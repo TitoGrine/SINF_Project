@@ -3,6 +3,7 @@ var router = express.Router();
 var axios = require("axios");
 var querystring = require("querystring");
 require("dotenv").config();
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   axios
@@ -16,7 +17,7 @@ router.get("/", function (req, res, next) {
       })
     )
     .then((token) => {
-      res.json({ token: token.data.access_token });
+      res.json({ access_token: token.data.access_token });
     });
 });
 
