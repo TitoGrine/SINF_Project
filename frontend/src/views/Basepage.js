@@ -13,7 +13,7 @@ import Inventory from "../templates/Inventory.js";
 import PickingRoute from "../templates/Pickingroute.js";
 import StockInventory from "../templates/Stockinventory.js";
 
-import ImageButton from "../components/imageButton.js";
+import HomeButton from "../components/HomeButton.jsx";
 
 import style from "../style/basepageStyle.js";
 
@@ -47,19 +47,19 @@ function BasePage({ template }) {
             <h1>Vicino</h1>
           </Grid>
           <Grid item xs={4} sm={2} md={1} lg={1}>
-            <ImageButton image={"grape.svg"} name={""}></ImageButton>
+            <HomeButton image={"grape.svg"} name={""}></HomeButton>
           </Grid>
           <Grid item xs={4} sm={2} md={1} lg={1}>
-            <ImageButton image={"wine-barrel.svg"} name={""}></ImageButton>
+            <HomeButton image={"wine-barrel.svg"} name={""}></HomeButton>
           </Grid>
           <Grid item xs={4} sm={2} md={1} lg={1}>
-            <ImageButton image={"wine-bottle.svg"} name={""}></ImageButton>
+            <HomeButton image={"wine-bottle.svg"} name={""}></HomeButton>
           </Grid>
           <Grid item xs={4} sm={2} md={1} lg={1}>
-            <ImageButton image={"architecture.svg"} name={""}></ImageButton>
+            <HomeButton image={"architecture.svg"} name={""}></HomeButton>
           </Grid>
           <Grid item xs={3} sm={2} md={1} lg={1}>
-            <ImageButton image={"grape.svg"} name={""}></ImageButton>
+            <HomeButton image={"grape.svg"} name={""}></HomeButton>
           </Grid>
         </Grid>
         <Card>{getTemplate(template)}</Card>

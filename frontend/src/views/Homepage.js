@@ -5,9 +5,9 @@ import "../index.css";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 
-import ImageButton from "../components/imageButton.js"
-
+import HomeButton from "../components/HomeButton.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import style from "../style/homepageStyle.js";
@@ -22,30 +22,40 @@ function Homepage() {
   return (
     <div className={classes.mainDiv}>
       <Container maxWidth="lg">
-        <Card>
-          <h1>Vicino</h1>
-          <Grid container justify="center" alignItems="center" spacing={3}>
-            <Grid item xs={3}>
-              <ImageButton name="Supplier Orders" image="grape.svg"></ImageButton>
+        <Grid
+          container
+          direction="column"
+          justify="space-around"
+          alignItems="center"
+          className={classes.card}
+        >
+          <Grid item>
+            <h1>Vicino</h1>
+          </Grid>
+          <Grid item container justify="space-around" alignItems="center" style={{width: "80%"}}>
+            <Grid item container justify="center" xs={3}>
+              <HomeButton name="Supplier Orders" image="grape.svg"></HomeButton>
             </Grid>
-            <Grid item xs={3}>
-              <span >
-                Inventory
-              </span>
+            <Grid item container justify="center" xs={3}>
+              <HomeButton
+                name="Client Orders"
+                image="wine-barrel.svg"
+              ></HomeButton>
             </Grid>
-            <Grid item xs={3}>
-              <span >
-                Client Orders
-              </span>
+            <Grid item container justify="center" xs={3}>
+              <HomeButton name="Inventory" image="wine-bottle.svg"></HomeButton>
             </Grid>
-            <Grid item xs={3}>
-              <span >
-                Warehouse Map
-              </span>
+            <Grid item container justify="center" xs={3}>
+              <HomeButton
+                name="Warehouse"
+                image="architecture.svg"
+              ></HomeButton>
             </Grid>
           </Grid>
-          <h5> Logout</h5>
-        </Card>
+          <Grid item>
+            <h5> Logout</h5>
+          </Grid>
+        </Grid>
       </Container>
     </div>
   );

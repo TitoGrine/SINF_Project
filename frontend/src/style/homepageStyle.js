@@ -3,7 +3,14 @@ const homepageStyle = {
     minHeight: "100%",
     minHeight: "100vh",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+  },
+  card: {
+    backgroundColor: "#CAA472",
+    height: "80vh",
+  },
+  btnMenu: {
+    width: "100%",
   },
 };
 
