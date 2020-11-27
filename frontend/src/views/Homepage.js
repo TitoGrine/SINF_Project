@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 
-import HomepageButton from "../components/homepageButton.js"
+import ImageButton from "../components/imageButton.js"
 
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,7 +26,7 @@ function Homepage() {
           <h1>Vicino</h1>
           <Grid container justify="center" alignItems="center" spacing={3}>
             <Grid item xs={3}>
-              <HomepageButton name="Supplier Orders" image="grape.svg"></HomepageButton>
+              <ImageButton name="Supplier Orders" image="grape.svg"></ImageButton>
             </Grid>
             <Grid item xs={3}>
               <span >
