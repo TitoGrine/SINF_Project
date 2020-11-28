@@ -2,6 +2,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
+import LoginPage from "./views/LoginPage.jsx";
 import HomePage from "./views/HomePage.js";
 import BasePage from "./views/BasePage.js";
 
@@ -11,6 +12,9 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <HomePage></HomePage>
+        </Route>
+        <Route path="/login" exact>
+          <LoginPage></LoginPage>
         </Route>
         <Route path="/client-order" exact>
           <BasePage template={"client-order"}></BasePage>
