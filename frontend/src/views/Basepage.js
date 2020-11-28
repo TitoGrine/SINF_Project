@@ -13,7 +13,7 @@ import Inventory from "../templates/Inventory.js";
 import PickingRoute from "../templates/Pickingroute.js";
 import StockInventory from "../templates/Stockinventory.js";
 
-import HomeButton from "../components/HomeButton.jsx";
+import HomeButton from "../components/HomeButton.js";
 
 import style from "../style/basepageStyle.js";
 

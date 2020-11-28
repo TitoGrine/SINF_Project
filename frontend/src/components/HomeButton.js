@@ -2,88 +2,48 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
+import { withStyles } from "@material-ui/core/styles";
+import style from "../style/homeButtonStyle.jsx";
+
+const styles = () => ({ ...style });
+
 class HomeButton extends Component {
-  state = {
-    circleStyle: {
-      backgroundColor: "#5B0012",
-      borderRadius: "50%",
-      width: 150,
-      height: 150,
-      verticalAlign: "middle",
-      textAlign: "center",
-      display: "table-cell",
-      transition: "all .2s ease-in-out",
-    },
-  };
-
-  imgStyle = {
-    filter:
-      "invert(68%) sepia(34%) saturate(436%) hue-rotate(354deg) brightness(94%) contrast(86%)",
-    display: "block",
-    margin: "0 auto",
-  };
-
-  textStyle = {
-    fontFamily: "'PT Sans Narrow', sans-serif",
-    fontSize: "1.5rem",
-    textTransform: "none",
-    color: "#5B0012",
-  };
-
-  handleMouseEnter() {
-    this.setState({
-      circleStyle: {
-        backgroundColor: "#5B0012",
-        borderRadius: "50%",
-        width: 150,
-        height: 150,
-        verticalAlign: "middle",
-        textAlign: "center",
-        display: "table-cell",
-        transition: "all .2s ease-in-out",
-        boxShadow: "0 0 20px 0 rgba(0,0,0,0.5)",
-      },
-    });
+  handleMouseEnter(ev) {
+    const circle = ev.currentTarget.getElementsByClassName("icon-circle")[0];
+    if (circle !== undefined)
+      circle.style["boxShadow"] = "0 0 20px 0 rgba(0,0,0,0.5)";
   }
 
-  handleMouseLeave() {
-    this.setState({
-      circleStyle: {
-        backgroundColor: "#5B0012",
-        borderRadius: "50%",
-        width: 150,
-        height: 150,
-        verticalAlign: "middle",
-        textAlign: "center",
-        display: "table-cell",
-        transition: "all .2s ease-in-out",
-      },
-    });
+  handleMouseLeave(ev) {
+    const circle = ev.currentTarget.getElementsByClassName("icon-circle")[0];
+    if (circle !== undefined) circle.style["boxShadow"] = "none";
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <Button
         variant="text"
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
         style={{ backgroundColor: "transparent" }}
-        onMouseEnter={() => this.handleMouseEnter()}
-        onMouseLeave={() => this.handleMouseLeave()}
         disableRipple
       >
         <Grid container direction="column" justify="center" alignItems="center">
           <Grid item>
-            <div style={this.state.circleStyle}>
+            <div className={classes.iconCircle + " icon-circle"}>
               <img
                 src={"./assets/" + this.props.image}
                 alt={this.props.image}
                 height="80px"
                 width="80px"
-                style={this.imgStyle}
+                className={classes.iconImg}
               />
             </div>
           </Grid>
           <Grid item>
-            <p style={this.textStyle}>{this.props.name}</p>
+            <p className={classes.btnText}>{this.props.name}</p>
           </Grid>
         </Grid>
       </Button>
@@ -91,4 +51,4 @@ class HomeButton extends Component {
   }
 }
 
-export default HomeButton;
+export default withStyles(styles)(HomeButton);

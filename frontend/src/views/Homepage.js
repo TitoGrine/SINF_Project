@@ -7,27 +7,26 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
 
-import HomeButton from "../components/HomeButton.jsx";
+import HomeButton from "../components/HomeButton.js";
 
 import { makeStyles } from "@material-ui/core/styles";
 import style from "../style/homepageStyle.js";
 
-const styles = { ...style };
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles({ ...style });
 
 //TODO: customize error page
 function Homepage() {
-  const classes = useStyles();
+  const { mainDiv, card, logoutBtn } = useStyles();
 
   return (
-    <div className={classes.mainDiv}>
+    <div className={mainDiv}>
       <Container maxWidth="lg">
         <Grid
           container
           direction="column"
           justify="space-evenly"
           alignItems="center"
-          className={classes.card}
+          className={card}
         >
           <Grid item>
             <h1 className="stylizedText" style={{ margin: 0 }}>
@@ -66,7 +65,7 @@ function Homepage() {
               size="large"
               variant="text"
               startIcon={<SubdirectoryArrowRightIcon />}
-              className={classes.logoutBtn}
+              className={logoutBtn}
             >
               Logout
             </Button>
