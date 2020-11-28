@@ -5,7 +5,7 @@ require("dotenv").config();
 
 router.get("/allItems", function (req, res, next) {
   const access_token = req.body.access_token;
-  console.log("Access token = " + access_token);
+
   if (!access_token)
     return res
       .status(400)

@@ -15,7 +15,7 @@ router.get("/orders", function (req, res, next) {
 
   var config = {
     method: "get",
-    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/sales/orders`,
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/purchases/orders`,
     headers: {
       Authorization: `Bearer ${access_token}`,
       "Content-Type": "application/json",
@@ -32,7 +32,7 @@ router.get("/orders", function (req, res, next) {
           parsed_orders[orders[i].documentLines[j].orderId] = {
             date: orders[i].documentDate,
             documentId: orders[i].naturalKey,
-            customer: orders[i].buyerCustomerParty,
+            customer: orders[i].sellerSupplierParty,
           };
         }
       }
@@ -55,7 +55,7 @@ router.get("/orders/:id", function (req, res, next) {
 
   var config = {
     method: "get",
-    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/sales/orders/${req.params.id}`,
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/purchases/orders/${req.params.id}`,
     headers: {
       Authorization: `Bearer ${access_token}`,
       "Content-Type": "application/json",
@@ -70,12 +70,12 @@ router.get("/orders/:id", function (req, res, next) {
       for (var j in documents) {
         let stock = await stockUtils.getMaterialStock(
           access_token,
-          documents[j].salesItem
+          documents[j].purchasesItem
         );
 
-        order_info[documents[j].salesItem] = {
+        order_info[documents[j].purchasesItem] = {
           description: documents[j].complementaryDescription,
-          quantity: documents[j].quantity,
+          quantity: parseInt(documents[j].quantity),
           stock,
           location: documents[j].warehouse,
         };
