@@ -1,4 +1,5 @@
-import { Sequelize } from 'sequelize/types';
+require('dotenv').config()
+const  Sequelize = require("sequelize");
 
 if (!process.env.DB) {
     throw new Error("DB is missing!")
@@ -16,4 +17,4 @@ db.authenticate().catch((err) => {
     throw new Error(`Unable to connect to the database, ${err}`)
 })
 
-export default db;
+module.exports = db;

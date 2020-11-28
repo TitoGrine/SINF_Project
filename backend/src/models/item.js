@@ -1,8 +1,8 @@
-import { define } from "../db/db";
-import picking_wave from "./picking_wave";
-import { INTEGER, STRING } from "sequelize";
+const db = require("../db/db");
+const { INTEGER, STRING } = require("sequelize");
+const picking_wave = require("./picking_wave");
 
-const item = define("items", {
+const item = db.define("items", {
     id: {
         type: INTEGER,
         primaryKey: true,
@@ -19,7 +19,10 @@ const item = define("items", {
     },
     quantity:{
         type: INTEGER,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            min: 0
+        }
     },
     order_ref:{
         type: STRING,
@@ -38,7 +41,5 @@ const item = define("items", {
         }
     }
 },{underscored:true});
-
-item.belongsTo(picking_wave);
 
 module.exports = item;

@@ -1,7 +1,7 @@
-import { define } from "../db/db";
-import { DATE, INTEGER, STRING } from "sequelize";
+const db = require("../db/db");
+const { DATE, INTEGER, STRING } = require("sequelize");
 
-const picking_wave = define("picking_waves", {
+const picking_wave = db.define("picking_waves", {
     id: {
         type: INTEGER,
         primaryKey: true,
