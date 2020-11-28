@@ -8,9 +8,13 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = {
   container: {
     height: "100vh",
-    width: "50%",
-    padding: "8rem",
     backgroundColor: "#CAA472",
+  },
+  formContainer: {
+    width: "60%",
+    height: "100%",
+    marginRight: "0",
+    marginLeft: "auto",
   },
   middleItems: {
     width: "100%",
@@ -20,7 +24,7 @@ const styles = {
     backgroundColor: "#5B0012",
   },
   labelStyle: {
-    marginLeft: ".5rem",
+    marginLeft: ".2rem",
   },
   notchedOutline: {
     borderWidth: "1px",
@@ -65,67 +69,69 @@ class LoginPage extends Component {
 
     return (
       <Grid container>
-        <Grid
-          item
-          xs={6}
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          className={classes.container}
-        >
-          <Grid item style={{ marginBottom: "5rem" }}>
-            <h1 className="stylizedText" style={{ margin: 0 }}>
-              Vicino
-            </h1>
-          </Grid>
-          <Grid item className={classes.middleItems}>
-            <label htmlFor="email-input" className={classes.labelStyle}>
-              Email
-            </label>
-            <TextField
-              id="email-input"
-              classes={{ root: classes.textFieldStyle }}
-              InputProps={{
-                classes: {
-                  focused: classes.inputFocused,
-                  notchedOutline: classes.notchedOutline,
-                },
-                className: classes.inputColor,
-              }}
-              required
-              fullWidth
-              type="email"
-              name="email"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item className={classes.middleItems}>
-            <label htmlFor="password-input" className={classes.labelStyle}>
-              Password
-            </label>
-            <TextField
-              id="password-input"
-              classes={{ root: classes.textFieldStyle }}
-              InputProps={{
-                classes: {
-                  focused: classes.inputFocused,
-                  notchedOutline: classes.notchedOutline,
-                },
-                className: classes.inputColor,
-              }}
-              required
-              fullWidth
-              type="password"
-              name="password"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item style={{ alignSelf: "flex-end" }}>
-            <LoginButton href="/" size="large" variant="text">
-              Login
-            </LoginButton>
-          </Grid>
+        <Grid item xs={6}>
+          <form className={classes.container}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.formContainer}
+            >
+              <Grid item style={{ marginBottom: "5rem" }}>
+                <h1 className="stylizedText" style={{ margin: 0 }}>
+                  Vicino
+                </h1>
+              </Grid>
+              <Grid item className={classes.middleItems}>
+                <label htmlFor="email-input" className={classes.labelStyle}>
+                  Email
+                </label>
+                <TextField
+                  id="email-input"
+                  classes={{ root: classes.textFieldStyle }}
+                  InputProps={{
+                    classes: {
+                      focused: classes.inputFocused,
+                      notchedOutline: classes.notchedOutline,
+                    },
+                    className: classes.inputColor,
+                  }}
+                  required
+                  fullWidth
+                  type="email"
+                  name="email"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item className={classes.middleItems}>
+                <label htmlFor="password-input" className={classes.labelStyle}>
+                  Password
+                </label>
+                <TextField
+                  id="password-input"
+                  classes={{ root: classes.textFieldStyle }}
+                  InputProps={{
+                    classes: {
+                      focused: classes.inputFocused,
+                      notchedOutline: classes.notchedOutline,
+                    },
+                    className: classes.inputColor,
+                  }}
+                  required
+                  fullWidth
+                  type="password"
+                  name="password"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item style={{ alignSelf: "flex-end" }}>
+                <LoginButton type="submit" size="large" variant="text">
+                  Login
+                </LoginButton>
+              </Grid>
+            </Grid>
+          </form>
         </Grid>
         <Grid item xs={6}>
           <div
