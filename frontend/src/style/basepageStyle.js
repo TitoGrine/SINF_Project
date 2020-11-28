@@ -1,4 +1,4 @@
-const basepageStyle = {
+const basePageStyle = {
 
 };
 

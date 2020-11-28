@@ -9,12 +9,11 @@ import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRigh
 import { makeStyles } from "@material-ui/core/styles";
 
 import HomeButton from "../components/HomeButton.js";
-import homepageStyle from "../style/homepageStyle.js";
+import homePageStyle from "../style/homePageStyle.js";
 
-const useStyles = makeStyles(homepageStyle);
+const useStyles = makeStyles(homePageStyle);
 
-//TODO: customize error page
-function Homepage() {
+function HomePage() {
   const { mainDiv, card, logoutBtn } = useStyles();
 
   return (
@@ -75,4 +74,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default HomePage;

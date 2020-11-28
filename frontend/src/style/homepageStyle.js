@@ -1,9 +1,8 @@
 // Just to clarify, I needed the 'theme' parameter for breakpoints
 // so I turned this json const into a function that ends up by returning the json
-function homepageStyle(theme) {
+function homePageStyle(theme) {
   const style = {
     mainDiv: {
-      minHeight: "100%",
       minHeight: "100vh",
       display: "flex",
       alignItems: "center",
@@ -29,4 +28,4 @@ function homepageStyle(theme) {
   return style;
 }
 
-export default homepageStyle;
+export default homePageStyle;

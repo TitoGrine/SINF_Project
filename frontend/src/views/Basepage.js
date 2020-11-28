@@ -15,9 +15,9 @@ import StockInventory from "../templates/Stockinventory.js";
 
 import HomeButton from "../components/HomeButton.js";
 
-import style from "../style/basepageStyle.js";
+import basePageStyle from "../style/basePageStyle.js";
 
-const useStyles = makeStyles(style);
+const useStyles = makeStyles(basePageStyle);
 
 //TODO: probably change this logic to something better
 function getTemplate(template) {
