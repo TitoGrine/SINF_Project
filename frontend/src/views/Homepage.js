@@ -6,13 +6,12 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
+import { makeStyles } from "@material-ui/core/styles";
 
 import HomeButton from "../components/HomeButton.js";
+import homepageStyle from "../style/homepageStyle.js";
 
-import { makeStyles } from "@material-ui/core/styles";
-import style from "../style/homepageStyle.js";
-
-const useStyles = makeStyles({ ...style });
+const useStyles = makeStyles(homepageStyle);
 
 //TODO: customize error page
 function Homepage() {
@@ -40,19 +39,19 @@ function Homepage() {
             alignItems="center"
             style={{ width: "80%" }}
           >
-            <Grid item container justify="center" xs={3}>
+            <Grid item container justify="center" xs={12} sm={6} md={3}>
               <HomeButton name="Supplier Orders" image="grape.svg"></HomeButton>
             </Grid>
-            <Grid item container justify="center" xs={3}>
+            <Grid item container justify="center" xs={12} sm={6} md={3}>
               <HomeButton
                 name="Client Orders"
                 image="wine-barrel.svg"
               ></HomeButton>
             </Grid>
-            <Grid item container justify="center" xs={3}>
+            <Grid item container justify="center" xs={12} sm={6} md={3}>
               <HomeButton name="Inventory" image="wine-bottle.svg"></HomeButton>
             </Grid>
-            <Grid item container justify="center" xs={3}>
+            <Grid item container justify="center" xs={12} sm={6} md={3}>
               <HomeButton
                 name="Warehouse"
                 image="architecture.svg"
