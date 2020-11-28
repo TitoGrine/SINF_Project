@@ -3,6 +3,10 @@ function homeButtonStyle(theme) {
     iconCircle: {
       backgroundColor: "#5B0012",
       borderRadius: "50%",
+      verticalAlign: "middle",
+      textAlign: "center",
+      display: "table-cell",
+      transition: "box-shadow .25s ease-in-out",
       [theme.breakpoints.down("sm")]: {
         width: 70,
         height: 70,
@@ -11,10 +15,6 @@ function homeButtonStyle(theme) {
         width: 150,
         height: 150,
       },
-      verticalAlign: "middle",
-      textAlign: "center",
-      display: "table-cell",
-      transition: "box-shadow .25s ease-in-out",
     },
 
     iconImg: {

@@ -2,7 +2,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import LoginPage from "./views/LoginPage.jsx";
+import LoginPage from "./views/LoginPage.js";
 import HomePage from "./views/HomePage.js";
 import BasePage from "./views/BasePage.js";
 

@@ -2,10 +2,10 @@ import React from "react";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import LoginField from "../components/LoginField.jsx";
+import LoginField from "./LoginField.js";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import loginFormStyle from "../style/loginFormStyle.jsx";
+import loginFormStyle from "../style/loginFormStyle.js";
 
 const useStyles = makeStyles(loginFormStyle);
 
@@ -34,7 +34,7 @@ const LoginButton = withStyles({
 })(Button);
 
 const LoginForm = () => {
-  const { container, formContainer, middleItems } = useStyles();
+  const { container, formContainer, title, middleItems } = useStyles();
   return (
     <form action="/" className={container}>
       <Grid
@@ -44,7 +44,7 @@ const LoginForm = () => {
         alignItems="center"
         className={formContainer}
       >
-        <Grid item style={{ marginBottom: "5rem" }}>
+        <Grid item className={title}>
           <h1 className="stylizedText" style={{ margin: 0 }}>
             Vicino
           </h1>
