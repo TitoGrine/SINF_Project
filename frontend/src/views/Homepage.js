@@ -3,9 +3,9 @@ import React from "react";
 import "../index.css";
 // material ui core
 import Container from "@material-ui/core/Container";
-import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
 
 import HomeButton from "../components/HomeButton.jsx";
 
@@ -25,14 +25,22 @@ function Homepage() {
         <Grid
           container
           direction="column"
-          justify="space-around"
+          justify="space-evenly"
           alignItems="center"
           className={classes.card}
         >
           <Grid item>
-            <h1>Vicino</h1>
+            <h1 className="stylizedText" style={{ margin: 0 }}>
+              Vicino
+            </h1>
           </Grid>
-          <Grid item container justify="space-around" alignItems="center" style={{width: "80%"}}>
+          <Grid
+            item
+            container
+            justify="space-around"
+            alignItems="center"
+            style={{ width: "80%" }}
+          >
             <Grid item container justify="center" xs={3}>
               <HomeButton name="Supplier Orders" image="grape.svg"></HomeButton>
             </Grid>
@@ -53,7 +61,15 @@ function Homepage() {
             </Grid>
           </Grid>
           <Grid item>
-            <h5> Logout</h5>
+            <Button
+              href="#"
+              size="large"
+              variant="text"
+              startIcon={<SubdirectoryArrowRightIcon />}
+              className={classes.logoutBtn}
+            >
+              Logout
+            </Button>
           </Grid>
         </Grid>
       </Container>
