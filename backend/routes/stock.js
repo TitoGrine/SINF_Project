@@ -3,7 +3,7 @@ var router = express.Router();
 var axios = require("axios");
 require("dotenv").config();
 
-router.get("/allItems", function (req, res, next) {
+router.get("/", function (req, res, next) {
   const access_token = req.body.access_token;
 
   if (!access_token)
