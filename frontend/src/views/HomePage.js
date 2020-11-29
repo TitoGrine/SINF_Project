@@ -17,16 +17,16 @@ import { darkred } from "../style/colors.js";
 const useStyles = makeStyles(homePageStyle);
 
 function HomePage() {
-  const classes = useStyles();
+  const {mainDiv, card, logoutBtn} = useStyles();
   return (
-    <div className={classes.mainDiv}>
+    <div className={mainDiv}>
       <Container maxWidth="lg">
         <Grid
           container
           direction="column"
           justify="space-evenly"
           alignItems="center"
-          className={classes.card}
+          className={card}
         >
           <Grid item>
             <h1 className="stylizedText" style={{ margin: 0, color: darkred }}>
@@ -75,7 +75,7 @@ function HomePage() {
               size="large"
               variant="text"
               startIcon={<SubdirectoryArrowRightIcon />}
-              className={classes.logoutBtn}
+              className={logoutBtn}
             >
               Logout
             </Button>
