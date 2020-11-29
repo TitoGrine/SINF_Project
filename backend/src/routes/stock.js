@@ -1,9 +1,9 @@
-var express = require("express");
-var router = express.Router();
-var axios = require("axios");
+const express = require("express");
+const router = express.Router();
+const axios = require("axios");
 require("dotenv").config();
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
   const access_token = req.body.access_token;
 
   if (!access_token)
@@ -11,7 +11,7 @@ router.get("/", function (req, res, next) {
       .status(400)
       .json({ error: "A valid access token was not provided." });
 
-  var config = {
+  const config = {
     method: "get",
     url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/materialscore/materialsitems`,
     headers: {

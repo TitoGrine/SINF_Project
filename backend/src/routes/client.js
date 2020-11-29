@@ -1,11 +1,11 @@
-var express = require("express");
-var router = express.Router();
-var axios = require("axios");
+const express = require("express");
+const router = express.Router();
+const axios = require("axios");
 require("dotenv").config();
 
 const stockUtils = require("../utils/stockUtils");
 
-router.get("/orders", function (req, res, next) {
+router.get("/orders", function (req, res) {
   const access_token = req.body.access_token;
 
   if (!access_token)
@@ -13,7 +13,7 @@ router.get("/orders", function (req, res, next) {
       .status(400)
       .json({ error: "A valid access token was not provided." });
 
-  var config = {
+  const config = {
     method: "get",
     url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/sales/orders`,
     headers: {
@@ -27,8 +27,8 @@ router.get("/orders", function (req, res, next) {
       let orders = response.data;
       let parsed_orders = {};
 
-      for (var i in orders) {
-        for (var j in orders[i].documentLines) {
+      for (let i in orders) {
+        for (let j in orders[i].documentLines) {
           parsed_orders[orders[i].documentLines[j].orderId] = {
             date: orders[i].documentDate,
             documentId: orders[i].naturalKey,
@@ -45,7 +45,7 @@ router.get("/orders", function (req, res, next) {
     });
 });
 
-router.get("/orders/:id", function (req, res, next) {
+router.get("/orders/:id", function (req, res) {
   const access_token = req.body.access_token;
 
   if (!access_token)
@@ -53,7 +53,7 @@ router.get("/orders/:id", function (req, res, next) {
       .status(400)
       .json({ error: "A valid access token was not provided." });
 
-  var config = {
+  const config = {
     method: "get",
     url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/sales/orders/${req.params.id}`,
     headers: {
@@ -67,7 +67,7 @@ router.get("/orders/:id", function (req, res, next) {
       let order_info = {};
       let documents = response.data.documentLines;
 
-      for (var j in documents) {
+      for (let j in documents) {
         let stock = await stockUtils.getMaterialStock(
           access_token,
           documents[j].salesItem
