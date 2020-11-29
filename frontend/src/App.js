@@ -16,10 +16,10 @@ function App() {
         <Route path="/login" exact>
           <LoginPage></LoginPage>
         </Route>
-        <Route path="/client-order" exact>
+        <Route path="/client-orders" exact>
           <BasePage template={"client-order"}></BasePage>
         </Route>
-        <Route path="/supplier-order" exact>
+        <Route path="/supplier-orders" exact>
           <BasePage template={"supplier-order"}></BasePage>
         </Route>
         <Route path="/inventory" exact>
