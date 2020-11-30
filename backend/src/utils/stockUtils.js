@@ -1,11 +1,11 @@
-var axios = require("axios");
+const axios = require("axios");
 require("dotenv").config();
 
 module.exports.getMaterialStock = async function getMaterialStock(
   access_token,
   materialID
 ) {
-  var config = {
+  const config = {
     method: "get",
     url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/materialscore/materialsitems/${materialID}/extension`,
     headers: {
@@ -20,7 +20,7 @@ module.exports.getMaterialStock = async function getMaterialStock(
     let totalStock = 0;
     let materials = response.data.materialsItemWarehouses;
 
-    for (var j in materials) {
+    for (let j in materials) {
       totalStock += parseInt(materials[j].stockBalance);
     }
 

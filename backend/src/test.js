@@ -1,6 +1,6 @@
 require("dotenv").config();
 const item = require("./models/item");
-const {clearQueryResults} = require("./db/utils");
+const {clearQueryResults} = require("./utils/dbUtils");
 
 const items = async () => {
     let list = await item.findAll({

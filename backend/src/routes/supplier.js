@@ -45,7 +45,7 @@ router.get("/orders", function (req, res) {
     });
 });
 
-router.get("/orders/:id", function (req, rest) {
+router.get("/orders/:id", function (req, res) {
   const access_token = req.body.access_token;
 
   if (!access_token)
