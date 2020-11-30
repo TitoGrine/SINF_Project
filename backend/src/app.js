@@ -27,7 +27,7 @@ app.use("/client", clientRouter);
 app.use("/supplier", supplierRouter);
 
 // catch 404 and forward to error handler
-app.use(function (next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
