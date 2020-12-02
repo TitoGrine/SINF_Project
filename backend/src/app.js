@@ -9,6 +9,8 @@ const logger = require("morgan");
 
 const apiRouter = require("./routes/api.js");
 
+const pickingWaveRouter = require("./routes/pickingWave")
+
 const app = express();
 
 // view engine setup
