@@ -1,0 +1,103 @@
+import React from "react";
+import { useHistory } from "react-router-dom";
+// base css configurations
+import "../index.css";
+// material ui core
+import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
+import CardContent from "@material-ui/core/CardContent";
+import { makeStyles } from "@material-ui/core/styles";
+//route components
+import Order from "../templates/Order.js";
+import Inventory from "../templates/Inventory.js";
+import PickingRoute from "../templates/Pickingroute.js";
+import StockInventory from "../templates/Stockinventory.js";
+//components
+import BaseButton from "../components/BaseButton.js";
+
+import basePageStyle from "../style/basePageStyle.js";
+
+const useStyles = makeStyles(basePageStyle);
+
+//TODO: probably change this logic to something better
+function getTemplate(template) {
+  switch (template) {
+    case "client-order":
+      return <Order type={"client"}></Order>;
+    case "supplier-order":
+      return <Order type={"supplier"}></Order>;
+    case "inventory":
+      return <Inventory></Inventory>;
+    case "stock-inventory":
+      return <StockInventory></StockInventory>;
+    case "picking-route":
+      return <PickingRoute></PickingRoute>;
+    default:
+      return null;
+  }
+}
+
+//TODO: customize error page
+function BasePage({ template }) {
+  const history = useHistory();
+  const classes = useStyles();
+
+  const routeChange = () => {
+    history.push("/");
+  };
+
+  return (
+    <div className={classes.mainDiv}>
+      <Container maxWidth="lg">
+        <Grid container>
+          <Grid item xs={12} sm={12} md={7} lg={7}>
+            <h1 onClick={routeChange} className={classes.stylizedText}>
+              Vicino
+            </h1>
+          </Grid>
+          <Grid className={classes.icons} item xs={4} sm={2} md={1} lg={1}>
+            <BaseButton
+              type={"nav"}
+              image={"grape.svg"}
+              name={"supplier-orders"}
+            ></BaseButton>
+          </Grid>
+          <Grid className={classes.icons} item xs={4} sm={2} md={1} lg={1}>
+            <BaseButton
+              type={"nav"}
+              image={"wine-barrel.svg"}
+              name={"client-orders"}
+            ></BaseButton>
+          </Grid>
+          <Grid className={classes.icons} item xs={4} sm={2} md={1} lg={1}>
+            <BaseButton
+              type={"nav"}
+              image={"wine-bottle.svg"}
+              name={"inventory"}
+            ></BaseButton>
+          </Grid>
+          <Grid className={classes.icons} item xs={4} sm={2} md={1} lg={1}>
+            <BaseButton
+              type={"nav"}
+              image={"architecture.svg"}
+              name={"warehouse"}
+            ></BaseButton>
+          </Grid>
+          <Grid className={classes.icons} item xs={3} sm={2} md={1} lg={1}>
+            <BaseButton
+              type={"nav"}
+              image={"grape.svg"}
+              name={null}
+            ></BaseButton>
+          </Grid>
+        </Grid>
+        <Card className={classes.card}>
+          <CardContent>{getTemplate(template)}</CardContent>
+        </Card>
+      </Container>
+    </div>
+  );
+}
+
+export default BasePage;
