@@ -6,7 +6,7 @@ const loginFormStyle = (theme) => {
     },
     formContainer: {
       height: "100%",
-      marginRight: "0",
+      marginRight: "auto",
       marginLeft: "auto",
       [theme.breakpoints.down("lg")]: {
         width: "80%",

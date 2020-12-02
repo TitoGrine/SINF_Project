@@ -5,6 +5,7 @@ const loginFieldStyle = () => {
       },
       labelStyle: {
         marginLeft: ".2rem",
+        color: "#5B0012",
       },
       notchedOutline: {
         borderWidth: "1px",

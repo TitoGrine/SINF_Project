@@ -45,7 +45,7 @@ const LoginForm = () => {
         className={formContainer}
       >
         <Grid item className={title}>
-          <h1 className="stylizedText" style={{ margin: 0 }}>
+          <h1 className="stylizedText" style={{ margin: 0, color: "#5B0012" }}>
             Vicino
           </h1>
         </Grid>
