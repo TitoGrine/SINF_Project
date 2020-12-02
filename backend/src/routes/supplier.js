@@ -32,7 +32,8 @@ router.get("/orders", function (req, res) {
           parsed_orders[orders[i].documentLines[j].orderId] = {
             date: orders[i].documentDate,
             documentId: orders[i].naturalKey,
-            customer: orders[i].sellerSupplierParty,
+            supplier: orders[i].sellerSupplierParty,
+            supplierName: orders[i].sellerSupplierPartyName,
           };
         }
       }
