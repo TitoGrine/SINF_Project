@@ -39,15 +39,13 @@ router.get("/", function (req, res) {
           };
         }
 
-        for (let j in stock[i].materialsItemWarehouses) {
-          parsed_stock[stock[i].itemKey] = {
-            description: stock[i].complementaryDescription,
-            minStock: stock[i].minStock,
-            maxStock: stock[i].maxStock,
-            totalStock: quantity,
-            warehouses,
-          };
-        }
+        parsed_stock[stock[i].itemKey] = {
+          description: stock[i].complementaryDescription,
+          minStock: stock[i].minStock,
+          maxStock: stock[i].maxStock,
+          totalStock: quantity,
+          warehouses,
+        };
       }
 
       res.send(parsed_stock);
