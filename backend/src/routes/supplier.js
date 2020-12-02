@@ -32,7 +32,8 @@ router.get("/orders", function (req, res) {
           parsed_orders[orders[i].documentLines[j].orderId] = {
             date: orders[i].documentDate,
             documentId: orders[i].naturalKey,
-            customer: orders[i].sellerSupplierParty,
+            supplier: orders[i].sellerSupplierParty,
+            supplierName: orders[i].sellerSupplierPartyName,
           };
         }
       }
@@ -75,7 +76,7 @@ router.get("/orders/:id", function (req, res) {
 
         order_info[documents[j].purchasesItem] = {
           description: documents[j].complementaryDescription,
-          quantity: parseInt(documents[j].quantity),
+          quantity: documents[j].quantity,
           stock,
           location: documents[j].warehouse,
         };

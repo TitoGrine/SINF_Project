@@ -22,8 +22,33 @@ router.get("/", function (req, res) {
 
   axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      res.send(response.data);
+      let stock = response.data;
+      let parsed_stock = {};
+
+      for (let i in stock) {
+        let quantity = 0;
+        let warehouses = {};
+
+        for (let j in stock[i].materialsItemWarehouses) {
+          quantity += parseInt(
+            stock[i].materialsItemWarehouses[j].stockBalance
+          );
+
+          warehouses[stock[i].materialsItemWarehouses[j].warehouse] = {
+            stock: stock[i].materialsItemWarehouses[j].stockBalance,
+          };
+        }
+
+        parsed_stock[stock[i].itemKey] = {
+          description: stock[i].complementaryDescription,
+          minStock: stock[i].minStock,
+          maxStock: stock[i].maxStock,
+          totalStock: quantity,
+          warehouses,
+        };
+      }
+
+      res.send(parsed_stock);
     })
     .catch(function (error) {
       console.log(error);

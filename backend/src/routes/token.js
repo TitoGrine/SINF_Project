@@ -5,7 +5,7 @@ const querystring = require("querystring");
 require("dotenv").config();
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
   axios
     .post(
       "https://identity.primaverabss.com/connect/token",
