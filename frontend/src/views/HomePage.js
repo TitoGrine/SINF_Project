@@ -14,9 +14,12 @@ import BaseButton from "../components/BaseButton.js";
 import homePageStyle from "../style/homePageStyle.js";
 import { darkred } from "../style/colors.js";
 
+
 const useStyles = makeStyles(homePageStyle);
 
+
 function HomePage() {
+
   const {mainDiv, card, logoutBtn} = useStyles();
   return (
     <div className={mainDiv}>

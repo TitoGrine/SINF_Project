@@ -1,4 +1,6 @@
-import React from "react";
+import React , { useContext } from "react";
+import { sendHttpRequest } from "../requests.js";
+import { useHistory } from "react-router-dom";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -6,6 +8,9 @@ import LoginField from "./LoginField.js";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import loginFormStyle from "../style/loginFormStyle.js";
+
+//state management
+import { AuthenticationContext } from "../statemanagement/AuthenticationContext.js";
 
 const useStyles = makeStyles(loginFormStyle);
 
@@ -33,10 +38,26 @@ const LoginButton = withStyles({
   },
 })(Button);
 
-const LoginForm = () => {
+function LoginForm() {
+
+  const [token, setToken] = useContext(AuthenticationContext);
+  const history = useHistory();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    sendHttpRequest("GET", "http://localhost:8800/token")
+      .then((data) => {
+        setToken(data.access_token);
+        history.push("/")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const { container, formContainer, title, middleItems } = useStyles();
   return (
-    <form action="/" className={container}>
+    <form onSubmit={handleSubmit} className={container}>
       <Grid
         container
         direction="column"
@@ -67,6 +88,6 @@ const LoginForm = () => {
       </Grid>
     </form>
   );
-};
+}
 
 export default LoginForm;

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 //material core
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -156,7 +156,11 @@ const rows = [
   },
 ];
 
+
 export default function DataTable() {
+
+  const [orders, setOrders] = useState();
+
   const classes = useStyles();
   return (
     <div className={classes.table}>
