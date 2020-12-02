@@ -24,7 +24,7 @@ function Order({ type }) {
           </h1>
         </Grid>
         <Grid item className={classes.list}>
-          <ListOrders></ListOrders>
+          <ListOrders type={type}></ListOrders>
         </Grid>
         <Grid item>
           <Grid item className={classes.buttonwrp}>

@@ -1,11 +1,14 @@
+import { darkred, beige} from "./colors";
+
+
 const loginFieldStyle = () => {
     const style = {
       textFieldStyle: {
-        backgroundColor: "#5B0012",
+        backgroundColor: darkred,
       },
       labelStyle: {
         marginLeft: ".2rem",
-        color: "#5B0012",
+        color: darkred,
       },
       notchedOutline: {
         borderWidth: "1px",
@@ -16,7 +19,7 @@ const loginFieldStyle = () => {
         transition: "box-shadow .25s ease-in-out",
       },
       inputColor: {
-        color: "#CAA472",
+        color: beige,
       },
     };
   

@@ -1,8 +1,11 @@
+import { beige } from "./colors";
+
+
 const loginFormStyle = (theme) => {
   const style = {
     container: {
       height: "100vh",
-      backgroundColor: "#CAA472",
+      backgroundColor: beige,
     },
     formContainer: {
       height: "100%",
