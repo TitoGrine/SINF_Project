@@ -44,6 +44,7 @@ router.get("/", function (req, res) {
           };
         }
       }
+
       res.send(parsed_stock);
     })
     .catch(function (error) {
