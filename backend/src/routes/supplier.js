@@ -76,7 +76,7 @@ router.get("/orders/:id", function (req, res) {
 
         order_info[documents[j].purchasesItem] = {
           description: documents[j].complementaryDescription,
-          quantity: parseInt(documents[j].quantity),
+          quantity: documents[j].quantity,
           stock,
           location: documents[j].warehouse,
         };
