@@ -4,11 +4,16 @@ import Grid from "@material-ui/core/Grid";
 import LoginForm from "../components/LoginForm.js";
 import { Hidden } from "@material-ui/core";
 
+//state management
+import { AuthenticationProvider } from "../statemanagement/AuthenticationContext"
+
 function LoginPage() {
   return (
     <Grid container>
       <Grid item xs={12} sm={6}>
-        <LoginForm></LoginForm>
+        <AuthenticationProvider>
+          <LoginForm></LoginForm>
+        </AuthenticationProvider>
       </Grid>
       <Hidden only="xs">
         <Grid item xs={6}>
