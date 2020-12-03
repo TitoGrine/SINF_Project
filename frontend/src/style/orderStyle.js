@@ -22,6 +22,7 @@ const orderStyle = {
     },
     "& .MuiDataGrid-root .MuiDataGrid-cell": {
       textAlign: "center",
+      border: "none",
     },
     "& .MuiDataGrid-root": {
       border: "none",
@@ -30,12 +31,10 @@ const orderStyle = {
     "& .MuiDataGrid-columnSeparator": {
       display: "none",
     },
-    "& .MuiDataGrid-root .MuiDataGrid-cell": {
-      border: "none",
-    },
     "& .MuiDataGrid-root .MuiDataGrid-columnsContainer": {
       borderBottom: "3px solid" + darkred,
     },
+    height: "100%",
     padding: "0em 2em",
   },
   GnrBtn: {
