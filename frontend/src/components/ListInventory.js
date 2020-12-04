@@ -27,15 +27,9 @@ const columns = [
     width: 150,
     headerClassName: "header",
   },
-  // {
-  //   field: "minStock",
-  //   headerName: "Min Stock",
-  //   width: 150,
-  //   headerClassName: "header",
-  // },
   {
     field: "location",
-    headerName: "Location",
+    headerName: "Zone",
     sortable: false,
     disableClickEventBubbling: true,
     width: 150,

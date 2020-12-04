@@ -1,16 +1,17 @@
 import React from "react";
-import "../index.css";
 //material core
-import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 //components
+import Searchbar from "../components/Searchbar";
+import ZoneDropdown from "../components/ZoneDropdown";
 import ListInventory from "../components/ListInventory";
 
 import orderStyle from "../style/orderStyle.js";
 
 const useStyles = makeStyles(orderStyle);
 
-function Order({ type }) {
+function Inventory() {
   const classes = useStyles();
 
   return (
@@ -18,15 +19,23 @@ function Order({ type }) {
       <Grid container direction="column">
         <Grid item>
           <h1 className={classes.title}>
-              Inventory
+            Inventory
           </h1>
         </Grid>
+        <Grid item container alignItems="center" style={{ padding: "0 2em", marginBottom: ".8rem" }}>
+          <Grid item>
+            <Searchbar/>
+          </Grid>
+          <Grid item>
+            <ZoneDropdown/>
+          </Grid>
+        </Grid>
         <Grid item className={classes.list}>
-          <ListInventory type={type}></ListInventory>
+          <ListInventory></ListInventory>
         </Grid>
       </Grid>
     </div>
   );
 }
 
-export default Order;
+export default Inventory;
