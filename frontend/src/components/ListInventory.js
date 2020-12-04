@@ -214,7 +214,7 @@ function parseRows() {
 
 let parsedRows = parseRows();
 
-export default function ListInventory() {
+function ListInventory() {
   const classes = useStyles();
 
   return (
@@ -234,3 +234,5 @@ export default function ListInventory() {
     </div>
   );
 }
+
+export default ListInventory;
