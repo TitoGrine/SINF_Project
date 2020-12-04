@@ -18,12 +18,12 @@ CREATE TABLE picking_waves (
 DROP TABLE IF EXISTS items;
 CREATE TABLE items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ref TEXT NOT NULL UNIQUE,
+    ref TEXT NOT NULL,
     product_name TEXT NOT NULL, --might not be useful
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,
     order_ref TEXT NOT NULL,
     warehouse_zone TEXT NOT NULL,
-    id_picking REFERENCES picking_waves (id) NOT NULL
+    ref_picking REFERENCES picking_waves (ref) NOT NULL
 );
 
 COMMIT TRANSACTION;
