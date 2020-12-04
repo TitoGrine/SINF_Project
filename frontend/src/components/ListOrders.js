@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 //material core
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -61,111 +61,111 @@ const rows = [
     documentID: "1",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "1"
+    info: "1",
   },
   {
     id: "C0012",
     documentID: "2",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "2"
+    info: "2",
   },
   {
     id: "C0013",
     documentID: "3",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "3"
+    info: "3",
   },
   {
     id: "C0014",
     documentID: "4",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "4"
+    info: "4",
   },
   {
     id: "C0015",
     documentID: "5",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "5"
+    info: "5",
   },
   {
     id: "C0016",
     documentID: "6",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "6"
+    info: "6",
   },
   {
     id: "C0017",
     documentID: "7",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "7"
+    info: "7",
   },
   {
     id: "C0018",
     documentID: "8",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "8"
+    info: "8",
   },
   {
     id: "C0019",
     documentID: "9",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "9"
+    info: "9",
   },
   {
     id: "C0020",
     documentID: "5",
     orderID: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "10"
+    info: "10",
   },
   {
     id: "C0021",
     documentID: "6",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "11"
+    info: "11",
   },
   {
     id: "C0022",
     documentID: "7",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "12"
+    info: "12",
   },
   {
     id: "C0023",
     documentID: "8",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "13"
+    info: "13",
   },
   {
     id: "C0024",
     documentID: "9",
     clientName: "Marisqueira Antiga",
     date: "23-11-2020",
-    info: "14"
+    info: "14",
   },
 ];
 
-
-export default function DataTable() {
-
-  const [orders, setOrders] = useState();
+export default function ListOrders({ type }) {
 
   const classes = useStyles();
+
   return (
     <div className={classes.table}>
       <DataGrid
-        onClick = { (ev) => {ev.preventDefault()}}
+        onClick={(ev) => {
+          ev.preventDefault();
+        }}
         autoHeight
         className={classes.tables}
         rows={rows}
