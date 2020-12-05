@@ -4,7 +4,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 router.get("/", function (req, res) {
-  const access_token = req.body.access_token;
+  const access_token = req.headers.authorization;
 
   if (!access_token)
     return res
@@ -49,6 +49,53 @@ router.get("/", function (req, res) {
       }
 
       res.send(parsed_stock);
+    })
+    .catch(function (error) {
+      console.log(error);
+      return res.status(500).json({ error });
+    });
+});
+
+router.post("/transfer", function (req, res) {
+  const access_token = req.headers.authorization;
+  const { sourceWarehouse, targetWarehouse, items } = req.body;
+
+  if (!access_token)
+    return res
+      .status(400)
+      .json({ error: "A valid access token was not provided." });
+
+  if (!access_token)
+    return res
+      .status(400)
+      .json({ error: "A valid access token was not provided." });
+
+  const data = JSON.stringify({
+    company: process.env.JASMIN_COMPANY,
+    sourceWarehouse,
+    targetWarehouse,
+    loadingStreetName: "R. Dr. Roberto Frias",
+    loadingBuildingNumber: "0",
+    loadingPostalZone: "4200-465",
+    loadingCityName: "Porto",
+    loadingCountry: "PT",
+    UnloadingCountry: "PT",
+    documentLines: items,
+  });
+
+  const config = {
+    method: "post",
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/materialsmanagement/stockTransferOrders`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+
+  axios(config)
+    .then(function (response) {
+      res.send(response.data);
     })
     .catch(function (error) {
       console.log(error);

@@ -1,16 +1,13 @@
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
-const cors = require('cors');
-const fileUpload = require('express-fileupload'); 
-const bodyParser = require('body-parser');
+const cors = require("cors");
+const fileUpload = require("express-fileupload");
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-const tokenRouter = require("./routes/token.js");
-const stockRouter = require("./routes/stock.js");
-const clientRouter = require("./routes/client.js");
-const supplierRouter = require("./routes/supplier.js");
+const apiRouter = require("./routes/api.js");
 
 const app = express();
 
@@ -27,10 +24,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/token", tokenRouter);
-app.use("/stock", stockRouter);
-app.use("/client", clientRouter);
-app.use("/supplier", supplierRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
