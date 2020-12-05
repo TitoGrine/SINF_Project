@@ -41,7 +41,7 @@ function LoginForm() {
   const history = useHistory();
 
   const handleSubmit = (event) => {
-    getToken("GET", "http://localhost:8800/token")
+    getToken("GET", "http://localhost:8800/api/token")
       .then((data) => {
         localStorage.setItem('token', data.access_token)
         history.push("/")

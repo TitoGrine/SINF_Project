@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 //material core
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,6 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 
 import orderStyle from "../style/orderStyle.js";
+import { getData } from "../requests.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -157,6 +158,22 @@ const rows = [
 ];
 
 export default function ListOrders({ type }) {
+
+  useEffect(() => {
+    getOrders()
+  }, [])
+
+  const [orders, setOrders] = useState();
+
+  async function getOrders() {
+    getData("GET", "http://localhost:8800/api/" + type + "/orders",localStorage.getItem('token'))
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const classes = useStyles();
 
