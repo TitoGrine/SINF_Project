@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 //material core
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,164 +11,90 @@ import { getData } from "../requests.js";
 
 const useStyles = makeStyles(orderStyle);
 
-const columns = [
-  {
-    field: "id",
-    headerName: "Client",
-    width: 100,
-    headerClassName: "header",
-  },
-  {
-    field: "documentID",
-    width: 180,
-    headerName: "Document ID",
-    headerClassName: "header",
-  },
-  {
-    field: "clientName",
-    width: 450,
-    headerName: "Client Name",
-    headerClassName: "header",
-  },
-  {
-    field: "date",
-    headerName: "Date",
-    width: 200,
-    headerClassName: "header",
-  },
-  {
-    field: "info",
-    headerName: "Info",
-    width: 100,
-    headerAlign: "center",
-    headerClassName: "header",
-    renderCell: (params) => {
-      const onClick = () => {
-        return alert(params.value);
-      };
-
-      return (
-        <IconButton onClick={onClick} aria-label="delete">
-          <AddIcon />
-        </IconButton>
-      );
+function getColumns(type) {
+  return [
+    {
+      field: "id",
+      headerName: type.charAt(0).toUpperCase() + type.slice(1) ,
+      width: 100,
+      headerClassName: "header",
     },
-  },
-];
+    {
+      field: "documentId",
+      width: 180,
+      headerName: "Document Id",
+      headerClassName: "header",
+    },
+    {
+      field: type + "Name",
+      width: 450,
+      headerName: type.charAt(0).toUpperCase() + type.slice(1) + " Name",
+      headerClassName: "header",
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      width: 200,
+      headerClassName: "header",
+    },
+    {
+      field: "info",
+      headerName: "Info",
+      width: 100,
+      headerAlign: "center",
+      headerClassName: "header",
+      renderCell: (params) => {
+        const onClick = () => {
+          return alert(params.value);
+        };
 
-const rows = [
-  {
-    id: "C0011",
-    documentID: "1",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "1",
-  },
-  {
-    id: "C0012",
-    documentID: "2",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "2",
-  },
-  {
-    id: "C0013",
-    documentID: "3",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "3",
-  },
-  {
-    id: "C0014",
-    documentID: "4",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "4",
-  },
-  {
-    id: "C0015",
-    documentID: "5",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "5",
-  },
-  {
-    id: "C0016",
-    documentID: "6",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "6",
-  },
-  {
-    id: "C0017",
-    documentID: "7",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "7",
-  },
-  {
-    id: "C0018",
-    documentID: "8",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "8",
-  },
-  {
-    id: "C0019",
-    documentID: "9",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "9",
-  },
-  {
-    id: "C0020",
-    documentID: "5",
-    orderID: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "10",
-  },
-  {
-    id: "C0021",
-    documentID: "6",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "11",
-  },
-  {
-    id: "C0022",
-    documentID: "7",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "12",
-  },
-  {
-    id: "C0023",
-    documentID: "8",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "13",
-  },
-  {
-    id: "C0024",
-    documentID: "9",
-    clientName: "Marisqueira Antiga",
-    date: "23-11-2020",
-    info: "14",
-  },
-];
+        return (
+          <IconButton onClick={onClick} aria-label="delete">
+            <AddIcon />
+          </IconButton>
+        );
+      },
+    },
+  ]
+}
 
 export default function ListOrders({ type }) {
 
   useEffect(() => {
-    getOrders()
-  }, [])
+    setRows([])
+    getOrders();
+  }, [type]);
 
-  const [orders, setOrders] = useState();
+  const [orders, setOrders] = useState(); //to link order to order id
+  const [rows, setRows] = useState([]); //to represent rows on render
 
   async function getOrders() {
-    getData("GET", "http://localhost:8800/api/" + type + "/orders",localStorage.getItem('token'))
+    getData(
+      "GET",
+      "http://localhost:8800/api/" + type + "/orders",
+      localStorage.getItem("token")
+    )
       .then((data) => {
-        console.log(data);
+        let keysName;
+        let orders = [];
+        let rows_aux = [];
+        let i = 0;
+        setOrders(data);
+        keysName = Object.keys(data);
+        keysName.forEach((name) => {
+          if (type == "client") {
+            data[name].id = data[name].client; //TODO pass id instead of client
+            delete data[name].client;
+          } else {
+            data[name].id = data[name].supplier; //TODO pass id instead of client
+            delete data[name].supplier;
+          }
+          data[name].info = i++;
+          orders.push([name, data[name]]);
+          rows_aux.push(data[name]);
+        });
+        setOrders(orders);
+        setRows(rows_aux);
       })
       .catch((err) => {
         console.log(err);
@@ -186,7 +112,7 @@ export default function ListOrders({ type }) {
         autoHeight
         className={classes.tables}
         rows={rows}
-        columns={columns.map((column) => ({
+        columns={getColumns(type).map((column) => ({
           ...column,
           disableClickEventBubbling: true,
         }))}
