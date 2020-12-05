@@ -32,12 +32,12 @@ const item = db.define("items", {
         type: STRING,
         allowNull: false
     },
-    id_picking: {
-        type: INTEGER,
+    ref_picking: {
+        type: STRING,
         allowNull: false,
         references: {
             model: picking_wave,
-            key: "id"
+            key: "ref"
         }
     }
 },{underscored:true});
