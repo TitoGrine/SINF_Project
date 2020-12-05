@@ -82,7 +82,7 @@ export default function ListOrders({ type }) {
         setOrders(data);
         keysName = Object.keys(data);
         keysName.forEach((name) => {
-          if (type == "client") {
+          if (type === "client") {
             data[name].id = data[name].client; //TODO pass id instead of client
             delete data[name].client;
           } else {
@@ -105,7 +105,7 @@ export default function ListOrders({ type }) {
 
   return (
     <div className={classes.table}>
-      {rows.length == 0 ? (
+      {rows.length === 0 ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <DataGrid
