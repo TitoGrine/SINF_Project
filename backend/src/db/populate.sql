@@ -1,5 +1,5 @@
 -- USERS
-INSERT INTO users(email,password_hash) VALUES ("admin@vicino.pt","53C750F6382998BF3C75ED0F6EC0013D969CD3ED384AF2412FD85960A19AFE5B");
+INSERT INTO users(email,password_hash) VALUES ("admin@vicino.pt","$2b$12$RLFiTSLLOWoOHZ2m5Awhi.GaAgNz2wJVwLZOaRy7KLRlB0FGphsdW");
 
 -- PICKING WAVES
 INSERT INTO picking_waves(ref,final_date) VALUES ("PW2020_1", "2020-12-02T10:30:00");
