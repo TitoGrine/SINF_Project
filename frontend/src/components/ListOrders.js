@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import AddIcon from "@material-ui/icons/Add";
 
@@ -15,7 +16,7 @@ function getColumns(type) {
   return [
     {
       field: "id",
-      headerName: type.charAt(0).toUpperCase() + type.slice(1) ,
+      headerName: type.charAt(0).toUpperCase() + type.slice(1),
       width: 100,
       headerClassName: "header",
     },
@@ -55,13 +56,12 @@ function getColumns(type) {
         );
       },
     },
-  ]
+  ];
 }
 
 export default function ListOrders({ type }) {
-
   useEffect(() => {
-    setRows([])
+    setRows([]);
     getOrders();
   }, [type]);
 
@@ -105,20 +105,24 @@ export default function ListOrders({ type }) {
 
   return (
     <div className={classes.table}>
-      <DataGrid
-        onClick={(ev) => {
-          ev.preventDefault();
-        }}
-        autoHeight
-        className={classes.tables}
-        rows={rows}
-        columns={getColumns(type).map((column) => ({
-          ...column,
-          disableClickEventBubbling: true,
-        }))}
-        pageSize={10}
-        checkboxSelection
-      />
+      {rows.length == 0 ? (
+        <CircularProgress className={classes.progress} color="inherit" />
+      ) : (
+        <DataGrid
+          onClick={(ev) => {
+            ev.preventDefault();
+          }}
+          autoHeight
+          className={classes.tables}
+          rows={rows}
+          columns={getColumns(type).map((column) => ({
+            ...column,
+            disableClickEventBubbling: true,
+          }))}
+          pageSize={10}
+          checkboxSelection
+        />
+      )}
     </div>
   );
 }
