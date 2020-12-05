@@ -172,6 +172,28 @@ function Inventory() {
     setData(data.filter((entry) => regex.test(entry.id)));
   };
 
+  const handleZoneChange = (ev) => {
+    console.log(ev.target.value);
+    const query = ev.target.value;
+    if (query === "") {
+      setData(originalData);
+      return;
+    }
+
+    // A RegEx that matches the query to the start of each warehouse
+    const regex = new RegExp("^" + query + ".*", "i");
+    console.log(originalData);
+    setData(
+      originalData.filter((entry) => {
+        for (const warehouse of entry.warehouses) {
+          if (regex.test(warehouse.location)) return true;
+        }
+
+        return false;
+      })
+    );
+  };
+
   return (
     <div>
       <Grid container direction="column">
@@ -188,7 +210,7 @@ function Inventory() {
             <Searchbar onChange={handleIdChange} />
           </Grid>
           <Grid item>
-            <ZoneDropdown />
+            <ZoneDropdown onChange={handleZoneChange} />
           </Grid>
         </Grid>
         <Grid item className={classes.list}>

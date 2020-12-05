@@ -37,24 +37,26 @@ const columns = [
     renderCell: (params) => {
       function handleChange(event) {
         // update the underlying data for the row
-        params.api.updateRowData([{
-          id: params.getValue('id'),
-          selectedWarehouse: event.target.value,
-        }]);
+        params.api.updateRowData([
+          {
+            id: params.getValue("id"),
+            selectedWarehouse: event.target.value,
+          },
+        ]);
       }
 
       return (
         <Select
           onChange={handleChange}
-          defaultValue={0}
-          style={{ width: "100%" }}>
+          value={params.data.selectedWarehouse}
+          style={{ width: "100%" }}
+        >
           {params.data.warehouses.map(({ location }, index) => {
             return (
-              <MenuItem
-                key={index}
-                value={index}>
+              <MenuItem key={index} value={index}>
                 {location}
-              </MenuItem>);
+              </MenuItem>
+            );
           })}
         </Select>
       );
@@ -67,7 +69,7 @@ const columns = [
     width: 150,
     headerClassName: "header",
     valueGetter: (params) => {
-      const { selectedWarehouse, warehouses } = params.data
+      const { selectedWarehouse, warehouses } = params.data;
       return warehouses[selectedWarehouse].stock;
     },
     sortComparator: (v1, v2, cellParams1, cellParams2) => {
@@ -78,17 +80,19 @@ const columns = [
       const stock2 = data2.warehouses[data2.selectedWarehouse].stock;
 
       return stock1 - stock2;
-    }
+    },
   },
 ];
 
-function ListInventory({data}) {
+function ListInventory({ data }) {
   const classes = useStyles();
 
   return (
     <div className={classes.table}>
       <DataGrid
-        onClick={(ev) => { ev.preventDefault() }}
+        onClick={(ev) => {
+          ev.preventDefault();
+        }}
         autoHeight
         className={classes.tables}
         rows={data}

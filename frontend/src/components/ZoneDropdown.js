@@ -31,7 +31,7 @@ const MyInput = withStyles((theme) => ({
 
 const useStyles = makeStyles(zoneDropdownStyle);
 
-function ZoneDropdown() {
+function ZoneDropdown({ onChange }) {
   const classes = useStyles();
 
   return (
@@ -49,6 +49,7 @@ function ZoneDropdown() {
           className={classes.select}
           margin="dense"
           input={<MyInput />}
+          onChange={onChange}
         >
           <MenuItem value="">All</MenuItem>
           <MenuItem value="A1">A1</MenuItem>

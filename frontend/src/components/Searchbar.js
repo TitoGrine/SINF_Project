@@ -11,7 +11,7 @@ import searchbarStyle from "../style/searchbarStyle";
 
 const useStyles = makeStyles(searchbarStyle);
 
-function Searchbar({onChange}) {
+function Searchbar({ onChange }) {
   const classes = useStyles();
 
   return (
