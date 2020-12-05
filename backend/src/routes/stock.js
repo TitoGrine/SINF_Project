@@ -60,10 +60,13 @@ router.post("/transfer", function (req, res) {
   const access_token = req.headers.authorization;
   const { sourceWarehouse, targetWarehouse, items } = req.body;
 
-  if (!access_token)
-    return res
-      .status(400)
-      .json({ error: "A valid access token was not provided." });
+  if (!sourceWarehouse)
+    return res.status(400).json({ error: "No sourceWarehouse was provided." });
+
+  if (!targetWarehouse)
+    return res.status(400).json({ error: "No targetWarehouse was provided." });
+
+  if (!items) return res.status(400).json({ error: "No items was provided." });
 
   if (!access_token)
     return res
