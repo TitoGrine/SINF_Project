@@ -82,133 +82,7 @@ const columns = [
   },
 ];
 
-const rows = {
-  "VISTAALEGRE": {
-    "description": "Oporto Port - Fortified Wine",
-    "minStock": 30,
-    "maxStock": 130,
-    "totalStock": 40,
-    "warehouses": {
-      "A3B": {
-        "stock": 30
-      },
-      "D0": {
-        "stock": 0
-      },
-      "D1": {
-        "stock": 10
-      }
-    }
-  },
-  "SYRAH": {
-    "description": "Lisboa Red Wine",
-    "minStock": 50,
-    "maxStock": 300,
-    "totalStock": 35,
-    "warehouses": {
-      "A1C": {
-        "stock": 20
-      },
-      "D0": {
-        "stock": 15
-      },
-      "D1": {
-        "stock": 0
-      }
-    }
-  },
-  "CHATEAULATOUR": {
-    "description": "French Red Wine 75cl",
-    "minStock": 5,
-    "maxStock": 20,
-    "totalStock": 0,
-    "warehouses": {
-      "A4D": {
-        "stock": 0
-      },
-      "D0": {
-        "stock": 0
-      },
-      "D1": {
-        "stock": 0
-      }
-    }
-  },
-  "TERRANTEZ": {
-    "description": "Madeira Dessert Wine",
-    "minStock": 5,
-    "maxStock": 60,
-    "totalStock": 0,
-    "warehouses": {
-      "A4A": {
-        "stock": 0
-      },
-      "D0": {
-        "stock": 0
-      },
-      "D1": {
-        "stock": 0
-      }
-    }
-  },
-  "QUINTACARDO": {
-    "description": "Beira Interior White Wine",
-    "minStock": 30,
-    "maxStock": 300,
-    "totalStock": 0,
-    "warehouses": {
-      "A2B": {
-        "stock": 0
-      },
-      "D0": {
-        "stock": 0
-      },
-      "D1": {
-        "stock": 0
-      }
-    }
-  },
-  "JP": {
-    "description": "Setúbal White Wine",
-    "minStock": 15,
-    "maxStock": 150,
-    "totalStock": 0,
-    "warehouses": {
-      "A2A": {
-        "stock": 0
-      },
-      "D0": {
-        "stock": 0
-      },
-      "D1": {
-        "stock": 0
-      }
-    }
-  },
-};
-
-function parseRows() {
-  let values = Object.entries(rows).map(([id, info]) => {
-    info['id'] = id;
-    info['selectedWarehouse'] = 0;
-    return info;
-  });
-
-  let parsedRows = values.map((obj) => {
-    let newWarehouses = Object.entries(obj.warehouses).map(([warehouse, info]) => {
-      info['location'] = warehouse;
-      return info
-    });
-    obj.warehouses = newWarehouses;
-    return obj;
-  })
-
-  return parsedRows;
-}
-
-let parsedRows = parseRows();
-
-function ListInventory() {
+function ListInventory({data}) {
   const classes = useStyles();
 
   return (
@@ -217,7 +91,7 @@ function ListInventory() {
         onClick={(ev) => { ev.preventDefault() }}
         autoHeight
         className={classes.tables}
-        rows={parsedRows}
+        rows={data}
         columns={columns.map((column) => ({
           ...column,
           disableClickEventBubbling: true,

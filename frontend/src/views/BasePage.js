@@ -9,14 +9,14 @@ import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 //route components
-import Order from "../templates/Order.js";
-import Inventory from "../templates/Inventory.js";
-import PickingRoute from "../templates/Pickingroute.js";
-import StockInventory from "../templates/Stockinventory.js";
+import Order from "../templates/Order";
+import Inventory from "../templates/Inventory";
+import PickingRoute from "../templates/Pickingroute";
+import StockInventory from "../templates/Stockinventory";
 //components
-import BaseButton from "../components/BaseButton.js";
+import BaseButton from "../components/BaseButton";
 
-import basePageStyle from "../style/basePageStyle.js";
+import basePageStyle from "../style/basePageStyle";
 
 const useStyles = makeStyles(basePageStyle);
 

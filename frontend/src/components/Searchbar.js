@@ -11,7 +11,7 @@ import searchbarStyle from "../style/searchbarStyle";
 
 const useStyles = makeStyles(searchbarStyle);
 
-function Searchbar() {
+function Searchbar({onChange}) {
   const classes = useStyles();
 
   return (
@@ -36,6 +36,7 @@ function Searchbar() {
               </IconButton>
             </InputAdornment>
           }
+          onChange={onChange}
         />
       </Grid>
     </Grid>
