@@ -4,7 +4,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 router.get("/", function (req, res) {
-  const access_token = req.body.access_token;
+  const access_token = req.headers.authorization;
 
   if (!access_token)
     return res
@@ -57,7 +57,8 @@ router.get("/", function (req, res) {
 });
 
 router.post("/transfer", function (req, res) {
-  const { access_token, sourceWarehouse, targetWarehouse, items } = req.body;
+  const access_token = req.headers.authorization;
+  const { sourceWarehouse, targetWarehouse, items } = req.body;
 
   if (!access_token)
     return res

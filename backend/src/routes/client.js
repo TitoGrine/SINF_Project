@@ -6,7 +6,7 @@ require("dotenv").config();
 const stockUtils = require("../utils/stockUtils");
 
 router.get("/orders", function (req, res) {
-  const access_token = req.body.access_token;
+  const access_token = req.headers.authorization;
 
   if (!access_token)
     return res
@@ -47,7 +47,7 @@ router.get("/orders", function (req, res) {
 });
 
 router.get("/orders/:id", function (req, res) {
-  const access_token = req.body.access_token;
+  const access_token = req.headers.authorization;
 
   if (!access_token)
     return res
