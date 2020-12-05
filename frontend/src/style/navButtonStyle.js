@@ -1,4 +1,4 @@
-import { darkred, beige } from "./colors";
+import { beige } from "./colors";
 
 const navButtonStyle = {
   circle: {

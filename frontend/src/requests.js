@@ -14,11 +14,10 @@ export const getToken = async (method, url, data) => {
 };
   
 
-export const sendHttpRequest = async (method, url, data) => {
+export const getData = async (method, url, token) => {
   const response = await fetch(url, {
     method: method,
-    data: JSON.stringify({access_token : data}),
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers: {"Authorization":  token }
   });
   if (response.status >= 400) {
     return response.json().then((errorMessage) => {

@@ -46,6 +46,10 @@ const orderStyle = {
     width:"100%",
     display: "flex",
     justifyContent: "flex-end",
+  },
+  progress:{
+    margin: "2em auto",
+    display: "flow-root"
   }
 };
 
