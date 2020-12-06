@@ -84,12 +84,12 @@ const columns = [
   },
 ];
 
-function ListInventory({ rows }) {
+function ListInventory({ rows, isDataReady }) {
   const classes = useStyles();
 
   return (
     <div className={classes.table}>
-      {rows.length === 0 ? (
+      {rows.length === 0 && !isDataReady ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <DataGrid

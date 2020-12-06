@@ -16,10 +16,25 @@ function Inventory() {
   const classes = useStyles();
   const [originalData, setOriginalData] = useState([]);
   const [rows, setRows] = useState([]);
+  const [dataReady, setDataReady] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [zoneQuery, setZoneQuery] = useState("");
 
+  /**
+   * Hook to fetch data from backend.
+   * Only runs after first render (equivalent to componentDidMount).
+   */
   useEffect(() => {
     getInventory();
   }, []);
+
+  /**
+   * Hook to filter presented rows.
+   * Only runs if any query changes.
+   */
+  useEffect(() => {
+    filterResults();
+  }, [searchQuery, zoneQuery]);
 
   function parseRows(rows) {
     let values = Object.entries(rows).map(([id, info]) => {
@@ -42,6 +57,37 @@ function Inventory() {
     return parsedRows;
   }
 
+  function filterResults() {
+    console.log(`Search: "${searchQuery}"`);
+    console.log(`Zone: "${zoneQuery}"`);
+    if (searchQuery === "" && zoneQuery === "") {
+      setRows(originalData);
+      return;
+    }
+
+    let filteredData = originalData;
+
+    if (searchQuery !== "") {
+      // A RegEx that matches the searchQuery to the start of each id
+      const searchRegex = new RegExp("^" + searchQuery + ".*", "i");
+      filteredData = filteredData.filter((entry) => searchRegex.test(entry.id));
+    }
+
+    if (zoneQuery !== "") {
+      // A RegEx that matches the zoneQuery to the start of each warehouse
+      const zoneRegex = new RegExp("^" + zoneQuery + ".*", "i");
+      filteredData = filteredData.filter((entry) => {
+        for (const warehouse of entry.warehouses) {
+          if (zoneRegex.test(warehouse.location)) return true;
+        }
+
+        return false;
+      });
+    }
+
+    setRows(filteredData);
+  }
+
   async function getInventory() {
     getData(
       "GET",
@@ -52,6 +98,7 @@ function Inventory() {
         const parsed = parseRows(data);
         setOriginalData(parsed);
         setRows(parsed);
+        setDataReady(true);
       })
       .catch((err) => {
         console.log(err);
@@ -59,35 +106,11 @@ function Inventory() {
   }
 
   const handleIdChange = (ev) => {
-    const query = ev.target.value.trim();
-    if (query === "") {
-      setRows(originalData);
-      return;
-    }
-
-    // A RegEx that matches the query to the start of each id
-    const regex = new RegExp("^" + query + ".*", "i");
-    setRows(originalData.filter((entry) => regex.test(entry.id)));
+    setSearchQuery(ev.target.value.trim());
   };
 
   const handleZoneChange = (ev) => {
-    const query = ev.target.value;
-    if (query === "") {
-      setRows(originalData);
-      return;
-    }
-
-    // A RegEx that matches the query to the start of each warehouse
-    const regex = new RegExp("^" + query + ".*", "i");
-    setRows(
-      originalData.filter((entry) => {
-        for (const warehouse of entry.warehouses) {
-          if (regex.test(warehouse.location)) return true;
-        }
-
-        return false;
-      })
-    );
+    setZoneQuery(ev.target.value);
   };
 
   return (
@@ -110,7 +133,7 @@ function Inventory() {
           </Grid>
         </Grid>
         <Grid item className={classes.list}>
-          <ListInventory rows={rows} />
+          <ListInventory rows={rows} isDataReady={dataReady} />
         </Grid>
       </Grid>
     </div>
