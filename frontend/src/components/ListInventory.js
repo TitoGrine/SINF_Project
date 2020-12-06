@@ -12,6 +12,7 @@ const columns = [
   {
     field: "id",
     headerName: "Product ID",
+    headerAlign: "center",
     width: 250,
     headerClassName: "header",
   },
@@ -19,17 +20,20 @@ const columns = [
     field: "description",
     flex: 1,
     headerName: "Description",
+    headerAlign: "center",
     headerClassName: "header",
   },
   {
     field: "totalStock",
     headerName: "Stock",
+    headerAlign: "center",
     width: 150,
     headerClassName: "header",
   },
   {
     field: "location",
     headerName: "Zone",
+    headerAlign: "center",
     sortable: false,
     disableClickEventBubbling: true,
     width: 150,
@@ -66,6 +70,7 @@ const columns = [
     field: "quantity",
     description: "Stock per location",
     headerName: "Quantity",
+    headerAlign: "center",
     width: 150,
     headerClassName: "header",
     valueGetter: (params) => {
