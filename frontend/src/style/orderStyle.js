@@ -7,8 +7,8 @@ const orderStyle = {
     fontWeight: "200",
     paddingLeft: "2em",
   },
-  list:{
-    height: "22em"
+  list: {
+    height: "22em",
   },
   table: {
     "& .header": {
@@ -26,7 +26,7 @@ const orderStyle = {
     },
     "& .MuiDataGrid-root": {
       border: "none",
-      fontSize: "0.75em"
+      fontSize: "0.75em",
     },
     "& .MuiDataGrid-columnSeparator": {
       display: "none",
@@ -34,6 +34,7 @@ const orderStyle = {
     "& .MuiDataGrid-root .MuiDataGrid-columnsContainer": {
       borderBottom: "3px solid" + darkred,
     },
+    height: "100%",
     padding: "0em 2em",
   },
   GnrBtn: {
@@ -41,15 +42,15 @@ const orderStyle = {
     color: beige,
     backgroundColor: darkred,
   },
-  buttonwrp:{
-    width:"100%",
+  buttonwrp: {
+    width: "100%",
     display: "flex",
     justifyContent: "flex-end",
   },
-  progress:{
+  progress: {
     margin: "2em auto",
-    display: "flow-root"
-  }
+    display: "flow-root",
+  },
 };
 
 export default orderStyle;
