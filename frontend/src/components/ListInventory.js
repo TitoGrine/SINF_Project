@@ -4,7 +4,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
 
 import orderStyle from "../style/orderStyle.js";
-import { MenuItem, Select } from "@material-ui/core";
+import { MenuItem, Select, CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -84,25 +84,29 @@ const columns = [
   },
 ];
 
-function ListInventory({ data }) {
+function ListInventory({ rows }) {
   const classes = useStyles();
 
   return (
     <div className={classes.table}>
-      <DataGrid
-        onClick={(ev) => {
-          ev.preventDefault();
-        }}
-        autoHeight
-        className={classes.tables}
-        rows={data}
-        columns={columns.map((column) => ({
-          ...column,
-          disableClickEventBubbling: true,
-        }))}
-        pageSize={10}
-        disableSelectionOnClick
-      />
+      {rows.length === 0 ? (
+        <CircularProgress className={classes.progress} color="inherit" />
+      ) : (
+        <DataGrid
+          onClick={(ev) => {
+            ev.preventDefault();
+          }}
+          autoHeight
+          className={classes.tables}
+          rows={rows}
+          columns={columns.map((column) => ({
+            ...column,
+            disableClickEventBubbling: true,
+          }))}
+          pageSize={10}
+          disableSelectionOnClick
+        />
+      )}
     </div>
   );
 }
