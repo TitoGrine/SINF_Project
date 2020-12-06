@@ -52,6 +52,7 @@ function ZoneDropdown({ onChange }) {
           onChange={onChange}
         >
           <MenuItem value="">All</MenuItem>
+          <MenuItem value="A0">A0</MenuItem>
           <MenuItem value="A1">A1</MenuItem>
           <MenuItem value="A2">A2</MenuItem>
           <MenuItem value="A3">A3</MenuItem>
