@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken } from "../requests.js";
+import { getToken, sendRequest } from "../requests.js";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -8,7 +8,7 @@ import LoginField from "./LoginField.js";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import loginFormStyle from "../style/loginFormStyle.js";
 
-import  { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(loginFormStyle);
 
@@ -37,19 +37,34 @@ const LoginButton = withStyles({
 })(Button);
 
 function LoginForm() {
-  
   const history = useHistory();
 
   const handleSubmit = (event) => {
-    getToken("GET", "http://localhost:8800/api/token")
+    const body = {
+      email: event.target.elements.email.value,
+      password: event.target.elements.password.value,
+    }
+
+    sendRequest("POST", "http://localhost:8800/api/auth/login", body)
       .then((data) => {
-        localStorage.setItem('token', data.access_token)
-        history.push("/")
+        console.log(data.token);
+        localStorage.setItem("session", data.token);
+
+        getToken("GET", "http://localhost:8800/api/token", data.token)
+        .then((data) => {
+          localStorage.setItem("token", data.access_token);
+          history.push("/");
+        })
+        .catch((err) => {
+          console.log(err)
+          history.push("/login");
+        });
       })
       .catch((err) => {
         console.log(err);
-      });
-      event.preventDefault();
+      })
+
+    event.preventDefault();
   };
 
   const { container, formContainer, title, middleItems } = useStyles();

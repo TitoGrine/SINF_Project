@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const jwt = require('jsonwebtoken');
 const express = require("express");
 const router = express.Router();
 
@@ -16,15 +17,22 @@ router.post("/login", async (req, res) => {
     });
 
     if (!registered)
-        return res.status(404).json({
+        return res.status(401).json({
             message: "User not found with that email.",
         });
 
     registered.checkPass(password, (err, match) => {
         if (match && !err) {
-            //todo: generate session token
+            const token = jwt.sign({
+                email: email,
+            },
+                "cabkij3412poljmdae2alfkem312klamde", {
+                expiresIn: '300m',
+            });
+
             return res.status(200).json({
-                message: "Login successful."
+                message: "Login successful.",
+                token: token,
             });
         } else {
             return res.status(401).json({

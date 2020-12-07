@@ -19,8 +19,9 @@ const useStyles = makeStyles(homePageStyle);
 
 
 function HomePage() {
-
   const {mainDiv, card, logoutBtn} = useStyles();
+
+  
   return (
     <div className={mainDiv}>
       <Container maxWidth="lg">
