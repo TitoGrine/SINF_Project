@@ -58,8 +58,6 @@ function Inventory() {
   }
 
   function filterResults() {
-    console.log(`Search: "${searchQuery}"`);
-    console.log(`Zone: "${zoneQuery}"`);
     if (searchQuery === "" && zoneQuery === "") {
       setRows(originalData);
       return;
@@ -93,7 +91,7 @@ function Inventory() {
       "GET",
       "http://localhost:8800/api/stock",
       localStorage.getItem("session"),
-      localStorage.getItem("token")
+      localStorage.getItem("tokens")
     )
       .then((data) => {
         const parsed = parseRows(data);

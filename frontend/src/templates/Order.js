@@ -27,9 +27,9 @@ function Order({ type }) {
           </h1>
         </Grid>
         <Grid item className={classes.list}>
-          <AuthenticationProvider>
+          {/* <AuthenticationProvider> */}
             <ListOrders type={type}></ListOrders>
-          </AuthenticationProvider>
+          {/* </AuthenticationProvider> */}
         </Grid>
         <Grid item>
           <Grid item className={classes.buttonwrp}>

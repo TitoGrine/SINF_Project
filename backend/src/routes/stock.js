@@ -7,11 +7,11 @@ require("dotenv").config();
 router.get("/", function (req, res) {
   const access_token = req.headers.authorization;
 
-  if (!verifySession(req)) {
-    return res.status(401).json({
-      message: "Invalid session token.",
-    });
-  }
+  // if (!verifySession(req)) {
+  //   return res.status(401).json({
+  //     message: "Invalid session token.",
+  //   });
+  // }
 
   if (!access_token)
     return res
@@ -67,11 +67,11 @@ router.post("/transfer", function (req, res) {
   const access_token = req.headers.authorization;
   const { sourceWarehouse, targetWarehouse, items } = req.body;
 
-  if (!verifySession(req)) {
-    return res.status(401).json({
-      message: "Invalid session token.",
-    });
-  }
+  // if (!verifySession(req)) {
+  //   return res.status(401).json({
+  //     message: "Invalid session token.",
+  //   });
+  // }
 
   if (!sourceWarehouse)
     return res.status(400).json({ error: "No sourceWarehouse was provided." });

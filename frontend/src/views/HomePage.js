@@ -13,15 +13,18 @@ import BaseButton from "../components/BaseButton.js";
 
 import homePageStyle from "../style/homePageStyle.js";
 import { darkred } from "../style/colors.js";
-
+import { useAuth } from "../statemanagement/AuthenticationContext";
 
 const useStyles = makeStyles(homePageStyle);
 
-
 function HomePage() {
-  const {mainDiv, card, logoutBtn} = useStyles();
+  const { mainDiv, card, logoutBtn } = useStyles();
+  const { setAuthTokens } = useAuth();
 
-  
+  function logout() {
+    setAuthTokens(null);
+  }
+
   return (
     <div className={mainDiv}>
       <Container maxWidth="lg">
@@ -75,10 +78,10 @@ function HomePage() {
           </Grid>
           <Grid item>
             <Button
-              href="/login"
               size="large"
               variant="text"
               startIcon={<SubdirectoryArrowRightIcon />}
+              onClick={logout}
               className={logoutBtn}
             >
               Logout

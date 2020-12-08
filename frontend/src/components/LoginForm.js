@@ -8,7 +8,9 @@ import LoginField from "./LoginField.js";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import loginFormStyle from "../style/loginFormStyle.js";
 
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "../statemanagement/AuthenticationContext";
 
 const useStyles = makeStyles(loginFormStyle);
 
@@ -38,36 +40,42 @@ const LoginButton = withStyles({
 
 function LoginForm() {
   const history = useHistory();
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const { setAuthTokens } = useAuth();
+  const { container, formContainer, title, middleItems } = useStyles();
 
   const handleSubmit = (event) => {
-    const body = {
-      email: event.target.elements.email.value,
-      password: event.target.elements.password.value,
-    }
+    // const body = {
+    //   email: event.target.elements.email.value,
+    //   password: event.target.elements.password.value,
+    // };
 
-    sendRequest("POST", "http://localhost:8800/api/auth/login", body)
+    // sendRequest("POST", "http://localhost:8800/api/auth/login", body)
+    //   .then((data) => {
+    //     setAuthTokens(data);
+    //     setLoggedIn(true);
+
+    getToken("GET", "http://localhost:8800/api/token")
       .then((data) => {
-        console.log(data.token);
-        localStorage.setItem("session", data.token);
-
-        getToken("GET", "http://localhost:8800/api/token", data.token)
-        .then((data) => {
-          localStorage.setItem("token", data.access_token);
-          history.push("/");
-        })
-        .catch((err) => {
-          console.log(err)
-          history.push("/login");
-        });
+        // localStorage.setItem("token", data.access_token);
+        // history.push("/");
+        setAuthTokens(data.access_token);
+        setLoggedIn(true);
       })
       .catch((err) => {
         console.log(err);
-      })
+        history.push("/login");
+      });
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
 
     event.preventDefault();
   };
 
-  const { container, formContainer, title, middleItems } = useStyles();
+  if (isLoggedIn) return <Redirect to="/" />;
+
   return (
     <form onSubmit={handleSubmit} className={container}>
       <Grid

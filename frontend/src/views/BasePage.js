@@ -88,7 +88,7 @@ function BasePage({ template }) {
             <BaseButton
               type={"nav"}
               image={"grape.svg"}
-              name={null}
+              name={"logout"}
             ></BaseButton>
           </Grid>
         </Grid>
