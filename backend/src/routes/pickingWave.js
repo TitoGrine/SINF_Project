@@ -9,15 +9,12 @@ const picking_wave = require("../models/picking_wave");
 
 // get all picking waves
 router.get("/", async (_, res) => {
-
     const pWaves = clearQueryResults(await picking_wave.findAll());
     return res.json(pWaves);
-
 });
 
 // get picking wave items
 router.get("/:ref/items", async (req, res) => {
-
     const ref = req.params.ref;
     const items = clearQueryResults(await item.findAll({
         where: {
@@ -30,7 +27,6 @@ router.get("/:ref/items", async (req, res) => {
 
 // create picking wave
 router.post("/create", async (req, res) => {
-
     const { ref, date } = req.body
     const pWave = await picking_wave.create(
         {

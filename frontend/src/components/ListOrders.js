@@ -70,7 +70,8 @@ export default function ListOders({ type }) {
         setRows(orders);
       })
       .catch((err) => {
-        console.log(err);
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
       });
   }
 

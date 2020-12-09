@@ -15,6 +15,7 @@ const LoginField = (props) => {
     inputFocused,
     inputColor,
   } = useStyles();
+
   return (
     <React.Fragment>
       <label htmlFor={props.id + "-input"} className={labelStyle}>

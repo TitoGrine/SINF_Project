@@ -9,6 +9,7 @@ import ListInventory from "../components/ListInventory";
 
 import { getData } from "../requests.js";
 import orderStyle from "../style/orderStyle.js";
+import { useAuth } from "../statemanagement/AuthenticationContext";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -19,6 +20,7 @@ function Inventory() {
   const [dataReady, setDataReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [zoneQuery, setZoneQuery] = useState("");
+  const { setAuthToken } = useAuth();
 
   /**
    * Hook to fetch data from backend.
@@ -37,29 +39,14 @@ function Inventory() {
   }, [searchQuery, zoneQuery]);
 
   function parseRows(rows) {
-    let values = Object.entries(rows).map(([id, info]) => {
+    return Object.entries(rows).map(([id, info]) => {
       info["id"] = id;
       info["selectedWarehouse"] = 0;
       return info;
     });
-
-    let parsedRows = values.map((obj) => {
-      let newWarehouses = Object.entries(obj.warehouses).map(
-        ([warehouse, info]) => {
-          info["location"] = warehouse;
-          return info;
-        }
-      );
-      obj.warehouses = newWarehouses;
-      return obj;
-    });
-
-    return parsedRows;
   }
 
   function filterResults() {
-    console.log(`Search: "${searchQuery}"`);
-    console.log(`Zone: "${zoneQuery}"`);
     if (searchQuery === "" && zoneQuery === "") {
       setRows(originalData);
       return;
@@ -101,7 +88,8 @@ function Inventory() {
         setDataReady(true);
       })
       .catch((err) => {
-        console.log(err);
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
       });
   }
 

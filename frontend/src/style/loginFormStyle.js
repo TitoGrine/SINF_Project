@@ -1,6 +1,5 @@
 import { beige } from "./colors";
 
-
 const loginFormStyle = (theme) => {
   const style = {
     container: {
@@ -23,14 +22,25 @@ const loginFormStyle = (theme) => {
       },
     },
     title: {
-        marginBottom: "5rem",
-        [theme.breakpoints.only("xs")]: {
-            marginBottom: "3rem",
-        }
+      marginBottom: "5rem",
+      [theme.breakpoints.only("xs")]: {
+        marginBottom: "3rem",
+      },
     },
-    middleItems: {
+    emailItem: {
       width: "100%",
       marginBottom: "2rem",
+    },
+    passwordItem: {
+      width: "100%",
+    },
+    errorMessage: {
+      margin: 0,
+      fontSize: "1.5rem",
+      height: 56,
+      display: "table-cell",
+      verticalAlign: "middle",
+      textAlign: "center",
     },
   };
 
