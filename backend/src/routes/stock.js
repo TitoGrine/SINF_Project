@@ -27,16 +27,17 @@ router.get("/", function (req, res) {
 
       for (let i in stock) {
         let quantity = 0;
-        let warehouses = {};
+        let warehouses = [];
 
         for (let j in stock[i].materialsItemWarehouses) {
           quantity += parseInt(
             stock[i].materialsItemWarehouses[j].stockBalance
           );
 
-          warehouses[stock[i].materialsItemWarehouses[j].warehouse] = {
+          warehouses.push({
             stock: stock[i].materialsItemWarehouses[j].stockBalance,
-          };
+            location: stock[i].materialsItemWarehouses[j].warehouse,
+          });
         }
 
         parsed_stock[stock[i].itemKey] = {
