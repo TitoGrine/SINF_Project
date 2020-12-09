@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3877ae4d-3c9f-4068-9807-080cb9de45ff",
+		"_postman_id": "8730cc2e-8e0d-47ae-a187-47ac810bb99e",
 		"name": "SINF",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -311,24 +311,9 @@
 					},
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
+						"header": [],
 						"url": {
-							"raw": "http://localhost:8800/api/stock/",
+							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/items",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -336,8 +321,39 @@
 							"port": "8800",
 							"path": [
 								"api",
-								"stock",
-								""
+								"picking-wave",
+								"PW2020_1",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Picking Wave",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2020-12-24T23:59:59\",\n    \"items\": [\n        {\n        \"ref\": \"TONSDUORUM\",\n        \"quantity\": 3,\n        \"order_ref\": \"c992e486-290c-4337-bb5f-da8d3441b2b9\",\n        \"location\": \"A2D\" \n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								"create"
 							]
 						}
 					},
@@ -388,7 +404,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d15a2687-4e76-42e6-9535-ac07470045f4",
+						"id": "06a88c0a-1fbf-4700-9aec-6333d7004a57",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"let bearer_token = jsonData.access_token;",
