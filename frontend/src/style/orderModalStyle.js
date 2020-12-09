@@ -56,8 +56,6 @@ const orderModalStyle = {
   GnrBtn: {
     color: beige,
     backgroundColor: darkred,
-    float: "right",
-    marginRight: "4em"
   },
 };
 

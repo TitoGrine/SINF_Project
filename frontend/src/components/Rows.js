@@ -96,7 +96,7 @@ export default function Row(props) {
 
   return (
     <React.Fragment >
-      <TableRow >
+      <TableRow className={classes.row}>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -113,7 +113,7 @@ export default function Row(props) {
         <TableCell>{data.clientName}</TableCell>
         <TableCell>{data.date}</TableCell>
       </TableRow>
-      <TableRow>
+      <TableRow className={classes.row}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box>

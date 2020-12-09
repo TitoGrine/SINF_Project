@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { getData } from "../requests.js";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -21,6 +22,7 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const { setAuthToken } = useAuth();
 
   useEffect(() => {
     getOrders();
@@ -86,7 +88,7 @@ export default function ListOders({ type }) {
             <TableContainer>
               <Table aria-label="collapsible table">
                 <TableHead>
-                  <TableRow>
+                  <TableRow className={classes.header}>
                     <TableCell> More Info</TableCell>
                     <TableCell>{type.charAt(0).toUpperCase() + type.slice(1)}</TableCell>
                     <TableCell>DocumentId</TableCell>
