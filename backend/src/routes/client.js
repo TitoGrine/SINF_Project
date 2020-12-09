@@ -79,6 +79,7 @@ router.get("/orders/:id", function (req, res) {
         );
 
         order_info[documents[j].salesItem] = {
+          lineNumber: parseInt(documents[j].index) + 1,
           description: documents[j].complementaryDescription,
           quantity: documents[j].quantity,
           stock,
