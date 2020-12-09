@@ -4,7 +4,6 @@ const router = express.Router();
 const { clearQueryResults } = require("../utils/dbUtils");
 const item = require("../models/item");
 const picking_wave = require("../models/picking_wave");
-const { generatePickRoute } = require("../utils/pickRouteUtils");
 const generatePickingRoute = require("../utils/pickRouteUtils");
 
 // get all picking waves
@@ -100,26 +99,36 @@ router.delete("/:ref", async (req, res) => {
     return res.status(404).send();
 });
 
-// delete picking waves
-router.delete("/:ref", async (req, res) => {
+
+// generate picking wave route
+router.get("/:ref/route", async (req, res) => {
     const { ref } = req.params;
 
-    await item.destroy({
+    const items = clearQueryResults(await item.findAll({
         where: {
             ref_picking: ref
         }
+    }))
+
+    if (!items) {
+        return res.status(404).json({
+            message: "Picking Wave does not exist or has no items."
+        })
+    }
+
+    let zones = new Set();
+
+    items.forEach((item) => {
+        zones.add(item.warehouse_zone);
     })
 
-    const i = await picking_wave.destroy({
-        where: {
-            ref: ref
-        }
-    });
+    const route = generatePickingRoute(zones);
 
-    if (i > 0)
-        return res.status(200).send();
+    return res.status(200).json({
+        message: "Route generated successfully.",
+        route : route
+    })
 
-    return res.status(404).send();
-});
+})
 
 module.exports = router;
