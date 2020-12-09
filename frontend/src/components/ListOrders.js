@@ -9,6 +9,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 import orderStyle from "../style/orderStyle.js";
 import { getData } from "../requests.js";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -67,6 +68,7 @@ export default function ListOrders({ type }) {
 
   const [orders, setOrders] = useState(); //to link order to order id
   const [rows, setRows] = useState([]); //to represent rows on render
+  const { setAuthToken } = useAuth();
 
   async function getOrders() {
     getData(
@@ -97,7 +99,8 @@ export default function ListOrders({ type }) {
         setRows(rows_aux);
       })
       .catch((err) => {
-        console.log(err);
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
       });
   }
 

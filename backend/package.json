@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/bin/www",
+    "start:quick": "npm run database:create && npm run database:populate && node src/bin/www",
     "start:test": "node src/test.js",
     "lint": "eslint src --max-warnings 0",
     "lint-fix": "npm run lint -- --fix",
