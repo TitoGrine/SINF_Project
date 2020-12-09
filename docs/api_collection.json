@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "15565c2f-67ad-4411-bab7-be494f4d543f",
+		"_postman_id": "3877ae4d-3c9f-4068-9807-080cb9de45ff",
 		"name": "SINF",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -88,7 +88,7 @@
 					"response": []
 				},
 				{
-					"name": "Get All Available Shipping Items",
+					"name": "Get All Available Delivery Items",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -99,7 +99,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8800/api/client/shipping",
+							"raw": "http://localhost:8800/api/client/delivery",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -108,7 +108,7 @@
 							"path": [
 								"api",
 								"client",
-								"shipping"
+								"delivery"
 							]
 						}
 					},
@@ -135,7 +135,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8800/api/client/shipping",
+							"raw": "http://localhost:8800/api/client/delivery",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -144,7 +144,7 @@
 							"path": [
 								"api",
 								"client",
-								"shipping"
+								"delivery"
 							]
 						}
 					},
@@ -230,6 +230,69 @@
 								"supplier",
 								"orders",
 								"91d89814-f994-4e4c-9185-01175bf2b8ab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Available Delivery Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8800/api/supplier/delivery",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"supplier",
+								"delivery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Delivery",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"sourceDocKey\": \"ECF.2020.2\",\n    \"sourceDocLineNumber\": 2,\n     \"quantity\": \"1\"\n  }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/supplier/delivery",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"supplier",
+								"delivery"
 							]
 						}
 					},
@@ -320,216 +383,12 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Picking Wave",
-			"item": [
-				{
-					"name": "Get All Picking Waves",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Picking Wave Items",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/items",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave",
-								"PW2020_1",
-								"items"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add or Update Picking Wave Item",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"ref\": \"uma_referencia\",\r\n            \"product_name\": \"um_produto\",\r\n            \"quantity\": 3,\r\n            \"order_ref\": \"uma_order\",\r\n            \"warehouse_zone\": \"uma_zona\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/items",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave",
-								"PW2020_1",
-								"items"
-							]
-						},
-						"description": "After sending request, call 'Get Picking Wave Items' to confirm that the item has been added or updated. After repeating this requesting, call the same request to verify that the quantity has been updated"
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Picking Wave Item",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/item/uma_referencia",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave",
-								"PW2020_1",
-								"item",
-								"uma_referencia"
-							]
-						},
-						"description": "After calling this request, call \"Get Picking Wave Items\" to verify that has been deleted"
-					},
-					"response": []
-				},
-				{
-					"name": "Create Picking Wave",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "ref",
-									"value": "PW2020_4",
-									"type": "text"
-								},
-								{
-									"key": "date",
-									"value": "2020-12-24T23:59:59",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Picking Wave",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8800/api/picking-wave/PW2020_1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"picking-wave",
-								"PW2020_1"
-							]
-						},
-						"description": "After calling this request, call \"Get All Picking Waves\" to verify that the PW has been deleted"
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Login user",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "email",
-									"value": "admin@vicino.pt",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "wrongpass",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost:8800/api/auth/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "Get Token",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "a0156fe5-5e98-449c-a8a0-25f4c5c5ecca",
+						"id": "d15a2687-4e76-42e6-9535-ac07470045f4",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"let bearer_token = jsonData.access_token;",

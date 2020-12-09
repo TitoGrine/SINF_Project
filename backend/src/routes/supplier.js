@@ -28,21 +28,22 @@ router.get("/orders", function (req, res) {
       let parsed_orders = {};
 
       for (let i in orders) {
-        for (let j in orders[i].documentLines) {
-          parsed_orders[orders[i].documentLines[j].orderId] = {
-            date: orders[i].documentDate,
-            documentId: orders[i].naturalKey,
-            supplier: orders[i].sellerSupplierParty,
-            supplierName: orders[i].sellerSupplierPartyName,
-          };
-        }
+        if (orders[i].isActive && !orders[i].isDeleted)
+          for (let j in orders[i].documentLines) {
+            parsed_orders[orders[i].documentLines[j].orderId] = {
+              date: orders[i].documentDate,
+              documentId: orders[i].naturalKey,
+              supplier: orders[i].sellerSupplierParty,
+              supplierName: orders[i].sellerSupplierPartyName,
+            };
+          }
       }
 
       res.send(parsed_orders);
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -75,6 +76,7 @@ router.get("/orders/:id", function (req, res) {
         );
 
         order_info[documents[j].purchasesItem] = {
+          lineNumber: parseInt(documents[j].index) + 1,
           description: documents[j].complementaryDescription,
           quantity: documents[j].quantity,
           stock,
@@ -86,7 +88,79 @@ router.get("/orders/:id", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
+    });
+});
+
+router.get("/delivery", function (req, res) {
+  const access_token = req.headers.authorization;
+
+  if (!access_token)
+    return res
+      .status(400)
+      .json({ error: "A valid access token was not provided." });
+
+  const config = {
+    method: "get",
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/goodsReceipt/processOrders/1/1000?company=SINFFEUP`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  axios(config)
+    .then(async function (response) {
+      let parsed_process_orders = [];
+      let process_orders = response.data;
+
+      for (let j in process_orders) {
+        parsed_process_orders.push({
+          sourceDocKey: process_orders[j].sourceDocKey,
+          sourceDocLineNumber: process_orders[j].sourceDocLineNumber,
+          item: process_orders[j].item,
+          originalQuantity: process_orders[j].originalQuantity,
+          quantity: process_orders[j].quantity,
+        });
+      }
+
+      res.send(parsed_process_orders);
+    })
+    .catch(function (error) {
+      console.log(error);
+      return res.status(error.response.status).json({ error });
+    });
+});
+
+router.post("/delivery", function (req, res) {
+  const access_token = req.headers.authorization;
+  const orders = req.body;
+
+  if (!access_token)
+    return res
+      .status(400)
+      .json({ error: "A valid access token was not provided." });
+
+  if (!orders)
+    return res.status(400).json({ error: "No orders were provided." });
+
+  const config = {
+    method: "post",
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/goodsReceipt/processOrders/SINFFEUP`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    data: orders,
+  };
+
+  axios(config)
+    .then(function (response) {
+      res.send({ key: response.data });
+    })
+    .catch(function (error) {
+      console.log(error);
+      return res.status(error.response.status).json({ error });
     });
 });
 
