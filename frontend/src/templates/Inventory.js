@@ -39,24 +39,11 @@ function Inventory() {
   }, [searchQuery, zoneQuery]);
 
   function parseRows(rows) {
-    let values = Object.entries(rows).map(([id, info]) => {
+    return Object.entries(rows).map(([id, info]) => {
       info["id"] = id;
       info["selectedWarehouse"] = 0;
       return info;
     });
-
-    let parsedRows = values.map((obj) => {
-      let newWarehouses = Object.entries(obj.warehouses).map(
-        ([warehouse, info]) => {
-          info["location"] = warehouse;
-          return info;
-        }
-      );
-      obj.warehouses = newWarehouses;
-      return obj;
-    });
-
-    return parsedRows;
   }
 
   function filterResults() {

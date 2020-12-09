@@ -95,10 +95,10 @@ function LoginForm() {
             type="password"
           ></LoginField>
         </Grid>
-        <Grid item>
+        <Grid item style={{alignSelf: "start"}}>
           {isError && (
             <p className={errorMessage}>
-              <ErrorIcon fontSize="small" />
+              <ErrorIcon fontSize="small" style={{marginRight: ".5rem"}}/>
               Credentials did not match. Please try again.
             </p>
           )}

@@ -17,6 +17,7 @@ import StockInventory from "../templates/Stockinventory";
 import BaseButton from "../components/BaseButton";
 
 import basePageStyle from "../style/basePageStyle";
+import LogoutButton from "../components/LogoutButton";
 
 const useStyles = makeStyles(basePageStyle);
 
@@ -85,11 +86,7 @@ function BasePage({ template }) {
             ></BaseButton>
           </Grid>
           <Grid className={classes.icons} item xs={3} sm={2} md={1} lg={1}>
-            <BaseButton
-              type={"nav"}
-              image={"grape.svg"}
-              name={"logout"}
-            ></BaseButton>
+            <LogoutButton/>
           </Grid>
         </Grid>
         <Card className={classes.card}>
