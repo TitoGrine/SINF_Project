@@ -27,16 +27,17 @@ router.get("/", function (req, res) {
 
       for (let i in stock) {
         let quantity = 0;
-        let warehouses = {};
+        let warehouses = [];
 
         for (let j in stock[i].materialsItemWarehouses) {
           quantity += parseInt(
             stock[i].materialsItemWarehouses[j].stockBalance
           );
 
-          warehouses[stock[i].materialsItemWarehouses[j].warehouse] = {
+          warehouses.push({
             stock: stock[i].materialsItemWarehouses[j].stockBalance,
-          };
+            location: stock[i].materialsItemWarehouses[j].warehouse,
+          });
         }
 
         parsed_stock[stock[i].itemKey] = {
@@ -51,7 +52,7 @@ router.get("/", function (req, res) {
       res.send(parsed_stock);
     })
     .catch(function (error) {
-      console.log(error.response); //TODO: refactor some code
+      console.log(error);
       return res.status(error.response.status).json({ error });
     });
 });
@@ -102,7 +103,7 @@ router.post("/transfer", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 

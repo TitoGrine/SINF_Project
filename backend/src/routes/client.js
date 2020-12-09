@@ -28,21 +28,22 @@ router.get("/orders", function (req, res) {
       let parsed_orders = {};
 
       for (let i in orders) {
-        for (let j in orders[i].documentLines) {
-          parsed_orders[orders[i].documentLines[j].orderId] = {
-            date: orders[i].documentDate,
-            documentId: orders[i].naturalKey,
-            client: orders[i].buyerCustomerParty,
-            clientName: orders[i].buyerCustomerPartyName,
-          };
-        }
+        if (orders[i].isActive && !orders[i].isDeleted)
+          for (let j in orders[i].documentLines) {
+            parsed_orders[orders[i].documentLines[j].orderId] = {
+              date: orders[i].documentDate,
+              documentId: orders[i].naturalKey,
+              client: orders[i].buyerCustomerParty,
+              clientName: orders[i].buyerCustomerPartyName,
+            };
+          }
       }
 
       res.send(parsed_orders);
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -75,6 +76,7 @@ router.get("/orders/:id", function (req, res) {
         );
 
         order_info[documents[j].salesItem] = {
+          lineNumber: parseInt(documents[j].index) + 1,
           description: documents[j].complementaryDescription,
           quantity: documents[j].quantity,
           stock,
@@ -86,11 +88,11 @@ router.get("/orders/:id", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
-router.get("/shipping", function (req, res) {
+router.get("/delivery", function (req, res) {
   const access_token = req.headers.authorization;
 
   if (!access_token)
@@ -128,11 +130,11 @@ router.get("/shipping", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
-router.post("/shipping", function (req, res) {
+router.post("/delivery", function (req, res) {
   const access_token = req.headers.authorization;
   const orders = req.body;
 
@@ -158,11 +160,11 @@ router.post("/shipping", function (req, res) {
 
   axios(config)
     .then(function (response) {
-      res.send(response.data);
+      res.send({ key: response.data });
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
