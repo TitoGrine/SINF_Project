@@ -4,7 +4,6 @@ const axios = require("axios");
 const querystring = require("querystring");
 require("dotenv").config();
 
-/* GET home page. */
 router.get("/", function (req, res) {
   axios
     .post(

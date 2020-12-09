@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/bin/www",
+    "start:quick": "npm run database:create && npm run database:populate && node src/bin/www",
     "start:test": "node src/test.js",
     "lint": "eslint src --max-warnings 0",
     "lint-fix": "npm run lint -- --fix",
@@ -20,6 +21,7 @@
     "express": "~4.16.1",
     "express-fileupload": "^1.2.0",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
     "querystring": "^0.2.0",

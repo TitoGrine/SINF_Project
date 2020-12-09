@@ -10,7 +10,7 @@ function NavButton({ name, image }) {
   const classes = useStyles();
 
   return (
-    <div className={classes.circle}>
+    <div className={classes.circle + " icon-circle"}>
       <img src={"./assets/" + image} alt={image} className={classes.iconImg} />
     </div>
   );
