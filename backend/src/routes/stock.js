@@ -52,7 +52,7 @@ router.get("/", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -102,7 +102,7 @@ router.post("/transfer", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 

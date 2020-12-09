@@ -42,7 +42,7 @@ router.get("/orders", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -86,7 +86,7 @@ router.get("/orders/:id", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -128,7 +128,7 @@ router.get("/shipping", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
@@ -162,7 +162,7 @@ router.post("/shipping", function (req, res) {
     })
     .catch(function (error) {
       console.log(error);
-      return res.status(500).json({ error });
+      return res.status(error.response.status).json({ error });
     });
 });
 
