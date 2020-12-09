@@ -28,14 +28,18 @@ router.get("/orders", function (req, res) {
       let parsed_orders = {};
 
       for (let i in orders) {
-        for (let j in orders[i].documentLines) {
-          parsed_orders[orders[i].documentLines[j].orderId] = {
-            date: orders[i].documentDate,
-            documentId: orders[i].naturalKey,
-            client: orders[i].buyerCustomerParty,
-            clientName: orders[i].buyerCustomerPartyName,
-          };
-        }
+        console.log(
+          `order ${orders[i].naturalKey}: isActive? ${orders[i].isActive} | isDeleted? ${orders[i].isDeleted}`
+        );
+        if (orders[i].isActive && !orders[i].isDeleted)
+          for (let j in orders[i].documentLines) {
+            parsed_orders[orders[i].documentLines[j].orderId] = {
+              date: orders[i].documentDate,
+              documentId: orders[i].naturalKey,
+              client: orders[i].buyerCustomerParty,
+              clientName: orders[i].buyerCustomerPartyName,
+            };
+          }
       }
 
       res.send(parsed_orders);
