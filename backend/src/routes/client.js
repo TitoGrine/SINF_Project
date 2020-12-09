@@ -4,16 +4,9 @@ const axios = require("axios");
 require("dotenv").config();
 
 const stockUtils = require("../utils/stockUtils");
-// const verifySession = require("../utils/authUtils");
 
 router.get("/orders", function (req, res) {
   const access_token = req.headers.authorization;
-
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
 
   if (!access_token)
     return res
@@ -55,12 +48,6 @@ router.get("/orders", function (req, res) {
 
 router.get("/orders/:id", function (req, res) {
   const access_token = req.headers.authorization;
-
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
 
   if (!access_token)
     return res
@@ -106,12 +93,6 @@ router.get("/orders/:id", function (req, res) {
 router.get("/shipping", function (req, res) {
   const access_token = req.headers.authorization;
 
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
-
   if (!access_token)
     return res
       .status(400)
@@ -154,12 +135,6 @@ router.get("/shipping", function (req, res) {
 router.post("/shipping", function (req, res) {
   const access_token = req.headers.authorization;
   const orders = req.body;
-
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
 
   if (!access_token)
     return res

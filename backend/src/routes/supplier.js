@@ -1,19 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-// const verifySession = require("../utils/authUtils");
 require("dotenv").config();
 
 const stockUtils = require("../utils/stockUtils");
 
 router.get("/orders", function (req, res) {
   const access_token = req.headers.authorization;
-
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
 
   if (!access_token)
     return res
@@ -55,12 +48,6 @@ router.get("/orders", function (req, res) {
 
 router.get("/orders/:id", function (req, res) {
   const access_token = req.headers.authorization;
-
-  // if (!verifySession(req)) {
-  //   return res.status(401).json({
-  //     message: "Invalid session token.",
-  //   });
-  // }
 
   if (!access_token)
     return res
