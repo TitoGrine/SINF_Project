@@ -11,11 +11,6 @@ const item = db.define("items", {
     ref:{
         type: STRING,
         allowNull: false,
-        unique: true
-    },
-    product_name:{
-        type: STRING,
-        allowNull: false
     },
     quantity:{
         type: INTEGER,

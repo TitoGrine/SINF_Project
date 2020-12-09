@@ -1,11 +1,11 @@
 require("dotenv").config();
-
 const express = require("express");
 const router = express.Router();
 const { clearQueryResults } = require("../utils/dbUtils");
-
 const item = require("../models/item");
 const picking_wave = require("../models/picking_wave");
+const { generatePickRoute } = require("../utils/pickRouteUtils");
+const generatePickingRoute = require("../utils/pickRouteUtils");
 
 // get all picking waves
 router.get("/", async (_, res) => {
@@ -27,79 +27,70 @@ router.get("/:ref/items", async (req, res) => {
 
 // create picking wave
 router.post("/create", async (req, res) => {
-    const { ref, date } = req.body
-    const pWave = await picking_wave.create(
-        {
-            ref,
-            final_date: date
-        },
-        {
-            fields: ["ref", "final_date"]
-        }
-    )
+    const {
+        date,
+        items
+    } = req.body
+    const nextID = await picking_wave.max('id') + 1;
+    const year = new Date().getFullYear();
+    const pwRef = "PW" + year + "_" + nextID;
 
-    return res.status(201).json(pWave);
+    const pWave = await picking_wave.create({
+        ref: pwRef,
+        final_date: date
+    }, {
+        fields: ["ref", "final_date"]
+    })
 
-});
+    if (!pWave) {
+        return res.status(500).json({
+            message: "Error creating picking wave."
+        })
+    }
 
-// add/update picking wave items
-router.post("/:ref/items", async (req, res) => {
-    const ref_picking = req.params.ref;
-    const items = req.body.items;
-    console.log(items);
     await Promise.all(
-        items.map(async ({ ref, product_name, quantity, order_ref, warehouse_zone }) => {
-            const result = await item.findOne({
-                where: {
-                    ref,
-                    product_name,
-                    quantity,
-                    order_ref,
-                    warehouse_zone,
-                    ref_picking: ref_picking,
-                }
+        items.map(async ({
+            ref,
+            quantity,
+            order_ref,
+            location
+        }) => {
+            return await item.create({
+                ref,
+                quantity,
+                order_ref,
+                warehouse_zone: location,
+                ref_picking: pwRef
+            }, {
+                fields: [
+                    "ref",
+                    "quantity",
+                    "order_ref",
+                    "warehouse_zone",
+                    "ref_picking"
+                ]
             });
-
-            if (result) {
-                return result.update({
-                    quantity: result.quantity + quantity
-                });
-            } else {
-                return item.create(
-                    {
-                        ref,
-                        product_name,
-                        quantity,
-                        order_ref,
-                        warehouse_zone,
-                        ref_picking: ref_picking
-                    },
-                    {
-                        fields: [
-                            "ref",
-                            "product_name",
-                            "quantity",
-                            "order_ref",
-                            "warehouse_zone",
-                            "ref_picking"
-                        ]
-                    }
-                );
-            }
         })
     );
 
-    return res.status(201).send();
+    return res.status(201).json(pWave);
 });
 
-//remove picking wave items
-router.delete("/:ref/item/:ref_item", async (req, res) => {
-    const { ref, ref_item } = req.params;
+// delete picking waves
+router.delete("/:ref", async (req, res) => {
+    const {
+        ref
+    } = req.params;
 
-    const i = await item.destroy({
+    await item.destroy({
         where: {
-            ref: ref_item,
             ref_picking: ref
+        }
+    })
+
+    const i = await picking_wave.destroy({
+        where: {
+            ref: ref
         }
     });
 
