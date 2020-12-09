@@ -7,6 +7,10 @@ const orderStyle = {
     fontWeight: "200",
     paddingLeft: "2em",
   },
+  modal:{
+    height: "22em",
+    width: "35em"
+  },
   list: {
     height: "22em",
   },

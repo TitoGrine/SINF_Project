@@ -128,7 +128,6 @@ export default function ListOrders({ type }) {
               disableClickEventBubbling: true,
             }))}
             pageSize={10}
-            checkboxSelection
           />
           {visible && <Modal id={id} type={type}></Modal>}
         </div>

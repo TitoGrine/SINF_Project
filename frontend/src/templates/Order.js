@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../index.css";
 //material core
 import Button from "@material-ui/core/Button";
@@ -11,11 +11,18 @@ import orderStyle from "../style/orderStyle.js";
 
 //state management
 import { ModalProvider } from "../statemanagement/ModalContext";
+import { OrderContext } from "../statemanagement/OrderContext";
+
 
 const useStyles = makeStyles(orderStyle);
 
 function Order({ type }) {
   const classes = useStyles();
+  const [rowsSelected, setrowsSelected] = useContext(OrderContext);
+
+  const handleButton = () => {
+    console.log(rowsSelected)
+  }
 
   return (
     <div>
@@ -33,7 +40,7 @@ function Order({ type }) {
         </Grid>
         <Grid item>
           <Grid item className={classes.buttonwrp}>
-            <Button className={classes.GnrBtn} variant="contained">
+            <Button onClick={handleButton} className={classes.GnrBtn} variant="contained">
               Generate Route
             </Button>
           </Grid>

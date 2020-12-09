@@ -11,15 +11,15 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 
 //state management
 import { ModalContext } from "../statemanagement/ModalContext";
+import { OrderContext } from "../statemanagement/OrderContext";
 
-import orderStyle from "../style/orderStyle.js";
 import orderModalStyle from "../style/orderModalStyle.js";
 
-const addStyles = { ...orderModalStyle, ...orderStyle };
-const useStyles = makeStyles(addStyles);
+const useStyles = makeStyles(orderModalStyle);
 
 const styles = (theme) => ({
   root: {
@@ -92,14 +92,23 @@ const columns = [
   },
 ];
 
-export default function CustomizedDialogs({ id, type}) {
+export default function CustomizedDialogs({ id, type }) {
   const classes = useStyles();
   const [rows, setRows] = useState([]);
   const [visible, setVisible] = useContext(ModalContext);
+  const [selection, setSelection] = useState([]);
+  const [rowsSelected, setrowsSelected] = useContext(OrderContext);
 
-  console.log(type)
   const handleClose = () => {
     setVisible(false);
+  };
+
+  const handleButton = () => {
+    selection.forEach((select) => {
+      let aux = rowsSelected;
+      aux.push(rows[select]);
+      setrowsSelected(aux);
+    });
   };
 
   useEffect(() => {
@@ -113,15 +122,16 @@ export default function CustomizedDialogs({ id, type}) {
       localStorage.getItem("token")
     )
       .then((data) => {
-        // let keysName;
-        // let rows_aux = [];
-        // setOrders(data);
-        // keysName = Object.keys(data);
-        // keysName.forEach((name) => {
-        //   data[name].productId = name; 
-        //   rows_aux.push(data[name]);
-        // });
-        // setRows(rows_aux);
+        let keysName;
+        let rows_aux = [];
+        let i = 0;
+        keysName = Object.keys(data);
+        keysName.forEach((name) => {
+          data[name].id = i++;
+          data[name].productId = name;
+          rows_aux.push(data[name]);
+        });
+        setRows(rows_aux);
       })
       .catch((err) => {
         console.log(err);
@@ -131,23 +141,39 @@ export default function CustomizedDialogs({ id, type}) {
   return (
     <div>
       <Dialog className={classes.dialog} open={visible} onClose={handleClose}>
-        <DialogTitle>{"Order Id"}</DialogTitle>
+        <DialogTitle className={classes.title}>
+          {"Order "} <b>{id}</b>{" "}
+        </DialogTitle>
         <DialogContent className={classes.content}>
           {rows.length == 0 ? (
             <CircularProgress className={classes.progress} color="inherit" />
           ) : (
-            <DataGrid
-              onClick={(ev) => {
-                ev.preventDefault();
-              }}
-              className={classes.table}
-              rows={rows}
-              columns={columns.map((column) => ({
-                ...column,
-                disableClickEventBubbling: true,
-              }))}
-              pageSize={10}
-            />
+            <div className={classes.table}>
+              <DataGrid
+                onClick={(ev) => {
+                  ev.preventDefault();
+                }}
+                rows={rows}
+                columns={columns.map((column) => ({
+                  ...column,
+                  disableClickEventBubbling: true,
+                }))}
+                pageSize={5}
+                checkboxSelection
+                onSelectionChange={(newSelection) => {
+                  setSelection(newSelection.rowIds);
+                }}
+              />
+            </div>
+          )}
+          {rows.length !== 0 && (
+            <Button
+              onClick={handleButton}
+              className={classes.GnrBtn}
+              variant="contained"
+            >
+              Add products to route
+            </Button>
           )}
         </DialogContent>
       </Dialog>

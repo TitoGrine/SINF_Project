@@ -20,13 +20,24 @@ import basePageStyle from "../style/basePageStyle";
 
 const useStyles = makeStyles(basePageStyle);
 
+//statemanagement
+import { OrderProvider } from "../statemanagement/OrderContext";
+
 //TODO: probably change this logic to something better
 function getTemplate(template) {
   switch (template) {
     case "client-order":
-      return <Order type={"client"}></Order>;
+      return (
+        <OrderProvider>
+          <Order type={"client"}></Order>
+        </OrderProvider>
+      );
     case "supplier-order":
-      return <Order type={"supplier"}></Order>;
+      return (
+        <OrderProvider>
+          <Order type={"supplier"}></Order>
+        </OrderProvider>
+      );
     case "inventory":
       return <Inventory></Inventory>;
     case "stock-inventory":
