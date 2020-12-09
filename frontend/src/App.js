@@ -10,16 +10,13 @@ import { AuthenticationProvider } from "./statemanagement/AuthenticationContext"
 import PrivateRoute from "./statemanagement/PrivateRoute";
 
 function App() {
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
   const [authToken, setAuthToken] = useState(token);
 
   const setToken = (data) => {
-    localStorage.setItem("token", JSON.stringify(data));
+    localStorage.setItem("token", data);
     setAuthToken(data);
   };
-
-  console.log("Token: ");
-  console.log(token);
 
   return (
     <main>

@@ -92,7 +92,7 @@ function Inventory() {
     getData(
       "GET",
       "http://localhost:8800/api/stock",
-      JSON.parse(localStorage.getItem("token")).token
+      localStorage.getItem("token")
     )
       .then((data) => {
         const parsed = parseRows(data);
@@ -102,8 +102,7 @@ function Inventory() {
       })
       .catch((err) => {
         const error = JSON.parse(err.message);
-        //TODO: check this code
-        if (error.status === 401) setAuthToken(null);
+        if (error.status === 401) setAuthToken("");
       });
   }
 

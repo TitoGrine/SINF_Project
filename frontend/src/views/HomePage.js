@@ -22,7 +22,7 @@ function HomePage() {
   const { setAuthToken } = useAuth();
 
   function logout() {
-    setAuthToken(null);
+    setAuthToken("");
   }
 
   return (
