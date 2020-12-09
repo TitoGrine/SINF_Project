@@ -18,10 +18,11 @@ import BaseButton from "../components/BaseButton";
 
 import basePageStyle from "../style/basePageStyle";
 
-const useStyles = makeStyles(basePageStyle);
-
 //statemanagement
 import { OrderProvider } from "../statemanagement/OrderContext";
+
+const useStyles = makeStyles(basePageStyle);
+
 
 //TODO: probably change this logic to something better
 function getTemplate(template) {

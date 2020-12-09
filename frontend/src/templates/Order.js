@@ -13,7 +13,6 @@ import orderStyle from "../style/orderStyle.js";
 import { ModalProvider } from "../statemanagement/ModalContext";
 import { OrderContext } from "../statemanagement/OrderContext";
 
-
 const useStyles = makeStyles(orderStyle);
 
 function Order({ type }) {
@@ -22,7 +21,21 @@ function Order({ type }) {
 
   const handleButton = () => {
     console.log(rowsSelected)
-  }
+    let aux = rowsSelected.map((obj) => {
+      let item = {
+        ref: obj.productId,
+        quantity: obj.quantity,
+        location: obj.quantity,
+        order_ref: obj.order_ref,
+      };
+      return item;
+    });
+    let object = {
+      date: Date.now(),
+      items: aux,
+    };
+    console.log(object)
+  };
 
   return (
     <div>
@@ -40,7 +53,11 @@ function Order({ type }) {
         </Grid>
         <Grid item>
           <Grid item className={classes.buttonwrp}>
-            <Button onClick={handleButton} className={classes.GnrBtn} variant="contained">
+            <Button
+              onClick={handleButton}
+              className={classes.GnrBtn}
+              variant="contained"
+            >
               Generate Route
             </Button>
           </Grid>

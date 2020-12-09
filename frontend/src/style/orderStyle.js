@@ -7,40 +7,14 @@ const orderStyle = {
     fontWeight: "200",
     paddingLeft: "2em",
   },
-  modal:{
-    height: "22em",
-    width: "35em"
+  root:{
+    backgroundColor: beige,
+    fontSize:"1.25em"
   },
   list: {
     height: "22em",
   },
-  table: {
-    "& .header": {
-      color: darkred,
-      borderStyle: "none",
-      fontFamily: "'PT Sans Narrow', sans-serif",
-    },
-    "& .MuiDataGrid-colCellTitle": {
-      fontSize: "1.10em",
-      fontWeight: "bold",
-    },
-    "& .MuiDataGrid-root .MuiDataGrid-cell": {
-      textAlign: "center",
-      border: "none",
-    },
-    "& .MuiDataGrid-root": {
-      border: "none",
-      fontSize: "0.75em",
-    },
-    "& .MuiDataGrid-columnSeparator": {
-      display: "none",
-    },
-    "& .MuiDataGrid-root .MuiDataGrid-columnsContainer": {
-      borderBottom: "3px solid" + darkred,
-    },
-    height: "100%",
-    padding: "0em 2em",
-  },
+  
   GnrBtn: {
     marginRight: "4em",
     color: beige,
