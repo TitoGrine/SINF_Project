@@ -94,7 +94,7 @@ router.get("/orders/:id", function (req, res) {
     });
 });
 
-router.get("/shipping", function (req, res) {
+router.get("/delivery", function (req, res) {
   const access_token = req.headers.authorization;
 
   if (!access_token)
@@ -136,7 +136,7 @@ router.get("/shipping", function (req, res) {
     });
 });
 
-router.post("/shipping", function (req, res) {
+router.post("/delivery", function (req, res) {
   const access_token = req.headers.authorization;
   const orders = req.body;
 
@@ -162,7 +162,7 @@ router.post("/shipping", function (req, res) {
 
   axios(config)
     .then(function (response) {
-      res.send(response.data);
+      res.send({ key: response.data });
     })
     .catch(function (error) {
       console.log(error);
