@@ -28,9 +28,6 @@ router.get("/orders", function (req, res) {
       let parsed_orders = {};
 
       for (let i in orders) {
-        console.log(
-          `order ${orders[i].naturalKey}: isActive? ${orders[i].isActive} | isDeleted? ${orders[i].isDeleted}`
-        );
         if (orders[i].isActive && !orders[i].isDeleted)
           for (let j in orders[i].documentLines) {
             parsed_orders[orders[i].documentLines[j].orderId] = {
