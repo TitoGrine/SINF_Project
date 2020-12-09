@@ -1,16 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { getData } from "../requests.js";
+//material core
+import { DataGrid } from "@material-ui/data-grid";
+import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 //state management
 import { ModalContext } from "../statemanagement/ModalContext";
+
+import orderStyle from "../style/orderStyle.js";
+import orderModalStyle from "../style/orderModalStyle.js";
+
+const addStyles = { ...orderModalStyle, ...orderStyle };
+const useStyles = makeStyles(addStyles);
 
 const styles = (theme) => ({
   root: {
@@ -49,46 +58,97 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
+const columns = [
+  {
+    field: "id",
+    headerName: "Product Id",
+    width: 100,
+    headerClassName: "header",
   },
-}))(MuiDialogActions);
+  {
+    field: "description",
+    width: 300,
+    headerName: "Description",
+    headerClassName: "header",
+  },
+  {
+    field: "quantity",
+    width: 100,
+    headerName: "Quantity",
+    headerClassName: "header",
+  },
+  {
+    field: "stock",
+    headerName: "Stock",
+    width: 100,
+    headerClassName: "header",
+  },
+  {
+    field: "location",
+    headerName: "Location",
+    width: 200,
+    headerAlign: "center",
+    headerClassName: "header",
+  },
+];
 
-export default function CustomizedDialogs() {
+export default function CustomizedDialogs({ id, type}) {
+  const classes = useStyles();
+  const [rows, setRows] = useState([]);
   const [visible, setVisible] = useContext(ModalContext);
 
+  console.log(type)
   const handleClose = () => {
     setVisible(false);
   };
 
+  useEffect(() => {
+    getOrderData();
+  }, [id]);
+
+  async function getOrderData() {
+    getData(
+      "GET",
+      "http://localhost:8800/api/" + type + "/orders/" + id,
+      localStorage.getItem("token")
+    )
+      .then((data) => {
+        // let keysName;
+        // let rows_aux = [];
+        // setOrders(data);
+        // keysName = Object.keys(data);
+        // keysName.forEach((name) => {
+        //   data[name].productId = name; 
+        //   rows_aux.push(data[name]);
+        // });
+        // setRows(rows_aux);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <div>
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={visible}
-      >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
-        </DialogTitle>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-            auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-            cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-            dui. Donec ullamcorper nulla non metus auctor fringilla.
-          </Typography>
+      <Dialog className={classes.dialog} open={visible} onClose={handleClose}>
+        <DialogTitle>{"Order Id"}</DialogTitle>
+        <DialogContent className={classes.content}>
+          {rows.length == 0 ? (
+            <CircularProgress className={classes.progress} color="inherit" />
+          ) : (
+            <DataGrid
+              onClick={(ev) => {
+                ev.preventDefault();
+              }}
+              className={classes.table}
+              rows={rows}
+              columns={columns.map((column) => ({
+                ...column,
+                disableClickEventBubbling: true,
+              }))}
+              pageSize={10}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </div>

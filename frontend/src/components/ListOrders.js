@@ -17,6 +17,13 @@ import orderStyle from "../style/orderStyle.js";
 const useStyles = makeStyles(orderStyle);
 
 export default function ListOrders({ type }) {
+
+  const [orders, setOrders] = useState([]); //to link order to order id
+  const [rows, setRows] = useState([]); //to represent rows on render
+  const classes = useStyles();
+  const [visible, setVisible] = useContext(ModalContext);
+  const [id, setId] = useState("");
+
   const getColumns = () => {
     return [
       {
@@ -52,6 +59,7 @@ export default function ListOrders({ type }) {
         renderCell: (params) => {
           const onClick = () => {
             setVisible(!visible);
+            setId(orders[params.value])
           };
 
           return (
@@ -68,11 +76,6 @@ export default function ListOrders({ type }) {
     setRows([]);
     getOrders();
   }, [type]);
-
-  const [orders, setOrders] = useState(); //to link order to order id
-  const [rows, setRows] = useState([]); //to represent rows on render
-  const classes = useStyles();
-  const [visible, setVisible] = useContext(ModalContext);
 
   async function getOrders() {
     getData(
@@ -96,7 +99,7 @@ export default function ListOrders({ type }) {
             delete data[name].supplier;
           }
           data[name].info = i++;
-          orders.push([name, data[name]]);
+          orders.push(name);
           rows_aux.push(data[name]);
         });
         setOrders(orders);
@@ -127,7 +130,7 @@ export default function ListOrders({ type }) {
             pageSize={10}
             checkboxSelection
           />
-          {visible && <Modal ></Modal>}
+          {visible && <Modal id={id} type={type}></Modal>}
         </div>
       )}
     </div>
