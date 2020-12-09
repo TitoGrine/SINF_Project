@@ -1,7 +1,8 @@
 require("dotenv").config();
 
-const jwt = require('jsonwebtoken');
+const axios = require("axios");
 const express = require("express");
+const querystring = require("querystring");
 const router = express.Router();
 
 const user = require("../models/user");
@@ -18,28 +19,32 @@ router.post("/login", async (req, res) => {
 
     if (!registered)
         return res.status(401).json({
-            message: "User not found with that email.",
+            message: "Login failed.",
         });
 
     registered.checkPass(password, (err, match) => {
         if (match && !err) {
-            const token = jwt.sign({
-                email: email,
-            },
-                "cabkij3412poljmdae2alfkem312klamde", {
-                expiresIn: '300m',
-            });
-
-            return res.status(200).json({
-                message: "Login successful.",
-                token: token,
-            });
+            axios
+              .post(
+                  "https://identity.primaverabss.com/connect/token",
+                  querystring.stringify({
+                      grant_type: "client_credentials",
+                      client_id: process.env.JASMIN_CLIENT_ID,
+                      client_secret: process.env.JASMIN_CLIENT_SECRET,
+                      scope: "application",
+                  })
+              )
+              .then((token) => {
+                  res.status(200).json({ token: token.data.access_token });
+              });
         } else {
             return res.status(401).json({
                 message: "Login failed.",
             })
         }
     })
+
+    return res;
 })
 
 module.exports = router;

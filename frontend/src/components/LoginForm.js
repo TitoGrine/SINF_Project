@@ -1,5 +1,5 @@
 import React from "react";
-import { getToken, sendRequest } from "../requests.js";
+import { sendRequest } from "../requests.js";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -8,8 +8,7 @@ import LoginField from "./LoginField.js";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import loginFormStyle from "../style/loginFormStyle.js";
 
-import { Redirect, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { useAuth } from "../statemanagement/AuthenticationContext";
 
 const useStyles = makeStyles(loginFormStyle);
@@ -39,42 +38,27 @@ const LoginButton = withStyles({
 })(Button);
 
 function LoginForm() {
-  const history = useHistory();
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const { setAuthTokens } = useAuth();
+  const { authToken, setAuthToken } = useAuth();
   const { container, formContainer, title, middleItems } = useStyles();
 
   const handleSubmit = (event) => {
-    // const body = {
-    //   email: event.target.elements.email.value,
-    //   password: event.target.elements.password.value,
-    // };
+    const body = {
+      email: event.target.elements.email.value,
+      password: event.target.elements.password.value,
+    };
 
-    // sendRequest("POST", "http://localhost:8800/api/auth/login", body)
-    //   .then((data) => {
-    //     setAuthTokens(data);
-    //     setLoggedIn(true);
-
-    getToken("GET", "http://localhost:8800/api/token")
+    sendRequest("POST", "http://localhost:8800/api/auth/login", body)
       .then((data) => {
-        // localStorage.setItem("token", data.access_token);
-        // history.push("/");
-        setAuthTokens(data.access_token);
-        setLoggedIn(true);
+        setAuthToken(data);
       })
       .catch((err) => {
         console.log(err);
-        history.push("/login");
       });
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
 
     event.preventDefault();
   };
 
-  if (isLoggedIn) return <Redirect to="/" />;
+  if (authToken) return <Redirect to="/" />;
 
   return (
     <form onSubmit={handleSubmit} className={container}>

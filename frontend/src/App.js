@@ -10,20 +10,20 @@ import { AuthenticationProvider } from "./statemanagement/AuthenticationContext"
 import PrivateRoute from "./statemanagement/PrivateRoute";
 
 function App() {
-  const existingTokens = JSON.parse(localStorage.getItem("tokens"));
-  const [authTokens, setAuthTokens] = useState(existingTokens);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const [authToken, setAuthToken] = useState(token);
 
-  const setTokens = (data) => {
-    localStorage.setItem("tokens", JSON.stringify(data));
-    setAuthTokens(data);
+  const setToken = (data) => {
+    localStorage.setItem("token", JSON.stringify(data));
+    setAuthToken(data);
   };
 
-  console.log("Tokens: ");
-  console.log(existingTokens);
+  console.log("Token: ");
+  console.log(token);
 
   return (
     <main>
-      <AuthenticationProvider value={{ authTokens, setAuthTokens: setTokens }}>
+      <AuthenticationProvider value={{ authToken, setAuthToken: setToken }}>
         <Switch>
           <Route path="/login" exact>
             <LoginPage></LoginPage>

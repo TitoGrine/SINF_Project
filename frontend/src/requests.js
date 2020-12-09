@@ -1,8 +1,8 @@
-export const getToken = async (method, url, session, data) => {
+export const getToken = async (method, url, data) => {
   const response = await fetch(url, {
     method: method,
     body: JSON.stringify(data),
-    headers: data ? { "Content-Type": "application/json", "SessionJWT": session } : { "SessionJWT": session },
+    headers: data ? { "Content-Type": "application/json" } : {},
   });
   if (response.status >= 400) {
     return response.json().then((errorMessage) => {
@@ -29,14 +29,15 @@ export const sendRequest = async (method, url, data) => {
 };
 
 
-export const getData = async (method, url, session, token) => {
+export const getData = async (method, url, token) => {
   const response = await fetch(url, {
     method: method,
-    headers: { "Authorization": token, "SessionJWT": session, }
+    headers: { "Authorization": token }
   });
   if (response.status >= 400) {
     return response.json().then((errorMessage) => {
-      const error = new Error(errorMessage);
+      errorMessage["status"] = response.status;
+      const error = new Error(JSON.stringify(errorMessage));
       throw error;
     });
   }

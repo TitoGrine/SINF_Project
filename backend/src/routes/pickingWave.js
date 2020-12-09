@@ -6,15 +6,15 @@ const { clearQueryResults } = require("../utils/dbUtils");
 
 const item = require("../models/item");
 const picking_wave = require("../models/picking_wave");
-const verifySession = require("../utils/authUtils");
+// const verifySession = require("../utils/authUtils");
 
 // get all picking waves
 router.get("/", async (_, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const pWaves = clearQueryResults(await picking_wave.findAll());
     return res.json(pWaves);
@@ -22,11 +22,11 @@ router.get("/", async (_, res) => {
 
 // get picking wave items
 router.get("/:ref/items", async (req, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const ref = req.params.ref;
     const items = clearQueryResults(await item.findAll({
@@ -40,11 +40,11 @@ router.get("/:ref/items", async (req, res) => {
 
 // create picking wave
 router.post("/create", async (req, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const { ref, date } = req.body
     const pWave = await picking_wave.create(
@@ -63,11 +63,11 @@ router.post("/create", async (req, res) => {
 
 // add/update picking wave items
 router.post("/:ref/items", async (req, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const ref_picking = req.params.ref;
     const items = req.body.items;
@@ -119,11 +119,11 @@ router.post("/:ref/items", async (req, res) => {
 
 //remove picking wave items
 router.delete("/:ref/item/:ref_item", async (req, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const { ref, ref_item } = req.params;
 
@@ -142,11 +142,11 @@ router.delete("/:ref/item/:ref_item", async (req, res) => {
 
 // delete picking waves
 router.delete("/:ref", async (req, res) => {
-    if (!verifySession(req)) {
-        return res.status(401).json({
-            message: "Invalid session token.",
-        });
-    }
+    // if (!verifySession(req)) {
+    //     return res.status(401).json({
+    //         message: "Invalid session token.",
+    //     });
+    // }
 
     const { ref } = req.params;
 

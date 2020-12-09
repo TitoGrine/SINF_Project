@@ -4,20 +4,15 @@ import Grid from "@material-ui/core/Grid";
 import LoginForm from "../components/LoginForm.js";
 import { Hidden } from "@material-ui/core";
 
-//state management
-import { AuthenticationProvider } from "../statemanagement/AuthenticationContext"
-
 function LoginPage() {
   return (
     <Grid container>
       <Grid item xs={12} sm={6}>
-        {/* <AuthenticationProvider> */}
-          <LoginForm></LoginForm>
-        {/* </AuthenticationProvider> */}
+        <LoginForm></LoginForm>
       </Grid>
       <Hidden only="xs">
         <Grid item xs={6}>
-          {/* The following div is used solely for the vorder,
+          {/* The following div is used solely for the border,
               which is what gives us the triangle on the right*/}
           <div
             style={{

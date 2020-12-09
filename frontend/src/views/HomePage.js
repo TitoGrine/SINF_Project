@@ -19,10 +19,10 @@ const useStyles = makeStyles(homePageStyle);
 
 function HomePage() {
   const { mainDiv, card, logoutBtn } = useStyles();
-  const { setAuthTokens } = useAuth();
+  const { setAuthToken } = useAuth();
 
   function logout() {
-    setAuthTokens(null);
+    setAuthToken(null);
   }
 
   return (

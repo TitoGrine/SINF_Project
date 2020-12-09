@@ -72,8 +72,7 @@ export default function ListOrders({ type }) {
     getData(
       "GET",
       "http://localhost:8800/api/" + type + "/orders",
-      localStorage.getItem("session"),
-      localStorage.getItem("token")
+      JSON.parse(localStorage.getItem("token")).token
     )
       .then((data) => {
         let keysName;

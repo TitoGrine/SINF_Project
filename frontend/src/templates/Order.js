@@ -9,9 +9,6 @@ import ListOrders from "../components/ListOrders";
 
 import orderStyle from "../style/orderStyle.js";
 
-//state management
-import { AuthenticationProvider } from "../statemanagement/AuthenticationContext";
-
 const useStyles = makeStyles(orderStyle);
 
 function Order({ type }) {
@@ -27,9 +24,7 @@ function Order({ type }) {
           </h1>
         </Grid>
         <Grid item className={classes.list}>
-          {/* <AuthenticationProvider> */}
-            <ListOrders type={type}></ListOrders>
-          {/* </AuthenticationProvider> */}
+          <ListOrders type={type}></ListOrders>
         </Grid>
         <Grid item>
           <Grid item className={classes.buttonwrp}>

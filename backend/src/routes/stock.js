@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const verifySession = require("../utils/authUtils");
+// const verifySession = require("../utils/authUtils");
 require("dotenv").config();
 
 router.get("/", function (req, res) {
@@ -58,8 +58,8 @@ router.get("/", function (req, res) {
       res.send(parsed_stock);
     })
     .catch(function (error) {
-      console.log(error);
-      return res.status(500).json({ error });
+      console.log(error.response); //TODO: refactor some code
+      return res.status(error.response.status).json({ error });
     });
 });
 
