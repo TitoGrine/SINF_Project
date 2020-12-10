@@ -30,7 +30,6 @@ export default function ListOders({ type }) {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [flag, setFlag] = useState(false);
   const { setAuthToken } = useAuth();
-
   const handleButton = () => {
     if (type === "client") {
       let aux = rowsSelected.map((obj) => {

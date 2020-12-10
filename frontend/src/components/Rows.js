@@ -48,6 +48,8 @@ export default function Row(props) {
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
+  console.log(rowsSelected);
+
   async function getRow(order_ref) {
     if (data.order[0].description !== "") {
       setOpen(!open);
@@ -81,8 +83,7 @@ export default function Row(props) {
       });
   }
 
-  const handleClick = (event, row_add, ref, value) => {
-    console.log(value);
+  const handleClick = (event, row_add, ref, input) => {
     const selectedIndex = selected.indexOf(row_add.productId);
     let newSelected = [];
 
@@ -98,15 +99,13 @@ export default function Row(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-
     setSelected(newSelected);
-
     let new_data = data.order.map((value) => {
       if (row_add.checked) {
         row_add.order_ref = ref;
       }
       if (value.productId === row_add.productId) {
-        value.input = value;
+        value.expected_quantity = parseInt(input);
         value.checked = !row_add.checked;
       }
       return value;
@@ -122,6 +121,26 @@ export default function Row(props) {
       return;
     }
     rowsSelected.push(row_add);
+  };
+
+  const handleInput = (row_add, input) => {
+    let new_data = data.order.map((value) => {
+      if (value.productId === row_add.productId) {
+        value.expected_quantity = parseInt(input);
+      }
+      return value;
+    });
+    let aux = data;
+    aux.order = new_data;
+    setData(aux);
+    if (row_add.checked) {
+      let aux = rowsSelected.filter(function (item) {
+        return item.productId !== row_add.productId;
+      });
+      aux.push(row_add);
+      setrowsSelected(aux);
+      return;
+    }
   };
 
   return (
@@ -207,6 +226,7 @@ export default function Row(props) {
                               type="number"
                               onChange={(e) => {
                                 value = e.target.value;
+                                handleInput(historyRow, value);
                               }}
                               InputLabelProps={{
                                 shrink: true,
