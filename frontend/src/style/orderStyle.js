@@ -1,4 +1,4 @@
-import { darkred, beige, darkbeige } from "./colors.js";
+import { darkred, darkbeige2, darkbeige3, beige, darkbeige } from "./colors.js";
 
 const orderStyle = {
   title: {
@@ -7,6 +7,18 @@ const orderStyle = {
     fontWeight: "200",
     paddingLeft: "2em",
   },
+  row: {
+    borderBottom: "1px solid " + darkbeige3,
+    "& MuiTableCell-root MuiTableCell-body": {
+      borderBottom: "none",
+    },
+  },
+  subtablerow: {
+    borderBottom: "none",
+  },
+  cell: {
+    borderBottom: "none",
+  },
   root: {
     backgroundColor: darkbeige,
   },
@@ -14,8 +26,14 @@ const orderStyle = {
     width: "90%",
     margin: "auto",
   },
-  ".MuiCheckbox-colorPrimary.Mui-checked":{
-      color: darkred
+  subtablehead: {
+    borderBottom: "1px solid " + darkred,
+  },
+  subTable: {
+    backgroundColor: darkbeige2,
+    "& .MuiTableCell-root": {
+      borderBottom: "none",
+    },
   },
   header: {
     borderBottom: "4px solid" + darkred,
@@ -37,12 +55,13 @@ const orderStyle = {
     borderBottom: "1px solid" + beige,
   },
   GnrBtn: {
+    padding: "1em",
     marginRight: "4em",
     color: beige,
     backgroundColor: darkred,
   },
   buttonwrp: {
-    marginTop:"1em",
+    marginTop: "1em",
     width: "100%",
     display: "flex",
     justifyContent: "flex-end",

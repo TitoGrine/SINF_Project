@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import "../index.css";
 //material core
 import Button from "@material-ui/core/Button";
@@ -11,30 +11,11 @@ import orderStyle from "../style/orderStyle.js";
 
 //state management
 import { ModalProvider } from "../statemanagement/ModalContext";
-import { OrderContext } from "../statemanagement/OrderContext";
 
 const useStyles = makeStyles(orderStyle);
 
 function Order({ type }) {
   const classes = useStyles();
-  const [rowsSelected, setrowsSelected] = useContext(OrderContext);
-
-  const handleButton = () => {
-    let aux = rowsSelected.map((obj) => {
-      let item = {
-        ref: obj.productId,
-        quantity: obj.quantity,
-        location: obj.quantity,
-        order_ref: obj.order_ref,
-      };
-      return item;
-    });
-    let object = {
-      date: Date.now(),
-      items: aux,
-    };
-    console.log(object)
-  };
 
   return (
     <div>
@@ -44,22 +25,9 @@ function Order({ type }) {
             {" "}
             {type === "client" ? "Clients" : "Suppliers"} Orders
           </h1>
-        </Grid>
-        <Grid item className={classes.list}>
           <ModalProvider>
             <ListOrders type={type}></ListOrders>
           </ModalProvider>
-        </Grid>
-        <Grid item>
-          <Grid item className={classes.buttonwrp}>
-            <Button
-              onClick={handleButton}
-              className={classes.GnrBtn}
-              variant="contained"
-            >
-              Generate Route
-            </Button>
-          </Grid>
         </Grid>
       </Grid>
     </div>

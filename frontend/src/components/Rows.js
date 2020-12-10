@@ -16,14 +16,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import { OrderContext } from "../statemanagement/OrderContext";
 
+import orderStyle from "../style/orderStyle.js";
 
-const useRowStyles = makeStyles({
-  root: {
-    "& > *": {
-      borderBottom: "unset",
-    },
-  },
-});
+const useStyles = makeStyles(orderStyle);
 
 Row.propTypes = {
   row: PropTypes.shape({
@@ -34,9 +29,9 @@ Row.propTypes = {
       PropTypes.shape({
         productId: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
+        location: PropTypes.string.isRequired,
         quantity: PropTypes.number.isRequired,
         stock: PropTypes.number.isRequired,
-        location: PropTypes.string.isRequired,
       })
     ).isRequired,
   }).isRequired,
@@ -45,7 +40,7 @@ Row.propTypes = {
 export default function Row(props) {
   const { row, type } = props;
   const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
+  const classes = useStyles();
   const [data, setData] = useState(row);
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
   const [selected, setSelected] = React.useState([]);
@@ -68,9 +63,9 @@ export default function Row(props) {
           let obj = {
             productId: name,
             description: d[name].description,
+            location: d[name].location,
             quantity: d[name].quantity,
             stock: d[name].stock,
-            location: d[name].location,
             checked: false,
           };
           values.push(obj);
@@ -84,7 +79,6 @@ export default function Row(props) {
   }
 
   const handleClick = (event, row_add, ref) => {
-
     const selectedIndex = selected.indexOf(row_add.productId);
     let newSelected = [];
 
@@ -97,7 +91,7 @@ export default function Row(props) {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -106,7 +100,7 @@ export default function Row(props) {
     let new_data = data.order.map((value) => {
       if (row_add.checked) row_add.order_ref = ref;
       if (value.productId === row_add.productId)
-      value.checked = !row_add.checked;
+        value.checked = !row_add.checked;
       return value;
     });
     let aux = data;
@@ -121,7 +115,7 @@ export default function Row(props) {
   return (
     <React.Fragment>
       <TableRow className={classes.row}>
-        <TableCell>
+        <TableCell className={classes.cell}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -132,24 +126,24 @@ export default function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{data.client}</TableCell>
-        <TableCell>{data.documentId}</TableCell>
-        <TableCell>{data.name}</TableCell>
-        <TableCell>{data.date}</TableCell>
+        <TableCell className={classes.cell}>{data.client}</TableCell>
+        <TableCell className={classes.cell}>{data.documentId}</TableCell>
+        <TableCell className={classes.cell}>{data.name}</TableCell>
+        <TableCell className={classes.cell}>{data.date}</TableCell>
       </TableRow>
-      <TableRow className={classes.row}>
+      <TableRow className={classes.subTable}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box>
               <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell> </TableCell>
-                    <TableCell> ProductId </TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>Stock</TableCell>
-                    <TableCell>Location</TableCell>
+                <TableHead className={classes.subtablehead}>
+                  <TableRow className={classes.subtablerow}>
+                    <TableCell className={classes.cell}> </TableCell>
+                    <TableCell className={classes.cell}> ProductId </TableCell>
+                    <TableCell className={classes.cell}>Description</TableCell>
+                    <TableCell className={classes.cell}>Location</TableCell>
+                    <TableCell className={classes.cell}>Quantity</TableCell>
+                    <TableCell className={classes.cell}>Stock</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -165,18 +159,24 @@ export default function Row(props) {
                         tabIndex={-1}
                         key={historyRow.productId}
                       >
-                        <TableCell padding="checkbox">
+                        <TableCell className={classes.cell} padding="checkbox">
                           <Checkbox color="primary" checked={isItemSelected} />
                         </TableCell>
-                        <TableCell scope="row">
+                        <TableCell className={classes.cell} scope="row">
                           {historyRow.productId}
                         </TableCell>
-                        <TableCell scope="row">
+                        <TableCell className={classes.cell} scope="row">
                           {historyRow.description}
                         </TableCell>
-                        <TableCell>{historyRow.quantity}</TableCell>
-                        <TableCell>{historyRow.stock}</TableCell>
-                        <TableCell>{historyRow.location}</TableCell>
+                        <TableCell className={classes.cell}>
+                          {historyRow.location}
+                        </TableCell>
+                        <TableCell className={classes.cell}>
+                          {historyRow.quantity}
+                        </TableCell>
+                        <TableCell className={classes.cell}>
+                          {historyRow.stock}
+                        </TableCell>
                       </TableRow>
                     );
                   })}

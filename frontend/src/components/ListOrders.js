@@ -12,17 +12,39 @@ import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TablePagination from "@material-ui/core/TablePagination";
 import Row from "../components/Rows";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 import orderStyle from "../style/orderStyle.js";
+
+import { OrderContext } from "../statemanagement/OrderContext";
 
 const useStyles = makeStyles(orderStyle);
 
 export default function ListOders({ type }) {
+  const [rowsSelected, setrowsSelected] = useContext(OrderContext);
   const [rows, setRows] = useState([]);
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const { setAuthToken } = useAuth();
+
+  const handleButton = () => {
+    let aux = rowsSelected.map((obj) => {
+      let item = {
+        ref: obj.productId,
+        quantity: obj.quantity,
+        location: obj.quantity,
+        order_ref: obj.order_ref,
+      };
+      return item;
+    });
+    let object = {
+      date: Date.now(),
+      items: aux,
+    };
+    console.log(object);
+  };
 
   useEffect(() => {
     getOrders();
@@ -61,9 +83,9 @@ export default function ListOders({ type }) {
               {
                 productId: "",
                 description: "",
+                location: "",
                 quantity: 0,
                 stock: 0,
-                location: "",
                 checked: false,
               },
             ],
@@ -81,44 +103,60 @@ export default function ListOders({ type }) {
 
   let i = 0;
   return (
-    <div className={classes.table}>
+    <div>
       {rows.length === 0 ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>
-          <Paper className={classes.root}>
-            <TableContainer>
-              <Table aria-label="collapsible table">
-                <TableHead>
-                  <TableRow className={classes.header}>
-                    <TableCell> More Info</TableCell>
-                    <TableCell>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </TableCell>
-                    <TableCell>DocumentId</TableCell>
-                    <TableCell> Client Name</TableCell>
-                    <TableCell>Date</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <Row key={i++} type={type} row={row} />
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[6]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </Paper>
+          <Grid item className={classes.list}>
+            <Paper className={classes.root}>
+              <TableContainer>
+                <Table aria-label="collapsible table">
+                  <TableHead>
+                    <TableRow className={classes.header}>
+                      <TableCell> More Info</TableCell>
+                      <TableCell>
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </TableCell>
+                      <TableCell>DocumentId</TableCell>
+                      <TableCell> Client Name</TableCell>
+                      <TableCell>Date</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((row) => (
+                        <Row key={i++} type={type} row={row} />
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[6]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </Grid>
+          <Grid item>
+            <Grid item className={classes.buttonwrp}>
+              <Button
+                onClick={handleButton}
+                className={classes.GnrBtn}
+                variant="contained"
+              >
+                Generate Route
+              </Button>
+            </Grid>
+          </Grid>
         </div>
       )}
     </div>
