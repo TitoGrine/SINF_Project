@@ -16,9 +16,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import { OrderContext } from "../statemanagement/OrderContext";
 
-import orderStyle from "../style/orderStyle.js";
-
-const useStyles = makeStyles(orderStyle);
 
 const useRowStyles = makeStyles({
   root: {
@@ -55,7 +52,7 @@ export default function Row(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   async function getRow(order_ref) {
-    if (data.order[0].description != "") {
+    if (data.order[0].description !== "") {
       setOpen(!open);
       return;
     }
@@ -108,7 +105,7 @@ export default function Row(props) {
 
     let new_data = data.order.map((value) => {
       if (row_add.checked) row_add.order_ref = ref;
-      if (value.productId == row_add.productId)
+      if (value.productId === row_add.productId)
       value.checked = !row_add.checked;
       return value;
     });
