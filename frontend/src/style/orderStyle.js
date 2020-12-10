@@ -14,6 +14,9 @@ const orderStyle = {
     width: "90%",
     margin: "auto",
   },
+  ".MuiCheckbox-colorPrimary.Mui-checked":{
+      color: darkred
+  },
   header: {
     borderBottom: "4px solid" + darkred,
     "& .MuiTableCell-head": {

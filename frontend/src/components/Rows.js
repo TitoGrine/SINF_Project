@@ -85,17 +85,25 @@ export default function Row(props) {
   }
 
   const handleClick = (event, row_add, ref) => {
-    if (row_add.checked) {
-      row_add.checked = false;
+    let new_data = data.order.map((value) => {
+      if (row_add.checked) row_add.order_ref = ref;
+      if (value.productId == row_add.productId)
+        value.checked = !row_add.checked;
+      return value;
+    });
+    let aux = data;
+    aux.order = new_data;
+    setData(aux);
+    if (!row_add.checked) {
       return;
     }
-    row_add.order_ref = ref;
-    row_add.checked = true;
     rowsSelected.push(row_add);
   };
 
+  const [check, setChecked] = useState(false);
+
   return (
-    <React.Fragment >
+    <React.Fragment>
       <TableRow className={classes.row}>
         <TableCell>
           <IconButton
@@ -120,7 +128,8 @@ export default function Row(props) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell></TableCell>
+                    <TableCell> </TableCell>
+                    <TableCell> ProductId </TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Stock</TableCell>
@@ -132,15 +141,19 @@ export default function Row(props) {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) =>
-                          handleClick(event, historyRow, data.order_ref)
-                        }
+                        onClick={(event) => {
+                          setChecked(!check)
+                          handleClick(event, historyRow, data.order_ref);
+                        }}
                         role="checkbox"
                         tabIndex={-1}
                         key={historyRow.productId}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={historyRow.checked} />
+                          <Checkbox color="primary" checked={check} />
+                        </TableCell>
+                        <TableCell scope="row">
+                          {historyRow.productId}
                         </TableCell>
                         <TableCell scope="row">
                           {historyRow.description}
