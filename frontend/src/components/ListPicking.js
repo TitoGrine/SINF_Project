@@ -60,7 +60,6 @@ function ListPicking({ rows }) {
     <div className={classes.table}>
       <DataGrid
         autoHeight
-        className={classes.tables}
         rows={rows}
         columns={columns}
         pageSize={10}
