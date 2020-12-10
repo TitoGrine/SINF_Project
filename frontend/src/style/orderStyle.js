@@ -4,7 +4,6 @@ const orderStyle = {
   title: {
     color: darkred,
     fontSize: "1.15em",
-    fontWeight: "200",
     paddingLeft: "2em",
   },
   row: {
@@ -36,7 +35,7 @@ const orderStyle = {
     },
   },
   header: {
-    borderBottom: "4px solid" + darkred,
+    borderBottom: "2px solid" + darkred,
     "& .MuiTableCell-head": {
       color: darkred,
       fontSize: "0.75em",
@@ -44,7 +43,6 @@ const orderStyle = {
     },
     "& .MuiTableCell-root": {
       fontSize: "0.85em",
-      fontWeight: "bold",
       fontFamily: "'PT Sans Narrow', sans-serif",
     },
     "& .MuiTableRow-root": {
@@ -56,9 +54,11 @@ const orderStyle = {
   },
   GnrBtn: {
     padding: "1em",
-    marginRight: "4em",
+    marginRight: "3.5em",
     color: beige,
     backgroundColor: darkred,
+    textTransform: "none",
+    fontSize: "0.60em"
   },
   buttonwrp: {
     marginTop: "1em",

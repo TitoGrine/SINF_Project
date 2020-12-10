@@ -170,16 +170,16 @@ export default function Row(props) {
                 <TableHead className={classes.subtablehead}>
                   <TableRow className={classes.subtablerow}>
                     <TableCell className={classes.cell}> </TableCell>
-                    <TableCell className={classes.cell}> ProductId </TableCell>
-                    <TableCell className={classes.cell}>Description</TableCell>
-                    <TableCell className={classes.cell}>Location</TableCell>
-                    <TableCell className={classes.cell}>Quantity</TableCell>
+                    <TableCell className={classes.cell}> <b>ProductId</b> </TableCell>
+                    <TableCell className={classes.cell}><b>Description</b></TableCell>
+                    <TableCell className={classes.cell}><b>Location</b></TableCell>
+                    <TableCell className={classes.cell}><b>Quantity</b></TableCell>
                     {type === "supplier" && (
                       <TableCell className={classes.cell}>
-                        Expected quantity
+                       <b>Expected Quantity</b>
                       </TableCell>
                     )}
-                    <TableCell className={classes.cell}>Stock</TableCell>
+                    <TableCell className={classes.cell}> <b>Stock</b></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
