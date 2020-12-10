@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getData } from "../requests.js";
+import { getData, sendRequest } from "../requests.js";
 import { useAuth } from "../statemanagement/AuthenticationContext.js";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -14,6 +14,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import Row from "../components/Rows";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { Redirect } from "react-router-dom";
 
 import orderStyle from "../style/orderStyle.js";
 
@@ -27,23 +28,37 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [flag, setFlag] = useState(false);
   const { setAuthToken } = useAuth();
 
   const handleButton = () => {
-    let aux = rowsSelected.map((obj) => {
-      let item = {
-        ref: obj.productId,
-        quantity: obj.quantity,
-        location: obj.quantity,
-        order_ref: obj.order_ref,
+    if (type === "client") {
+      let aux = rowsSelected.map((obj) => {
+        let item = {
+          ref: obj.productId,
+          quantity: obj.quantity,
+          location: obj.quantity,
+          order_ref: obj.order_ref,
+        };
+        return item;
+      });
+      let object = {
+        date: Date.now(),
+        items: aux,
       };
-      return item;
-    });
-    let object = {
-      date: Date.now(),
-      items: aux,
-    };
-    console.log(object);
+      console.log(object)
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/picking-wave/create",
+        object
+      )
+        .then((data) => {
+          setFlag(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -86,6 +101,7 @@ export default function ListOders({ type }) {
                 location: "",
                 quantity: 0,
                 stock: 0,
+                input: 0,
                 checked: false,
               },
             ],
@@ -100,6 +116,8 @@ export default function ListOders({ type }) {
         if (error.status === 401) setAuthToken("");
       });
   }
+
+  if (flag) return <Redirect to="/" />;
 
   let i = 0;
   return (

@@ -13,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
 
 import { OrderContext } from "../statemanagement/OrderContext";
 
@@ -30,6 +31,7 @@ Row.propTypes = {
         productId: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         location: PropTypes.string.isRequired,
+        expected_quantity: PropTypes.number,
         quantity: PropTypes.number.isRequired,
         stock: PropTypes.number.isRequired,
       })
@@ -65,6 +67,7 @@ export default function Row(props) {
             description: d[name].description,
             location: d[name].location,
             quantity: d[name].quantity,
+            expected_quantity: d[name].quantity,
             stock: d[name].stock,
             checked: false,
           };
@@ -78,7 +81,8 @@ export default function Row(props) {
       });
   }
 
-  const handleClick = (event, row_add, ref) => {
+  const handleClick = (event, row_add, ref, value) => {
+    console.log(value);
     const selectedIndex = selected.indexOf(row_add.productId);
     let newSelected = [];
 
@@ -98,15 +102,23 @@ export default function Row(props) {
     setSelected(newSelected);
 
     let new_data = data.order.map((value) => {
-      if (row_add.checked) row_add.order_ref = ref;
-      if (value.productId === row_add.productId)
+      if (row_add.checked) {
+        row_add.order_ref = ref;
+      }
+      if (value.productId === row_add.productId) {
+        value.input = value;
         value.checked = !row_add.checked;
+      }
       return value;
     });
     let aux = data;
     aux.order = new_data;
     setData(aux);
     if (!row_add.checked) {
+      let aux = rowsSelected.filter(function (item) {
+        return item.productId !== row_add.productId;
+      });
+      setrowsSelected(aux);
       return;
     }
     rowsSelected.push(row_add);
@@ -143,24 +155,38 @@ export default function Row(props) {
                     <TableCell className={classes.cell}>Description</TableCell>
                     <TableCell className={classes.cell}>Location</TableCell>
                     <TableCell className={classes.cell}>Quantity</TableCell>
+                    {type === "supplier" && (
+                      <TableCell className={classes.cell}>
+                        Expected quantity
+                      </TableCell>
+                    )}
                     <TableCell className={classes.cell}>Stock</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.order.map((historyRow) => {
                     const isItemSelected = isSelected(historyRow.productId);
+                    let value = 0;
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => {
-                          handleClick(event, historyRow, data.order_ref);
-                        }}
                         role="checkbox"
                         tabIndex={-1}
                         key={historyRow.productId}
                       >
                         <TableCell className={classes.cell} padding="checkbox">
-                          <Checkbox color="primary" checked={isItemSelected} />
+                          <Checkbox
+                            onClick={(event) => {
+                              handleClick(
+                                event,
+                                historyRow,
+                                data.order_ref,
+                                value
+                              );
+                            }}
+                            color="primary"
+                            checked={isItemSelected}
+                          />
                         </TableCell>
                         <TableCell className={classes.cell} scope="row">
                           {historyRow.productId}
@@ -174,6 +200,20 @@ export default function Row(props) {
                         <TableCell className={classes.cell}>
                           {historyRow.quantity}
                         </TableCell>
+                        {type === "supplier" && (
+                          <TableCell className={classes.cell}>
+                            <TextField
+                              label="Number"
+                              type="number"
+                              onChange={(e) => {
+                                value = e.target.value;
+                              }}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          </TableCell>
+                        )}
                         <TableCell className={classes.cell}>
                           {historyRow.stock}
                         </TableCell>
