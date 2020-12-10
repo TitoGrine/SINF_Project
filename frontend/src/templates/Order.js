@@ -20,7 +20,6 @@ function Order({ type }) {
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
 
   const handleButton = () => {
-    console.log(rowsSelected)
     let aux = rowsSelected.map((obj) => {
       let item = {
         ref: obj.productId,

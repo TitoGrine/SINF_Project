@@ -30,7 +30,7 @@ const useRowStyles = makeStyles({
 
 Row.propTypes = {
   row: PropTypes.shape({
-    clientName: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     documentId: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     order: PropTypes.arrayOf(
@@ -51,6 +51,8 @@ export default function Row(props) {
   const classes = useRowStyles();
   const [data, setData] = useState(row);
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
+  const [selected, setSelected] = React.useState([]);
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   async function getRow(order_ref) {
     if (data.order[0].description != "") {
@@ -85,10 +87,29 @@ export default function Row(props) {
   }
 
   const handleClick = (event, row_add, ref) => {
+
+    const selectedIndex = selected.indexOf(row_add.productId);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, row_add.productId);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+
     let new_data = data.order.map((value) => {
       if (row_add.checked) row_add.order_ref = ref;
       if (value.productId == row_add.productId)
-        value.checked = !row_add.checked;
+      value.checked = !row_add.checked;
       return value;
     });
     let aux = data;
@@ -99,8 +120,6 @@ export default function Row(props) {
     }
     rowsSelected.push(row_add);
   };
-
-  const [check, setChecked] = useState(false);
 
   return (
     <React.Fragment>
@@ -118,7 +137,7 @@ export default function Row(props) {
         </TableCell>
         <TableCell>{data.client}</TableCell>
         <TableCell>{data.documentId}</TableCell>
-        <TableCell>{data.clientName}</TableCell>
+        <TableCell>{data.name}</TableCell>
         <TableCell>{data.date}</TableCell>
       </TableRow>
       <TableRow className={classes.row}>
@@ -138,11 +157,11 @@ export default function Row(props) {
                 </TableHead>
                 <TableBody>
                   {data.order.map((historyRow) => {
+                    const isItemSelected = isSelected(historyRow.productId);
                     return (
                       <TableRow
                         hover
                         onClick={(event) => {
-                          setChecked(!check)
                           handleClick(event, historyRow, data.order_ref);
                         }}
                         role="checkbox"
@@ -150,7 +169,7 @@ export default function Row(props) {
                         key={historyRow.productId}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox color="primary" checked={check} />
+                          <Checkbox color="primary" checked={isItemSelected} />
                         </TableCell>
                         <TableCell scope="row">
                           {historyRow.productId}

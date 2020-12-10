@@ -50,9 +50,11 @@ export default function ListOders({ type }) {
         orders = keysName.map((name) => {
           let value_type =
             type === "client" ? data[name].client : data[name].supplier;
+          let name_value =
+            type === "client" ? data[name].clientName : data[name].supplierName;
           let obj = {
             client: value_type,
-            clientName: data[name].clientName,
+            name: name_value,
             documentId: data[name].documentId,
             date: data[name].date,
             order: [
@@ -62,7 +64,7 @@ export default function ListOders({ type }) {
                 quantity: 0,
                 stock: 0,
                 location: "",
-                checked: false
+                checked: false,
               },
             ],
             order_ref: name,
@@ -90,7 +92,9 @@ export default function ListOders({ type }) {
                 <TableHead>
                   <TableRow className={classes.header}>
                     <TableCell> More Info</TableCell>
-                    <TableCell>{type.charAt(0).toUpperCase() + type.slice(1)}</TableCell>
+                    <TableCell>
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </TableCell>
                     <TableCell>DocumentId</TableCell>
                     <TableCell> Client Name</TableCell>
                     <TableCell>Date</TableCell>
