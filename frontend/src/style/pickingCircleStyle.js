@@ -38,7 +38,7 @@ const pickingCircleStyle = {
     height: "5px",
     background: darkred,
     zIndex: "1",
-    transition: "background-color .25s ease",
+    transition: "all .25s ease",
   },
   activeBefore: {
     top: "3.2rem",

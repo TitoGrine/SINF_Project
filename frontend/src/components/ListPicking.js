@@ -42,12 +42,16 @@ const columns = [
     headerClassName: "header",
     disableClickEventBubbling: true,
     renderCell: (params) => {
-      //   return <input type="text" name="picked-quantity" aria-label="Picked Quantity"/>;
+      function handleChange(ev) {
+        console.log(ev.target.value);
+      }
+
       return (
-        <TextField
-          type="number"
-          style={{width: "80%", margin: "auto"}}
-        />
+          <TextField
+            type="number"
+            onChange={handleChange}
+            style={{ width: "80%", margin: "auto" }}
+          />
       );
     },
   },

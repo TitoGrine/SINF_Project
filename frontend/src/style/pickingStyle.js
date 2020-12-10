@@ -11,9 +11,11 @@ const pickingStyle = {
     height: "calc(22em - 192px)",
   },
   pickingCircles: {
-    height: 150,
+    minHeight: 150,
     textAlign: "center",
     margin: "2rem 0",
+    overflow: "auto",
+    whiteSpace: "nowrap",
   },
   button: {
     marginRight: "4em",
