@@ -231,6 +231,10 @@ export default function Row(props) {
                               InputLabelProps={{
                                 shrink: true,
                               }}
+                              inputProps={{
+                                min: 0,
+                                max: historyRow.quantity,
+                              }}
                             />
                           </TableCell>
                         )}
