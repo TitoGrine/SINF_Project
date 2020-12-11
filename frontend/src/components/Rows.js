@@ -48,8 +48,6 @@ export default function Row(props) {
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  console.log(rowsSelected);
-
   async function getRow(order_ref) {
     if (data.order[0].description !== "") {
       setOpen(!open);
@@ -199,7 +197,7 @@ export default function Row(props) {
                               handleClick(
                                 event,
                                 historyRow,
-                                data.order_ref,
+                                data.documentId,
                                 value
                               );
                             }}

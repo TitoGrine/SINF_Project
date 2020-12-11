@@ -80,8 +80,7 @@ function PickingRoute() {
         );
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        console.log(err);
       });
   }
 
@@ -95,8 +94,7 @@ function PickingRoute() {
         setRoute(data.route);
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        console.log(err);
       });
   }
 

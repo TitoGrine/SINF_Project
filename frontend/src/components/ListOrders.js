@@ -36,7 +36,7 @@ export default function ListOders({ type }) {
         let item = {
           ref: obj.productId,
           quantity: obj.quantity,
-          location: obj.quantity,
+          location: obj.location,
           order_ref: obj.order_ref,
         };
         return item;
@@ -45,14 +45,13 @@ export default function ListOders({ type }) {
         date: Date.now(),
         items: aux,
       };
-      console.log(object)
       sendRequest(
         "POST",
         "http://localhost:8800/api/picking-wave/create",
         object
       )
         .then((data) => {
-          setFlag(true);
+          window.location.href = "/picking-route/" + data.ref;
         })
         .catch((err) => {
           console.log(err);
