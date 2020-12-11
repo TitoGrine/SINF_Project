@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cc4287e1-ab01-44fb-87de-0ca0b83795f7",
+		"_postman_id": "14f032d3-5c16-4e96-bd8f-54ca243b926f",
 		"name": "SINF",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -356,7 +356,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sourceWarehouse\": \"D1\",\n    \"targetWarehouse\": \"A3A\",\n    \"items\": [\n        {\n            \"materialsItem\": \"BACALHOA\", \n            \"quantity\": 5\n        }\n    ]\n}",
+							"raw": "[\n    {\n        \"sourceWarehouse\": \"D1\",\n        \"targetWarehouse\": \"A3A\",\n        \"items\": [\n            {\n                \"materialsItem\": \"BACALHOA\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A2D\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"materialsItem\": \"QUINTAPORTAL\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"D1\",\n        \"targetWarehouse\": \"A0B\",\n        \"items\": [\n            {\n                \"materialsItem\": \"EA\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -564,7 +564,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "79ad6543-ef53-47e3-a3be-b400e518d2b3",
+						"id": "e14a64e1-6e6d-43e8-adcc-e296a296f2fe",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"let bearer_token = jsonData.access_token;",
