@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import LoginField from "./LoginField.js";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import loginFormStyle from "../style/loginFormStyle.js";
-
 import { sendRequest } from "../requests.js";
 import { useAuth } from "../statemanagement/AuthenticationContext";
+
+import loginFormStyle from "../style/loginFormStyle.js";
 
 const useStyles = makeStyles(loginFormStyle);
 
@@ -95,10 +95,10 @@ function LoginForm() {
             type="password"
           ></LoginField>
         </Grid>
-        <Grid item style={{alignSelf: "start"}}>
+        <Grid item style={{ alignSelf: "start" }}>
           {isError && (
             <p className={errorMessage}>
-              <ErrorIcon fontSize="small" style={{marginRight: ".5rem"}}/>
+              <ErrorIcon fontSize="small" style={{ marginRight: ".5rem" }} />
               Credentials did not match. Please try again.
             </p>
           )}

@@ -1,4 +1,5 @@
-import React, {  useState } from "react";
+import React, { useState, useContext } from "react";
+//material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,10 +10,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TablePagination from "@material-ui/core/TablePagination";
-import Row from "../components/StockRows";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+
+import Row from "../components/StockRows";
+
 import { useAuth } from "../statemanagement/AuthenticationContext.js";
+import { StockContext } from "../statemanagement/StockContext";
+
 import orderStyle from "../style/orderStyle.js";
 
 const useStyles = makeStyles(orderStyle);
@@ -20,8 +25,9 @@ const useStyles = makeStyles(orderStyle);
 export default function ListOders() {
   const classes = useStyles();
 
-  const [rows, setRows] = useState([
+  const [rows] = useState([
     {
+      id: 0,
       location: "A10",
       productId: "A10",
       documentId: "A10",
@@ -29,6 +35,7 @@ export default function ListOders() {
       storedquantity: "A10",
     },
     {
+      id: 1,
       location: "A3",
       productId: "A3",
       documentId: "A3",
@@ -36,6 +43,7 @@ export default function ListOders() {
       storedquantity: "A3",
     },
     {
+      id: 2,
       location: "A5",
       productId: "A5",
       documentId: "A5",
@@ -46,26 +54,12 @@ export default function ListOders() {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [checked] = useContext(StockContext);
   const { setAuthToken } = useAuth();
 
-  // useEffect(() =>{
-
-  // },[])
-
-  // async function getRows() {
-  //   getData(
-  //     "GET",
-  //     "http://localhost:8800/api/" + type + "/orders",
-  //     localStorage.getItem("token")
-  //   )
-  //     .then((data) => {
-
-  //     })
-  //     .catch((err) => {
-  //       const error = JSON.parse(err.message);
-  //       if (error.status === 401) setAuthToken("");
-  //     });
-  // }
+  const handleButton = () => {
+    console.log(checked);
+  };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -123,7 +117,7 @@ export default function ListOders() {
           <Grid item>
             <Grid item className={classes.buttonwrp}>
               <Button
-                //onClick={handleButton}
+                onClick={handleButton}
                 className={classes.GnrBtn}
                 variant="contained"
               >

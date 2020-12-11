@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { getData, sendRequest } from "../requests.js";
-import { useAuth } from "../statemanagement/AuthenticationContext.js";
+import { Redirect } from "react-router-dom";
+//material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,14 +12,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TablePagination from "@material-ui/core/TablePagination";
-import Row from "../components/Rows";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { Redirect } from "react-router-dom";
-
-import orderStyle from "../style/orderStyle.js";
+import Row from "../components/Rows";
 
 import { OrderContext } from "../statemanagement/OrderContext";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
+
+import orderStyle from "../style/orderStyle.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -45,7 +46,7 @@ export default function ListOders({ type }) {
         date: Date.now(),
         items: aux,
       };
-      console.log(object)
+      console.log(object);
       sendRequest(
         "POST",
         "http://localhost:8800/api/picking-wave/create",

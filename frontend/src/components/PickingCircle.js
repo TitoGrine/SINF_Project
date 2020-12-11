@@ -1,7 +1,6 @@
 import React from "react";
-
-import pickingCircleStyle from "../style/pickingCircleStyle.js";
 import { makeStyles } from "@material-ui/core";
+import pickingCircleStyle from "../style/pickingCircleStyle.js";
 
 const useStyles = makeStyles(pickingCircleStyle);
 
