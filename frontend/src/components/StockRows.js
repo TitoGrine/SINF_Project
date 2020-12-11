@@ -29,10 +29,11 @@ export default function Row(props) {
         <TableCell className={classes.cell}>
           <Checkbox checked={isSelected}></Checkbox>
         </TableCell>
-        <TableCell className={classes.cell}>{row.client}</TableCell>
+        <TableCell className={classes.cell}>{row.location}</TableCell>
+        <TableCell className={classes.cell}>{row.productId}</TableCell>
         <TableCell className={classes.cell}>{row.documentId}</TableCell>
-        <TableCell className={classes.cell}>{row.name}</TableCell>
-        <TableCell className={classes.cell}>{row.date}</TableCell>
+        <TableCell className={classes.cell}>{row.orderedquantity}</TableCell>
+        <TableCell className={classes.cell}>{row.storedquantity}</TableCell>
       </TableRow>
     </React.Fragment>
   );
