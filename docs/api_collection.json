@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3877ae4d-3c9f-4068-9807-080cb9de45ff",
+		"_postman_id": "cc4287e1-ab01-44fb-87de-0ca0b83795f7",
 		"name": "SINF",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -383,12 +383,188 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Picking Wave",
+			"item": [
+				{
+					"name": "Get All Picking Waves",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Picking Wave Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								"PW2020_1",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Picking Waves",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2020-12-24T23:59:59\",\r\n    \"items\": [\r\n        {\r\n            \"ref\": \"TONSDUORUM\",\r\n            \"quantity\": 3,\r\n            \"order_ref\": \"c992e486-290c-4337-bb5f-da8d3441b2b9\",\r\n            \"location\": \"A2D\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Picking Route",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/PW2020_1/route",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								"PW2020_1",
+								"route"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Picking Wave",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8800/api/picking-wave/PW2020_3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"picking-wave",
+								"PW2020_3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@vicino.pt",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "v1n0f0rmyv1c1n0!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Get Token",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "d15a2687-4e76-42e6-9535-ac07470045f4",
+						"id": "79ad6543-ef53-47e3-a3be-b400e518d2b3",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"let bearer_token = jsonData.access_token;",
