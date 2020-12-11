@@ -15,7 +15,7 @@ function HomeButton({ name, image }) {
       <Grid item style={{ marginRight: ".5rem" }}>
         <div className={classes.iconCircle + " icon-circle"}>
           <img
-            src={"./assets/" + image}
+            src={"../assets/" + image}
             alt={image}
             className={classes.iconImg}
           />

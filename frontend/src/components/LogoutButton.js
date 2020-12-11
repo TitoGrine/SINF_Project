@@ -39,7 +39,7 @@ function LogoutButton() {
       onClick={handleClick}
     >
       <div className={classes.circle + " icon-circle"}>
-        <img src={"./assets/exit.svg"} alt="Logout Button" className={classes.iconImg} />
+        <img src={"../assets/exit.svg"} alt="Logout Button" className={classes.iconImg} />
       </div>
     </Button>
   );
