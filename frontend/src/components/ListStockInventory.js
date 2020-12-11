@@ -83,7 +83,7 @@ export default function ListOders() {
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>
-          <Grid item className={classes.list}>
+          <Grid item xs={12} sm={12} md={12} lg={12} className={classes.list}>
             <Paper className={classes.root}>
               <TableContainer>
                 <Table aria-label="collapsible table">

@@ -12,7 +12,7 @@ function Stockinventory() {
   return (
     <div>
       <Grid container>
-        <Grid item>
+        <Grid item xs={12} sm={12} md={12} lg={12} >
           <h1 className={classes.title} >Stock Inventory</h1>
           <ListStockInventory></ListStockInventory>
         </Grid>

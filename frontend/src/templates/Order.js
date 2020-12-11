@@ -20,7 +20,7 @@ function Order({ type }) {
   return (
     <div>
       <Grid container direction="column">
-        <Grid item>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <h1 className={classes.title}>
             {" "}
             {type === "client" ? "Clients" : "Suppliers"} Orders

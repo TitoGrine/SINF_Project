@@ -13,8 +13,8 @@ Row.propTypes = {
     location: PropTypes.string.isRequired,
     productId: PropTypes.string.isRequired,
     documentId: PropTypes.string.isRequired,
-    orderedquantity: PropTypes.number.isRequired,
-    storedquantity: PropTypes.number.isRequired,
+    orderedquantity: PropTypes.string.isRequired,
+    storedquantity: PropTypes.string.isRequired,
   }).isRequired,
 };
 
