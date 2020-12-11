@@ -9,6 +9,9 @@ import ListOrders from "../components/ListOrders";
 
 import orderStyle from "../style/orderStyle.js";
 
+//state management
+import { ModalProvider } from "../statemanagement/ModalContext";
+
 const useStyles = makeStyles(orderStyle);
 
 function Order({ type }) {
@@ -22,16 +25,9 @@ function Order({ type }) {
             {" "}
             {type === "client" ? "Clients" : "Suppliers"} Orders
           </h1>
-        </Grid>
-        <Grid item className={classes.list}>
-          <ListOrders type={type}></ListOrders>
-        </Grid>
-        <Grid item>
-          <Grid item className={classes.buttonwrp}>
-            <Button className={classes.GnrBtn} variant="contained">
-              Generate Route
-            </Button>
-          </Grid>
+          <ModalProvider>
+            <ListOrders type={type}></ListOrders>
+          </ModalProvider>
         </Grid>
       </Grid>
     </div>

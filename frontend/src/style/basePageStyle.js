@@ -3,7 +3,7 @@ import { beige } from "./colors.js";
 const basePageStyle = {
   card: {
     backgroundColor: beige,
-    height: "28em",
+    minHeight: "28em",
   },
   stylizedText: {
     fontFamily: "Crimson Text, serif",
