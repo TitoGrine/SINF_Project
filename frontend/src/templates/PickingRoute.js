@@ -1,67 +1,48 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
+import { useParams } from "react-router-dom";
 //material core
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core";
 
 import ListPicking from "../components/ListPicking";
 import PickingCircle from "../components/PickingCircle";
 
 import pickingStyle from "../style/pickingStyle.js";
-import { makeStyles } from "@material-ui/core";
+import { useAuth } from "../statemanagement/AuthenticationContext";
+import { getData } from "../requests";
 
 const useStyles = makeStyles(pickingStyle);
 
-const items = [
-  {
-    id: 1,
-    ref: "BACALHOA",
-    quantity: 10,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-    picked_quantity: 0,
-  },
-  {
-    id: 2,
-    ref: "VULCANICO",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3D",
-    ref_picking: "PW2020_1",
-    picked_quantity: 0,
-  },
-  {
-    id: 3,
-    ref: "TONSDUORUM",
-    quantity: 30,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A2D",
-    ref_picking: "PW2020_1",
-    picked_quantity: 2,
-  },
-  {
-    id: 4,
-    ref: "PAPAFIGOS",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A1B",
-    ref_picking: "PW2020_1",
-    picked_quantity: 0,
-  },
-];
-
-const route = ["A2D", "A1B", "A3A", "A3D", "A2D", "A1B", "A3A"];
-
 function PickingRoute() {
   const classes = useStyles();
+  const [originalData, setOriginalData] = useState([]);
   const [rows, setRows] = useState([]);
+  const [route, setRoute] = useState([]);
   const [wrapped, setWrapped] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { setAuthToken } = useAuth();
+  const { id } = useParams();
+
+  /**
+   * Hook to fetch data from backend.
+   * First it fetches the route and once setRoute is called it triggers the next hook.
+   * This last hook fetches the items and filters the first zone right away.
+   * Only runs after first render (equivalent to componentDidMount).
+   */
+  useEffect(() => {
+    getRoute();
+  }, []);
 
   useEffect(() => {
-    filterRows();
-  }, [activeIndex]);
+    getRows();
+  }, [route]);
 
+  /**
+   * Hook to detect if the circles in the picking diagram wrap.
+   * In that case, the content is justified to the start so
+   * the scroll works correctly
+   */
   useLayoutEffect(() => {
     function measureCircles() {
       const parent = document.getElementById("circlesParent");
@@ -78,10 +59,51 @@ function PickingRoute() {
     return () => window.removeEventListener("resize", measureCircles);
   }, [wrapped]);
 
+  /**
+   * Hook to filter presented rows.
+   * Only runs if activeIndex changes.
+   */
+  useEffect(() => {
+    filterRows();
+  }, [activeIndex]);
+
+  function getRows() {
+    getData(
+      "GET",
+      `http://localhost:8800/api/picking-wave/${id}/items`,
+      localStorage.getItem("token")
+    )
+      .then((data) => {
+        setOriginalData(data);
+        setRows(
+          data.filter((item) => item.warehouse_zone === route[activeIndex])
+        );
+      })
+      .catch((err) => {
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
+      });
+  }
+
+  function getRoute() {
+    getData(
+      "GET",
+      `http://localhost:8800/api/picking-wave/${id}/route`,
+      localStorage.getItem("token")
+    )
+      .then((data) => {
+        setRoute(data.route);
+      })
+      .catch((err) => {
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
+      });
+  }
+
   function filterRows() {
     const currentZone = route[activeIndex];
 
-    let filteredRows = items.filter((item) => {
+    let filteredRows = originalData.filter((item) => {
       return item.warehouse_zone === currentZone;
     });
 

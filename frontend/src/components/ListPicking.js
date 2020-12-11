@@ -4,7 +4,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
 
 import orderStyle from "../style/orderStyle.js";
-import { TextField } from "@material-ui/core";
+import { TextField, CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -47,11 +47,11 @@ const columns = [
       }
 
       return (
-          <TextField
-            type="number"
-            onChange={handleChange}
-            style={{ width: "80%", margin: "auto" }}
-          />
+        <TextField
+          type="number"
+          onChange={handleChange}
+          style={{ width: "80%", margin: "auto" }}
+        />
       );
     },
   },
@@ -62,14 +62,18 @@ function ListPicking({ rows }) {
 
   return (
     <div className={classes.table}>
-      <DataGrid
-        autoHeight
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        checkboxSelection
-        disableSelectionOnClick
-      />
+      {rows.length === 0 ? (
+        <CircularProgress className={classes.progress} color="inherit" />
+      ) : (
+        <DataGrid
+          autoHeight
+          rows={rows}
+          columns={columns}
+          pageSize={10}
+          checkboxSelection
+          disableSelectionOnClick
+        />
+      )}
     </div>
   );
 }

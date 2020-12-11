@@ -37,7 +37,7 @@ function App() {
           <PrivateRoute path="/inventory" exact>
             <BasePage template={"inventory"}></BasePage>
           </PrivateRoute>
-          <PrivateRoute path="/picking-route" exact>
+          <PrivateRoute path="/picking-route/:id" exact>
             <BasePage template={"picking-route"}></BasePage>
           </PrivateRoute>
           <PrivateRoute path="/stock-inventory" exact>
