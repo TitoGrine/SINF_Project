@@ -27,6 +27,10 @@ const item = db.define("items", {
         type: STRING,
         allowNull: false
     },
+    line_number:{
+        type: INTEGER,
+        allowNull: false
+    },
     ref_picking: {
         type: STRING,
         allowNull: false,

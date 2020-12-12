@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // base css configurations
 import "../index.css";
 // material ui core
@@ -14,10 +14,12 @@ import BaseButton from "../components/BaseButton.js";
 import homePageStyle from "../style/homePageStyle.js";
 import { darkred } from "../style/colors.js";
 import { useAuth } from "../statemanagement/AuthenticationContext";
+import WarehouseModal from "../components/WarehouseModal";
 
 const useStyles = makeStyles(homePageStyle);
 
 function HomePage() {
+  const [showModal, setShowModal] = useState(false);
   const { mainDiv, card, logoutBtn } = useStyles();
   const { setAuthToken } = useAuth();
 
@@ -73,6 +75,7 @@ function HomePage() {
                 type="home"
                 name="Warehouse"
                 image="architecture.svg"
+                event={setShowModal}
               ></BaseButton>
             </Grid>
           </Grid>
@@ -89,6 +92,9 @@ function HomePage() {
           </Grid>
         </Grid>
       </Container>
+      {showModal && (
+        <WarehouseModal showModal={showModal} setShowModal={setShowModal} />
+      )}
     </div>
   );
 }
