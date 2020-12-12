@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getData, sendRequest } from "../requests.js";
+import { getData, getToken, sendRequest } from "../requests.js";
 import { Redirect } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,14 +46,43 @@ export default function ListOders({ type }) {
         date: Date.now(),
         items: aux,
       };
-      console.log(object);
       sendRequest(
         "POST",
         "http://localhost:8800/api/picking-wave/create",
-        object
+        object,
+        localStorage.getItem("token")
       )
         .then((data) => {
           setFlag(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (type === "supplier") {
+      let products = rowsSelected.map((obj) => {
+        let item = {
+          sourceDocKey: obj.documentId,
+          sourceDocLineNumber: 0,
+          quantity: obj.quantity,
+        };
+        return item;
+      });
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/supplier/delivery",
+        products,
+        localStorage.getItem("token")
+      )
+        .then((data) => {
+          <Redirect
+            to={{
+              pathname: "/stock-inventory",
+              state: {
+                props: products,
+              },
+            }}
+          />;
+          console.log(data);
         })
         .catch((err) => {
           console.log(err);

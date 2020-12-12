@@ -56,9 +56,13 @@ export default function ListOders() {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [checked] = useContext(StockContext);
   const { setAuthToken } = useAuth();
+  const [error, setError] = useState(false);
 
   const handleButton = () => {
-    console.log(checked);
+    if (checked.length != rows.length) setError(true);
+    else {
+      setError(false);
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
