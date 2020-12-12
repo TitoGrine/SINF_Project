@@ -8,10 +8,10 @@ import ZoneDropdown from "../components/ZoneDropdown";
 import ListInventory from "../components/ListInventory";
 
 import { getData } from "../requests.js";
-import orderStyle from "../style/orderStyle.js";
+import inventoryStyle from "../style/inventoryStyle.js";
 import { useAuth } from "../statemanagement/AuthenticationContext";
 
-const useStyles = makeStyles(orderStyle);
+const useStyles = makeStyles(inventoryStyle);
 
 function Inventory() {
   const classes = useStyles();

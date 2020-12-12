@@ -4,7 +4,6 @@ const pickingStyle = {
   title: {
     color: darkred,
     fontSize: "1.15em",
-    fontWeight: "200",
     paddingLeft: "2em",
   },
   list: {
