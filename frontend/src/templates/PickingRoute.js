@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
 
-import ListPicking from "../components/NewListPicking";
+import ListPicking from "../components/ListPicking";
 import PickingCircle from "../components/PickingCircle";
 
 import pickingStyle from "../style/pickingStyle.js";
@@ -87,30 +87,6 @@ const items = [
     warehouse_zone: "A3A",
     ref_picking: "PW2020_1",
   },
-  {
-    id: 10,
-    ref: "VULCANICO",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 11,
-    ref: "TONSDUORUM",
-    quantity: 30,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 12,
-    ref: "PAPAFIGOS",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
 ];
 
 function PickingRoute() {
@@ -173,6 +149,10 @@ function PickingRoute() {
       localStorage.getItem("token")
     )
       .then((data) => {
+        items.forEach((row) => {
+          row["picked"] = false;
+          row["selected_quantity"] = 0;
+        });
         setOriginalData(items);
         setRows(
           items.filter((item) => item.warehouse_zone === route[activeIndex])
@@ -198,10 +178,8 @@ function PickingRoute() {
   }
 
   function filterRows() {
-    const currentZone = route[activeIndex];
-
     let filteredRows = originalData.filter((item) => {
-      return item.warehouse_zone === currentZone;
+      return item.warehouse_zone === route[activeIndex];
     });
 
     setRows(filteredRows);
@@ -230,11 +208,32 @@ function PickingRoute() {
       return;
     }
 
+    console.log(originalData);
     console.log("Finished");
   }
 
   function previousZone() {
     if (activeIndex > 0) setActiveIndex(activeIndex - 1);
+  }
+
+  function handleQuantityChange(rowID, value) {
+    originalData.forEach((row) => {
+      if (row.id === rowID) {
+        row.selected_quantity = value;
+      }
+    });
+
+    setOriginalData(originalData);
+  }
+
+  function handleCheckboxChange(rowID, checked) {
+    originalData.forEach((row) => {
+      if (row.id === rowID) {
+        row.picked = checked;
+      }
+    });
+
+    setOriginalData(originalData);
   }
 
   return (
@@ -261,7 +260,11 @@ function PickingRoute() {
           ))}
         </Grid>
         <Grid item className={classes.list}>
-          <ListPicking rows={rows} />
+          <ListPicking
+            rows={rows}
+            onQuantityChange={handleQuantityChange}
+            onCheckboxChange={handleCheckboxChange}
+          />
         </Grid>
         <Grid item>
           <div className={classes.buttonWrapper}>
