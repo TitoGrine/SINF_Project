@@ -8,7 +8,7 @@ const pickingStyle = {
     paddingLeft: "2em",
   },
   list: {
-    height: "calc(22em - 192px)",
+    marginBottom: "1rem",
   },
   pickingCircles: {
     minHeight: 150,
@@ -18,7 +18,7 @@ const pickingStyle = {
     whiteSpace: "nowrap",
   },
   button: {
-    marginRight: "4em",
+    marginRight: "1rem",
     color: beige,
     backgroundColor: darkred,
   },

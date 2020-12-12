@@ -14,7 +14,6 @@ import TablePagination from "@material-ui/core/TablePagination";
 import Row from "../components/Rows";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { Redirect } from "react-router-dom";
 
 import orderStyle from "../style/orderStyle.js";
 
@@ -28,7 +27,6 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [flag, setFlag] = useState(false);
   const { setAuthToken } = useAuth();
   const handleButton = () => {
     if (type === "client") {
@@ -114,8 +112,6 @@ export default function ListOders({ type }) {
         if (error.status === 401) setAuthToken("");
       });
   }
-
-  if (flag) return <Redirect to="/" />;
 
   let i = 0;
   return (

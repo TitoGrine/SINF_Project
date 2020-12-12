@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
 
-import ListPicking from "../components/ListPicking";
+import ListPicking from "../components/NewListPicking";
 import PickingCircle from "../components/PickingCircle";
 
 import pickingStyle from "../style/pickingStyle.js";
@@ -13,6 +13,105 @@ import { useAuth } from "../statemanagement/AuthenticationContext";
 import { getData } from "../requests";
 
 const useStyles = makeStyles(pickingStyle);
+
+const items = [
+  {
+    id: 1,
+    ref: "BACALHOA",
+    quantity: 10,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 2,
+    ref: "VULCANICO",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3D",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 3,
+    ref: "TONSDUORUM",
+    quantity: 30,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A2D",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 4,
+    ref: "PAPAFIGOS",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A1B",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 5,
+    ref: "BACALHOA",
+    quantity: 10,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 6,
+    ref: "VULCANICO",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 7,
+    ref: "TONSDUORUM",
+    quantity: 30,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 8,
+    ref: "PAPAFIGOS",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 9,
+    ref: "BACALHOA",
+    quantity: 10,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 10,
+    ref: "VULCANICO",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 11,
+    ref: "TONSDUORUM",
+    quantity: 30,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+  {
+    id: 12,
+    ref: "PAPAFIGOS",
+    quantity: 25,
+    order_ref: "ECL.2020.8",
+    warehouse_zone: "A3A",
+    ref_picking: "PW2020_1",
+  },
+];
 
 function PickingRoute() {
   const classes = useStyles();
@@ -74,9 +173,9 @@ function PickingRoute() {
       localStorage.getItem("token")
     )
       .then((data) => {
-        setOriginalData(data);
+        setOriginalData(items);
         setRows(
-          data.filter((item) => item.warehouse_zone === route[activeIndex])
+          items.filter((item) => item.warehouse_zone === route[activeIndex])
         );
       })
       .catch((err) => {
@@ -126,11 +225,16 @@ function PickingRoute() {
   }
 
   function nextZone() {
-    setActiveIndex(activeIndex + 1);
+    if (activeIndex < route.length - 1) {
+      setActiveIndex(activeIndex + 1);
+      return;
+    }
+
+    console.log("Finished");
   }
 
   function previousZone() {
-    setActiveIndex(activeIndex - 1);
+    if (activeIndex > 0) setActiveIndex(activeIndex - 1);
   }
 
   return (
