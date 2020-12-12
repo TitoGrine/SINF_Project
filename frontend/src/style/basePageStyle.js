@@ -8,6 +8,8 @@ const basePageStyle = {
   stylizedText: {
     fontFamily: "Crimson Text, serif",
     color: beige,
+    fontSize: "50px",
+    cursor: "pointer",
   },
   icons: {
     alignSelf: "center",

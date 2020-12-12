@@ -17,7 +17,7 @@ function getPath(name) {
   return "/" + name.toLowerCase().replace(/\s/g, "-");
 }
 
-function BaseButton({ name, image, type }) {
+function BaseButton({ name, image, type, event }) {
   const history = useHistory();
 
   const handleMouseEnter = (ev) => {
@@ -44,7 +44,7 @@ function BaseButton({ name, image, type }) {
       onMouseLeave={handleMouseLeave}
       style={{ backgroundColor: "transparent", width: "100%" }}
       disableRipple
-      onClick={routeChange}
+      onClick={event ? () => event(true) : routeChange}
     >
       {getButtonType(name, image, type)}
     </Button>
