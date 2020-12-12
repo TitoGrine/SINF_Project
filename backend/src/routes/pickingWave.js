@@ -52,13 +52,15 @@ router.post("/create", async (req, res) => {
             ref,
             quantity,
             order_ref,
-            location
+            location,
+            line_number
         }) => {
             return await item.create({
                 ref,
                 quantity,
                 order_ref,
                 warehouse_zone: location,
+                line_number,
                 ref_picking: pwRef
             }, {
                 fields: [
@@ -66,6 +68,7 @@ router.post("/create", async (req, res) => {
                     "quantity",
                     "order_ref",
                     "warehouse_zone",
+                    "line_number",
                     "ref_picking"
                 ]
             });

@@ -22,6 +22,7 @@ CREATE TABLE items (
     quantity INT NOT NULL CHECK (quantity >= 0) DEFAULT 0,
     order_ref TEXT NOT NULL,
     warehouse_zone TEXT NOT NULL,
+    line_number INTEGER NOT NULL,
     ref_picking REFERENCES picking_waves (ref) NOT NULL
 );
 
