@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 // base css configurations
 import "../index.css";
@@ -21,9 +21,9 @@ import LogoutButton from "../components/LogoutButton";
 
 //statemanagement
 import { OrderProvider } from "../statemanagement/OrderContext";
+import WarehouseModal from "../components/WarehouseModal";
 
 const useStyles = makeStyles(basePageStyle);
-
 
 //TODO: probably change this logic to something better
 function getTemplate(template) {
@@ -53,6 +53,7 @@ function getTemplate(template) {
 
 //TODO: customize error page
 function BasePage({ template }) {
+  const [showModal, setShowModal] = useState(false);
   const history = useHistory();
   const classes = useStyles();
 
@@ -95,16 +96,20 @@ function BasePage({ template }) {
               type={"nav"}
               image={"architecture.svg"}
               name={"warehouse"}
+              event={setShowModal}
             ></BaseButton>
           </Grid>
           <Grid className={classes.icons} item xs={3} sm={2} md={1} lg={1}>
-            <LogoutButton/>
+            <LogoutButton />
           </Grid>
         </Grid>
         <Card className={classes.card}>
           <CardContent>{getTemplate(template)}</CardContent>
         </Card>
       </Container>
+      {showModal && (
+        <WarehouseModal showModal={showModal} setShowModal={setShowModal} />
+      )}
     </div>
   );
 }
