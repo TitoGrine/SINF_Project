@@ -48,9 +48,7 @@ export default function Row(props) {
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  console.log(rowsSelected);
-
-  async function getRow(order_ref) {
+  async function getRow(order_ref, documentId) {
     if (data.order[0].description !== "") {
       setOpen(!open);
       return;
@@ -65,6 +63,8 @@ export default function Row(props) {
         let keysName = Object.keys(d);
         keysName.forEach((name) => {
           let obj = {
+            documentId: documentId,
+            lineNumber: d[name].lineNumber,
             productId: name,
             description: d[name].description,
             location: d[name].location,
@@ -151,7 +151,7 @@ export default function Row(props) {
             aria-label="expand row"
             size="small"
             onClick={() => {
-              getRow(row.order_ref);
+              getRow(row.order_ref, row.documentId);
             }}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -170,16 +170,28 @@ export default function Row(props) {
                 <TableHead className={classes.subtablehead}>
                   <TableRow className={classes.subtablerow}>
                     <TableCell className={classes.cell}> </TableCell>
-                    <TableCell className={classes.cell}> <b>ProductId</b> </TableCell>
-                    <TableCell className={classes.cell}><b>Description</b></TableCell>
-                    <TableCell className={classes.cell}><b>Location</b></TableCell>
-                    <TableCell className={classes.cell}><b>Quantity</b></TableCell>
+                    <TableCell className={classes.cell}>
+                      {" "}
+                      <b>ProductId</b>{" "}
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Description</b>
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Location</b>
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Quantity</b>
+                    </TableCell>
                     {type === "supplier" && (
                       <TableCell className={classes.cell}>
-                       <b>Expected Quantity</b>
+                        <b>Expected Quantity</b>
                       </TableCell>
                     )}
-                    <TableCell className={classes.cell}> <b>Stock</b></TableCell>
+                    <TableCell className={classes.cell}>
+                      {" "}
+                      <b>Stock</b>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

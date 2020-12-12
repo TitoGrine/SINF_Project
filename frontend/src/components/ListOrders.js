@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { getData, getToken, sendRequest } from "../requests.js";
-import { Redirect } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -29,66 +29,10 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [flag, setFlag] = useState(false);
+  const [flagClient, setFlagClient] = useState(false);
+  const history = useHistory();
+
   const { setAuthToken } = useAuth();
-  const handleButton = () => {
-    if (type === "client") {
-      let aux = rowsSelected.map((obj) => {
-        let item = {
-          ref: obj.productId,
-          quantity: obj.quantity,
-          location: obj.quantity,
-          order_ref: obj.order_ref,
-        };
-        return item;
-      });
-      let object = {
-        date: Date.now(),
-        items: aux,
-      };
-      sendRequest(
-        "POST",
-        "http://localhost:8800/api/picking-wave/create",
-        object,
-        localStorage.getItem("token")
-      )
-        .then((data) => {
-          setFlag(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else if (type === "supplier") {
-      let products = rowsSelected.map((obj) => {
-        let item = {
-          sourceDocKey: obj.documentId,
-          sourceDocLineNumber: 0,
-          quantity: obj.quantity,
-        };
-        return item;
-      });
-      sendRequest(
-        "POST",
-        "http://localhost:8800/api/supplier/delivery",
-        products,
-        localStorage.getItem("token")
-      )
-        .then((data) => {
-          <Redirect
-            to={{
-              pathname: "/stock-inventory",
-              state: {
-                props: products,
-              },
-            }}
-          />;
-          console.log(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
 
   useEffect(() => {
     getOrders();
@@ -146,8 +90,59 @@ export default function ListOders({ type }) {
       });
   }
 
-  if (flag) return <Redirect to="/" />;
+  const handleButton = () => {
+    if (type === "client") {
+      let aux = rowsSelected.map((obj) => {
+        let item = {
+          ref: obj.productId,
+          quantity: obj.quantity,
+          location: obj.quantity,
+          order_ref: obj.order_ref,
+        };
+        return item;
+      });
+      let object = {
+        date: Date.now(),
+        items: aux,
+      };
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/picking-wave/create",
+        object,
+        localStorage.getItem("token")
+      )
+        .then((data) => {
+          setFlagClient(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (type === "supplier") {
+      let prod = rowsSelected.map((obj) => {
+        let item = {
+          sourceDocKey: obj.documentId,
+          sourceDocLineNumber: obj.lineNumber,
+          quantity: obj.quantity,
+        };
+        return item;
+      });
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/supplier/delivery",
+        prod,
+        localStorage.getItem("token")
+      )
+        .then((data) => {
+          history.push("/stock-inventory", { params: prod });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
+  if (flagClient) return <Redirect to="/" />;
+ 
   let i = 0;
   return (
     <div>

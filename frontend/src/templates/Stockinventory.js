@@ -3,14 +3,16 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import ListStockInventory from "../components/ListStockInventory";
 import orderStyle from "../style/orderStyle.js";
-
+import { useLocation } from "react-router-dom";
 import { StockProvider } from "../statemanagement/StockContext";
 
 const useStyles = makeStyles(orderStyle);
 
 function Stockinventory() {
   const classes = useStyles();
-
+  const location = useLocation();
+  const data = location.state.params;
+  console.log(data);
   return (
     <div>
       <Grid container>
