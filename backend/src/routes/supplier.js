@@ -5,7 +5,60 @@ require("dotenv").config();
 
 const stockUtils = require("../utils/stockUtils");
 
-router.get("/orders", function (req, res) {
+async function getValidOrders(access_token) {
+  const config = {
+    method: "get",
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/goodsReceipt/processOrders/1/1000?company=SINFFEUP`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+
+    let validOrders = [];
+    let process_orders = response.data;
+
+    for (let j in process_orders) {
+      validOrders.push(process_orders[j].sourceDocKey);
+    }
+
+    return validOrders;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getValidOrderLines(access_token, documentKey) {
+  const config = {
+    method: "get",
+    url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/goodsReceipt/processOrders/1/1000?company=SINFFEUP`,
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+
+    let validItems = [];
+    let process_orders = response.data;
+
+    for (let j in process_orders) {
+      if (process_orders[j].sourceDocKey === documentKey)
+        validItems.push(process_orders[j].item);
+    }
+
+    return validItems;
+  } catch (error) {
+    return null;
+  }
+}
+
+router.get("/orders", async function (req, res) {
   const access_token = req.headers.authorization;
 
   if (!access_token)
@@ -22,13 +75,19 @@ router.get("/orders", function (req, res) {
     },
   };
 
+  const validOrders = await getValidOrders(access_token);
+
   axios(config)
     .then(function (response) {
       let orders = response.data;
       let parsed_orders = {};
 
       for (let i in orders) {
-        if (orders[i].isActive && !orders[i].isDeleted)
+        if (
+          orders[i].isActive &&
+          !orders[i].isDeleted &&
+          validOrders.includes(orders[i].naturalKey)
+        )
           for (let j in orders[i].documentLines) {
             parsed_orders[orders[i].documentLines[j].orderId] = {
               date: orders[i].documentDate,
@@ -69,19 +128,28 @@ router.get("/orders/:id", function (req, res) {
       let order_info = {};
       let documents = response.data.documentLines;
 
-      for (let j in documents) {
-        let stock = await stockUtils.getMaterialStock(
-          access_token,
-          documents[j].purchasesItem
-        );
+      const validItems = await getValidOrderLines(
+        access_token,
+        response.data.naturalKey
+      );
 
-        order_info[documents[j].purchasesItem] = {
-          lineNumber: parseInt(documents[j].index) + 1,
-          description: documents[j].complementaryDescription,
-          quantity: documents[j].quantity,
-          stock,
-          location: documents[j].warehouse,
-        };
+      for (let j in documents) {
+        if (validItems.includes(documents[j].purchasesItem)) {
+          let stock = await stockUtils.getMaterialStock(
+            access_token,
+            documents[j].purchasesItem
+          );
+
+          order_info[documents[j].purchasesItem] = {
+            lineNumber: parseInt(documents[j].index) + 1,
+            description: documents[j].complementaryDescription,
+            quantity:
+              parseInt(documents[j].quantity) -
+              parseInt(documents[j].receivedQuantity),
+            stock,
+            location: documents[j].warehouse,
+          };
+        }
       }
 
       res.send(order_info);
