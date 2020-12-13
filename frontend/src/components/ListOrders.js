@@ -67,7 +67,7 @@ export default function ListOders({ type }) {
             client: value_type,
             name: name_value,
             documentId: data[name].documentId,
-            date: date.substring(0, date.indexOf("T")),
+            date: date,
             order: [
               {
                 productId: "",
