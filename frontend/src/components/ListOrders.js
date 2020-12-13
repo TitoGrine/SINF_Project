@@ -39,6 +39,7 @@ export default function ListOders({ type }) {
           quantity: obj.quantity,
           location: obj.location,
           order_ref: obj.order_ref,
+          line_number: obj.line_number,
         };
         return item;
       });
@@ -46,18 +47,17 @@ export default function ListOders({ type }) {
         date: Date.now(),
         items: aux,
       };
-      console.log(object);
-      // sendRequest(
-      //   "POST",
-      //   "http://localhost:8800/api/picking-wave/create",
-      //   object
-      // )
-      //   .then((data) => {
-      //     window.location.href = "/picking-route/" + data.ref;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/picking-wave/create",
+        object
+      )
+        .then((data) => {
+          window.location.href = "/picking-route/" + data.ref;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

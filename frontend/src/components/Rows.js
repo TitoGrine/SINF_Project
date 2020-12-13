@@ -66,6 +66,7 @@ export default function Row(props) {
           let obj = {
             productId: name,
             description: d[name].description,
+            line_number: d[name].lineNumber,
             location: d[name].location,
             quantity: d[name].quantity,
             expected_quantity: d[name].quantity,
