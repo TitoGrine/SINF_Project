@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import { sendRequest } from "../requests.js";
+import { Redirect } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -12,7 +14,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TablePagination from "@material-ui/core/TablePagination";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from '@material-ui/core/Snackbar';
 import Row from "../components/StockRows";
 
 import { useAuth } from "../statemanagement/AuthenticationContext.js";
@@ -22,48 +25,78 @@ import orderStyle from "../style/orderStyle.js";
 
 const useStyles = makeStyles(orderStyle);
 
-export default function ListOders() {
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+export default function ListOders({ rows }) {
   const classes = useStyles();
-
-  const [rows] = useState([
-    {
-      id: 0,
-      location: "A10",
-      productId: "A10",
-      documentId: "A10",
-      orderedquantity: "A10",
-      storedquantity: "A10",
-    },
-    {
-      id: 1,
-      location: "A3",
-      productId: "A3",
-      documentId: "A3",
-      orderedquantity: "A3",
-      storedquantity: "A3",
-    },
-    {
-      id: 2,
-      location: "A5",
-      productId: "A5",
-      documentId: "A5",
-      orderedquantity: "A5",
-      storedquantity: "A5",
-    },
-  ]);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [checked] = useContext(StockContext);
   const { setAuthToken } = useAuth();
-  const [error, setError] = useState(false);
+  const [flag, setFlag] = useState(false);
+  const [open, setOpen] = useState(false);
+
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function include(arr, obj) {
+    return arr.indexOf(obj) != -1;
+  }
 
   const handleButton = () => {
-    if (checked.length != rows.length) setError(true);
-    else {
-      setError(false);
+    if (checked.length != rows.length) {
+      setOpen(true);
+    } else {
+      let locations = [];
+      let objs = [];
+      rows.forEach((row) => {
+        if (!include(locations, row.location)) {
+          let obj = {
+            sourceWarehouse: "D0",
+            targetWarehouse: row.location,
+            items: [
+              {
+                materialsItem: row.productId,
+                quantity: row.storedquantity,
+              },
+            ],
+          };
+          objs.push(obj);
+          locations.push(row.location);
+        } else {
+          let obj = objs.find(
+            (element) => (element.targetWarehouse = row.location)
+          );
+          obj.items.push({
+            materialsItem: row.productId,
+            quantity: row.storedquantity,
+          });
+        }
+      });
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/stock/transfer",
+        objs,
+        localStorage.getItem("token")
+      )
+        .then((data) => {
+          setFlag(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
+
+  if (flag) return <Redirect to="/" />;
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -81,6 +114,11 @@ export default function ListOders() {
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>
+          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+              Please make sure you select all the items before confirming!
+            </Alert>
+          </Snackbar>
           <Grid item xs={12} sm={12} md={12} lg={12} className={classes.list}>
             <Paper className={classes.root}>
               <TableContainer>

@@ -12,14 +12,49 @@ function Stockinventory() {
   const classes = useStyles();
   const location = useLocation();
   const data = location.state.params;
-  console.log(data);
+
+  // let rows = [
+  //   {
+  //     id: 0,
+  //     documentId: "EF0.13",
+  //     storedquantity: "1",
+  //     orderedquantity: "15",
+  //     location: "A32",
+  //     productId: "123",
+  //   },
+  //   {
+  //     id: 1,
+  //     documentId: "EF0.13",
+  //     storedquantity: "1",
+  //     orderedquantity: "15",
+  //     location: "A45",
+  //     productId: "123",
+  //   },
+  //   {
+  //     id: 2,
+  //     documentId: "EF0.13",
+  //     storedquantity: "1",
+  //     orderedquantity: "15",
+  //     location: "A32",
+  //     productId: "123",
+  //   },
+  //   {
+  //     id: 3,
+  //     documentId: "EF0.13",
+  //     storedquantity: "1",
+  //     orderedquantity: "15",
+  //     location: "A32",
+  //     productId: "dftry",
+  //   }
+  // ];
+
   return (
     <div>
       <Grid container>
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <h1 className={classes.title}>Stock Inventory</h1>
           <StockProvider>
-            <ListStockInventory></ListStockInventory>
+            <ListStockInventory rows={data}></ListStockInventory>
           </StockProvider>
         </Grid>
       </Grid>

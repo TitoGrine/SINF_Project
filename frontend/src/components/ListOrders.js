@@ -122,7 +122,19 @@ export default function ListOders({ type }) {
         let item = {
           sourceDocKey: obj.documentId,
           sourceDocLineNumber: obj.lineNumber,
-          quantity: obj.quantity,
+          quantity: obj.expected_quantity.toString(),
+        };
+        return item;
+      });
+      let i = 0;
+      let sendpage = rowsSelected.map((obj) => {
+        let item = {
+          id: i++,
+          documentId: obj.documentId,
+          storedquantity: obj.expected_quantity.toString(),
+          orderedquantity: obj.quantity.toString(),
+          location: obj.location,
+          productId: obj.productId
         };
         return item;
       });
@@ -133,7 +145,7 @@ export default function ListOders({ type }) {
         localStorage.getItem("token")
       )
         .then((data) => {
-          history.push("/stock-inventory", { params: prod });
+          history.push("/stock-inventory", { params: sendpage });
         })
         .catch((err) => {
           console.log(err);
