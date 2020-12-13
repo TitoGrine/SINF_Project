@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cfef6164-6476-4727-a428-674a6cd6adee",
+		"_postman_id": "14f032d3-5c16-4e96-bd8f-54ca243b926f",
 		"name": "SINF",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -219,7 +219,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8800/api/supplier/orders/91d89814-f994-4e4c-9185-01175bf2b8ab",
+							"raw": "http://localhost:8800/api/supplier/orders/4f405388-d687-4cac-8ddd-0c7263490c1e",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -229,7 +229,7 @@
 								"api",
 								"supplier",
 								"orders",
-								"91d89814-f994-4e4c-9185-01175bf2b8ab"
+								"4f405388-d687-4cac-8ddd-0c7263490c1e"
 							]
 						}
 					},
@@ -564,7 +564,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "06e78ca1-2c52-4212-911d-f3e174ea99fc",
+						"id": "e14a64e1-6e6d-43e8-adcc-e296a296f2fe",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
 							"let bearer_token = jsonData.access_token;",
