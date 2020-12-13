@@ -10,7 +10,7 @@ import PickingCircle from "../components/PickingCircle";
 
 import pickingStyle from "../style/pickingStyle.js";
 import { useAuth } from "../statemanagement/AuthenticationContext";
-import { getData } from "../requests";
+import { getData, sendRequest } from "../requests";
 
 const useStyles = makeStyles(pickingStyle);
 
@@ -177,6 +177,20 @@ function PickingRoute() {
       });
   }
 
+  function transferStock(obj) {
+    
+
+    console.log(obj)
+    // sendRequest("POST", "http://localhost:8800/api/stock/transfer", obj)
+    //   .then((data) => {
+    //     // ??
+    //   })
+    //   .catch((err) => {
+    //     const error = JSON.parse(err.message);
+    //     if (error.status === 401) setAuthToken("");
+    //   });
+  }
+
   function filterRows() {
     let filteredRows = originalData.filter((item) => {
       return item.warehouse_zone === route[activeIndex];
@@ -209,6 +223,7 @@ function PickingRoute() {
     }
 
     console.log(originalData);
+    transferStock(originalData);
     console.log("Finished");
   }
 
