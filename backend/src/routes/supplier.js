@@ -90,7 +90,10 @@ router.get("/orders", async function (req, res) {
         )
           for (let j in orders[i].documentLines) {
             parsed_orders[orders[i].documentLines[j].orderId] = {
-              date: orders[i].documentDate,
+              date: orders[i].documentDate.substring(
+                0,
+                orders[i].documentDate.indexOf("T")
+              ),
               documentId: orders[i].naturalKey,
               supplier: orders[i].sellerSupplierParty,
               supplierName: orders[i].sellerSupplierPartyName,
