@@ -149,13 +149,13 @@ function PickingRoute() {
       localStorage.getItem("token")
     )
       .then((data) => {
-        items.forEach((row) => {
+        data.forEach((row) => {
           row["picked"] = false;
           row["selected_quantity"] = 0;
         });
-        setOriginalData(items);
+        setOriginalData(data);
         setRows(
-          items.filter((item) => item.warehouse_zone === route[activeIndex])
+          data.filter((item) => item.warehouse_zone === route[activeIndex])
         );
       })
       .catch((err) => {

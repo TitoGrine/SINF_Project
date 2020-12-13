@@ -28,7 +28,10 @@ export default function ListOders({ type }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const { setAuthToken } = useAuth();
+  
   const handleButton = () => {
+    if (rowsSelected.length === 0) return;
+
     if (type === "client") {
       let aux = rowsSelected.map((obj) => {
         let item = {
@@ -43,17 +46,18 @@ export default function ListOders({ type }) {
         date: Date.now(),
         items: aux,
       };
-      sendRequest(
-        "POST",
-        "http://localhost:8800/api/picking-wave/create",
-        object
-      )
-        .then((data) => {
-          window.location.href = "/picking-route/" + data.ref;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      console.log(object);
+      // sendRequest(
+      //   "POST",
+      //   "http://localhost:8800/api/picking-wave/create",
+      //   object
+      // )
+      //   .then((data) => {
+      //     window.location.href = "/picking-route/" + data.ref;
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     }
   };
 
