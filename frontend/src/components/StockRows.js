@@ -5,6 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
 import orderStyle from "../style/orderStyle.js";
+import TextField from "@material-ui/core/TextField";
 
 import { StockContext } from "../statemanagement/StockContext";
 
@@ -25,6 +26,10 @@ export default function Row(props) {
   const classes = useStyles();
   const [checked, setChecked] = useContext(StockContext);
   const [isSelected, setSelected] = useState(false);
+  const [quantity, setQuantity] = useState(row.storedquantity);
+  const [error, setError] = useState(false);
+
+  const initialQnt = row.storedquantity;
 
   const handleChecked = (id) => {
     let newChecked = [];
@@ -54,7 +59,24 @@ export default function Row(props) {
         <TableCell className={classes.cell}>{row.productId}</TableCell>
         <TableCell className={classes.cell}>{row.documentId}</TableCell>
         <TableCell className={classes.cell}>{row.orderedquantity}</TableCell>
-        <TableCell className={classes.cell}>{row.storedquantity}</TableCell>
+        <TableCell className={classes.cell}>
+          <TextField
+            value={quantity}
+            id="standard-number"
+            label="Number"
+            type="number"
+            onChange={(e) => {
+              if (e.target.value > initialQnt || e.target.value < 0) {
+                setQuantity(initialQnt);
+              } else {
+                setQuantity(e.target.value);
+              }
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </TableCell>
       </TableRow>
     </React.Fragment>
   );

@@ -62,11 +62,12 @@ export default function ListOders({ type }) {
             type === "client" ? data[name].client : data[name].supplier;
           let name_value =
             type === "client" ? data[name].clientName : data[name].supplierName;
+          let date = data[name].date;
           let obj = {
             client: value_type,
             name: name_value,
             documentId: data[name].documentId,
-            date: data[name].date,
+            date: date.substring(0, date.indexOf("T")),
             order: [
               {
                 productId: "",
@@ -134,7 +135,7 @@ export default function ListOders({ type }) {
           storedquantity: obj.expected_quantity.toString(),
           orderedquantity: obj.quantity.toString(),
           location: obj.location,
-          productId: obj.productId
+          productId: obj.productId,
         };
         return item;
       });
@@ -154,7 +155,7 @@ export default function ListOders({ type }) {
   };
 
   if (flagClient) return <Redirect to="/" />;
- 
+
   let i = 0;
   return (
     <div>
