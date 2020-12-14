@@ -29,10 +29,6 @@ export default function Row(props) {
   const [isSelected, setSelected] = useState(false);
   const [quantity, setQuantity] = useContext(StockInventoryContext);
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    setQuantity(row.storedquantity);
-  }, []);
   const initialQnt = row.storedquantity;
 
   const handleChecked = (id) => {
@@ -65,15 +61,19 @@ export default function Row(props) {
         <TableCell className={classes.cell}>{row.orderedquantity}</TableCell>
         <TableCell className={classes.cell}>
           <TextField
-            value={quantity}
+            value={quantity[row.id] || ''}
             id="standard-number"
             label="Number"
             type="number"
             onChange={(e) => {
               if (e.target.value > initialQnt || e.target.value < 0) {
-                setQuantity(initialQnt);
+                let aux = [...quantity];
+                aux[row.id] = initialQnt;
+                setQuantity(aux);
               } else {
-                setQuantity(e.target.value);
+                let aux = [...quantity];
+                aux[row.id] = e.target.value;
+                setQuantity(aux);
               }
             }}
             InputLabelProps={{
