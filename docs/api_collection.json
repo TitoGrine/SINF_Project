@@ -127,7 +127,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n  {\n    \"sourceDocKey\": \"ECL.2020.8\",\n    \"sourceDocLineNumber\": 1,\n     \"quantity\": \"1\"\n  }\n]",
+							"raw": "[\n    {\n        \"sourceWarehouse\": \"A3D\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"sourceDocKey\": \"ECL.2020.14\",\n                \"sourceDocLineNumber\": 4,\n                \"materialsItem\": \"VULCANICO\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A1B\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"sourceDocKey\": \"ECL.2020.8\",\n                \"sourceDocLineNumber\": 4,\n                \"materialsItem\": \"PAPAFIGOS\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A0B\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"sourceDocKey\": \"ECL.2020.9\",\n                \"sourceDocLineNumber\": 4,\n                \"materialsItem\": \"EA\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -356,7 +356,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"sourceWarehouse\": \"D1\",\n        \"targetWarehouse\": \"A3A\",\n        \"items\": [\n            {\n                \"materialsItem\": \"BACALHOA\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A2D\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"materialsItem\": \"QUINTAPORTAL\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"D1\",\n        \"targetWarehouse\": \"A0B\",\n        \"items\": [\n            {\n                \"materialsItem\": \"EA\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]",
+							"raw": "[\n    {\n        \"sourceWarehouse\": \"A3D\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"materialsItem\": \"VULCANICO\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A1B\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"materialsItem\": \"PAPAFIGOS\",\n                \"quantity\": 1\n            }\n        ]\n    },\n    {\n        \"sourceWarehouse\": \"A0B\",\n        \"targetWarehouse\": \"D1\",\n        \"items\": [\n            {\n                \"materialsItem\": \"EA\",\n                \"quantity\": 1\n            }\n        ]\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"

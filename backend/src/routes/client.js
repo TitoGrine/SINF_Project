@@ -58,6 +58,61 @@ async function getValidOrderLines(access_token, documentKey) {
   }
 }
 
+async function transferStock(access_token, stockTransfers) {
+  let responses = [];
+
+  await Promise.all(
+    stockTransfers.map(async (transfer) => {
+      if (
+        !transfer.sourceWarehouse ||
+        !transfer.targetWarehouse ||
+        !transfer.items
+      ) {
+        return res.status(400).json({
+          error:
+            "At least one of the tranfers is invalid - missing one of {sourceWarehouse, targetWarehouse, items}.",
+        });
+      }
+
+      const data = JSON.stringify({
+        company: process.env.JASMIN_COMPANY,
+        sourceWarehouse: transfer.sourceWarehouse,
+        targetWarehouse: transfer.targetWarehouse,
+        loadingStreetName: "R. Dr. Roberto Frias",
+        loadingBuildingNumber: "0",
+        loadingPostalZone: "4200-465",
+        loadingCityName: "Porto",
+        loadingCountry: "PT",
+        UnloadingCountry: "PT",
+        documentLines: transfer.items,
+      });
+
+      const config = {
+        method: "post",
+        url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/materialsmanagement/stockTransferOrders`,
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      try {
+        const response = await axios(config);
+
+        responses.push({ key: response.data });
+      } catch (error) {
+        responses.push({
+          status: error.response.status,
+          error: error.message,
+        });
+      }
+    })
+  );
+
+  return responses;
+}
+
 router.get("/orders", async function (req, res) {
   const access_token = req.headers.authorization;
 
@@ -205,7 +260,7 @@ router.get("/delivery", function (req, res) {
     });
 });
 
-router.post("/delivery", function (req, res) {
+router.post("/delivery", async function (req, res) {
   const access_token = req.headers.authorization;
   const orders = req.body;
 
@@ -217,6 +272,34 @@ router.post("/delivery", function (req, res) {
   if (!orders)
     return res.status(400).json({ error: "No orders were provided." });
 
+  let transfers = orders.map((order) => {
+    return {
+      sourceWarehouse: order.targetWarehouse,
+      targetWarehouse: order.sourceWarehouse,
+      items: order.items.map((item) => {
+        return {
+          materialsItem: item.materialsItem,
+          quantity: item.quantity,
+        };
+      }),
+    };
+  });
+
+  let deliveries = [].concat.apply(
+    [],
+    orders.map((order) =>
+      order.items.map((item) => {
+        return {
+          sourceDocKey: item.sourceDocKey,
+          sourceDocLineNumber: item.sourceDocLineNumber,
+          quantity: item.quantity,
+        };
+      })
+    )
+  );
+
+  await transferStock(access_token, transfers);
+
   const config = {
     method: "post",
     url: `${process.env.JASMIN_URI}/api/${process.env.JASMIN_TENANT}/${process.env.JASMIN_ORGANIZATION}/shipping/processOrders/SINFFEUP`,
@@ -226,7 +309,7 @@ router.post("/delivery", function (req, res) {
       Cookie:
         "OpenIdConnect.nonce.8DjNTjFnmYxEyLIFMzNETby3dWyiKOrV9LKz8Pgragk%3D=b1NscFM1YTZsbERKNmJhWTBCWGVyeWVQbVhSZWh4OU9aN09jX2tGWkNPanVYbTI0ZUh5RC1MeUczUHhrRlg3MV94Yjd2Rlc4YjNPSm5TeDBfaENLdnBTTVoybmhFZ3Q2R1Q5ZlQtWHhQMFRFQlJlT1JKMnhhUFNWTzdQZUZ0cUJFZGZPMU80QVlnQmtBSmg0SzV3VmZqYXJZR1ZoeXBGV0Iydk5jRkxyS0ttaTJRUVhuaFZVUl9DLURYcDg2TlFpLTJyLWtGd0t0OG9yUF8xenZnR2p3dDM0RTVn",
     },
-    data: orders,
+    data: deliveries,
   };
 
   axios(config)
@@ -238,5 +321,26 @@ router.post("/delivery", function (req, res) {
       return res.status(error.response.status).json({ error });
     });
 });
+
+/*
+let transfers = response.map((order) => {
+    return {
+        "sourceWarehouse": instance.sourceWarehouse,
+        "targetWarehouse": instance.targetWarehouse,
+        "items": instance.items.map((item) => {
+            return {
+                "materialsItem": item.materialsItem,
+                "quantity": item.quantity
+            }
+        })
+    }
+});
+
+let deliveries = [].concat.apply([], response.map((instance) => instance.items.map((item) => {
+        return {"sourceDocKey": item.sourceDocKey,
+        "sourceDocLineNumber": item.sourceDocLineNumber,
+        "quantity": item.quantity}
+})));
+*/
 
 module.exports = router;
