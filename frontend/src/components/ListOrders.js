@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getData, getToken, sendRequest } from "../requests.js";
-import { useHistory, Redirect } from "react-router-dom";
+import { getData, sendRequest } from "../requests.js";
+import { useHistory } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";

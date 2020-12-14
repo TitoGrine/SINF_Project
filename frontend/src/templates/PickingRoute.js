@@ -14,81 +14,6 @@ import { getData, sendRequest } from "../requests";
 
 const useStyles = makeStyles(pickingStyle);
 
-const items = [
-  {
-    id: 1,
-    ref: "BACALHOA",
-    quantity: 10,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 2,
-    ref: "VULCANICO",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3D",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 3,
-    ref: "TONSDUORUM",
-    quantity: 30,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A2D",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 4,
-    ref: "PAPAFIGOS",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A1B",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 5,
-    ref: "BACALHOA",
-    quantity: 10,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 6,
-    ref: "VULCANICO",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 7,
-    ref: "TONSDUORUM",
-    quantity: 30,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 8,
-    ref: "PAPAFIGOS",
-    quantity: 25,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-  {
-    id: 9,
-    ref: "BACALHOA",
-    quantity: 10,
-    order_ref: "ECL.2020.8",
-    warehouse_zone: "A3A",
-    ref_picking: "PW2020_1",
-  },
-];
-
 function PickingRoute() {
   const classes = useStyles();
   const [originalData, setOriginalData] = useState([]);
@@ -177,34 +102,6 @@ function PickingRoute() {
       });
   }
 
-  function addItemToTransfer(item, transfer) {
-    let newItem = {
-      sourceDocLineNumber: item.line_number,
-      sourceDocKey: item.order_ref,
-      quantity: item.selected_quantity,
-      materialsItem: item.ref,
-    };
-
-    transfer.items.push(newItem);
-  }
-
-  function addNewTransferEntry(item, transfer) {
-    let newEntry = {
-      sourceWarehouse: item.warehouse_zone,
-      targetWarehouse: "D1",
-      items: [
-        {
-          sourceDocLineNumber: item.line_number,
-          sourceDocKey: item.order_ref,
-          quantity: item.selected_quantity,
-          materialsItem: item.ref,
-        },
-      ],
-    };
-
-    transfer.push(newEntry);
-  }
-
   function transferStock(obj) {
     let bodyObj = [];
 
@@ -236,6 +133,34 @@ function PickingRoute() {
     // igual ao transfer stock, mas com o DocKey e DocLine dentro de cada item
   }
 
+  function addItemToTransfer(item, transfer) {
+    let newItem = {
+      sourceDocLineNumber: item.line_number,
+      sourceDocKey: item.order_ref,
+      quantity: item.selected_quantity,
+      materialsItem: item.ref,
+    };
+
+    transfer.items.push(newItem);
+  }
+
+  function addNewTransferEntry(item, transfer) {
+    let newEntry = {
+      sourceWarehouse: item.warehouse_zone,
+      targetWarehouse: "D1",
+      items: [
+        {
+          sourceDocLineNumber: item.line_number,
+          sourceDocKey: item.order_ref,
+          quantity: item.selected_quantity,
+          materialsItem: item.ref,
+        },
+      ],
+    };
+
+    transfer.push(newEntry);
+  }
+
   function filterRows() {
     let filteredRows = originalData.filter((item) => {
       return item.warehouse_zone === route[activeIndex];
@@ -261,14 +186,35 @@ function PickingRoute() {
     return <PickingCircle active location={location} />;
   }
 
+  function getTransferedInfo(obj) {
+    let selected = obj.filter((item) => item.picked);
+    let result = selected.map((item) => {
+      return {
+        ref: item.ref,
+        order_ref: item.order_ref,
+        quantity: item.selected_quantity,
+      };
+    });
+
+    console.log(result);
+    return result;
+  }
+
   function nextZone() {
-    if (activeIndex < route.length - 1) {
+    if (activeIndex < route.length) {
       setActiveIndex(activeIndex + 1);
+    }
+
+    if (activeIndex === route.length - 1) {
+      transferStock(originalData);
+      console.log("Finished");
       return;
     }
 
-    transferStock(originalData);
-    console.log("Finished");
+    if (activeIndex === route.length) {
+      console.log("Deliveries");
+      return;
+    }
   }
 
   function previousZone() {
@@ -319,11 +265,20 @@ function PickingRoute() {
           ))}
         </Grid>
         <Grid item className={classes.list}>
-          <ListPicking
-            rows={rows}
-            onQuantityChange={handleQuantityChange}
-            onCheckboxChange={handleCheckboxChange}
-          />
+          {activeIndex < route.length ? (
+            <ListPicking
+              rows={rows}
+              onQuantityChange={handleQuantityChange}
+              onCheckboxChange={handleCheckboxChange}
+            />
+          ) : (
+            <div>
+              <p>Stock has been transfered to warehouse exit:</p>
+              {getTransferedInfo(originalData).map((item, index) => {
+                <div key={index}>{item}</div>;
+              })}
+            </div>
+          )}
         </Grid>
         <Grid item>
           <div className={classes.buttonWrapper}>
