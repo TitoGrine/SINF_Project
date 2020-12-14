@@ -47,6 +47,7 @@ export default function Row(props) {
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
+  const [inputs, setInputs] = useState([]);
 
   async function getRow(order_ref, documentId) {
     if (data.order[0].description !== "") {
@@ -61,8 +62,11 @@ export default function Row(props) {
       .then((d) => {
         let values = [];
         let keysName = Object.keys(d);
+        let inpts = [];
+        let i = 0;
         keysName.forEach((name) => {
           let obj = {
+            id: i++,
             documentId: documentId,
             lineNumber: d[name].lineNumber,
             productId: name,
@@ -73,9 +77,14 @@ export default function Row(props) {
             stock: d[name].stock,
             checked: false,
           };
+          inpts[obj.id] = [d[name].quantity];
           values.push(obj);
         });
-        data.order = values;
+        setInputs(inpts);
+        setData((prevData) => ({
+          ...prevData,
+          order: values,
+        }));
         setOpen(!open);
       })
       .catch((err) => {
@@ -110,9 +119,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (!row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -130,9 +140,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -197,7 +208,6 @@ export default function Row(props) {
                 <TableBody>
                   {data.order.map((historyRow) => {
                     const isItemSelected = isSelected(historyRow.productId);
-                    let value = 0;
                     return (
                       <TableRow
                         hover
@@ -212,7 +222,7 @@ export default function Row(props) {
                                 event,
                                 historyRow,
                                 data.order_ref,
-                                value
+                                inputs[historyRow.id]
                               );
                             }}
                             color="primary"
@@ -236,9 +246,12 @@ export default function Row(props) {
                             <TextField
                               label="Number"
                               type="number"
+                              value={inputs[historyRow.id]}
                               onChange={(e) => {
-                                value = e.target.value;
-                                handleInput(historyRow, value);
+                                inputs[historyRow.id] = [
+                                  parseInt(e.target.value),
+                                ];
+                                handleInput(historyRow, e.target.value);
                               }}
                               InputLabelProps={{
                                 shrink: true,
