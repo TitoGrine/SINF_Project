@@ -30,10 +30,13 @@ export default function ListOders({ type }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const history = useHistory();
+  const [flagType, setflagType] = useState(false);
 
   const { setAuthToken } = useAuth();
 
   useEffect(() => {
+    setflagType(true);
+    setPage(0);
     getOrders();
   }, [type]);
 
@@ -83,6 +86,7 @@ export default function ListOders({ type }) {
           return obj;
         });
         setRows(orders);
+        setflagType(false)
       })
       .catch((err) => {
         const error = JSON.parse(err.message);
@@ -141,7 +145,7 @@ export default function ListOders({ type }) {
   let i = 0;
   return (
     <div>
-      {rows.length === 0 ? (
+      {(rows.length === 0 || flagType)? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>

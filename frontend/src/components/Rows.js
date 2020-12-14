@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { getData } from "../requests.js";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -49,6 +49,10 @@ export default function Row(props) {
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const [inputs, setInputs] = useState([]);
+
+  useEffect(() => {
+    setData(row);
+  }, [row]);
 
   async function getRow(order_ref, documentId) {
     setOpen(!open);
@@ -200,11 +204,9 @@ export default function Row(props) {
                       <TableCell className={classes.cell}>
                         <b>Quantity</b>
                       </TableCell>
-                      {type === "supplier" && (
-                        <TableCell className={classes.cell}>
-                          <b>Received Quantity</b>
-                        </TableCell>
-                      )}
+                      <TableCell className={classes.cell}>
+                        <b>Received Quantity</b>
+                      </TableCell>
                       <TableCell className={classes.cell}>
                         {" "}
                         <b>Stock</b>
@@ -230,6 +232,7 @@ export default function Row(props) {
                                 handleClick(
                                   event,
                                   historyRow,
+                                  data.order_ref,
                                   inputs[historyRow.id]
                                 );
                               }}
@@ -247,30 +250,28 @@ export default function Row(props) {
                             {historyRow.location}
                           </TableCell>
                           <TableCell className={classes.cell}>
-                            {historyRow.quantity}
+                            <b>Received Quantity</b>
                           </TableCell>
-                          {type === "supplier" && (
-                            <TableCell className={classes.cell}>
-                              <TextField
-                                label="Number"
-                                type="number"
-                                value={inputs[historyRow.id]}
-                                onChange={(e) => {
-                                  inputs[historyRow.id] = [
-                                    parseInt(e.target.value),
-                                  ];
-                                  handleInput(historyRow, e.target.value);
-                                }}
-                                InputLabelProps={{
-                                  shrink: true,
-                                }}
-                                inputProps={{
-                                  min: 0,
-                                  max: historyRow.quantity,
-                                }}
-                              />
-                            </TableCell>
-                          )}
+                          <TableCell className={classes.cell}>
+                            <TextField
+                              label="Number"
+                              type="number"
+                              value={inputs[historyRow.id]}
+                              onChange={(e) => {
+                                inputs[historyRow.id] = [
+                                  parseInt(e.target.value),
+                                ];
+                                handleInput(historyRow, e.target.value);
+                              }}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              inputProps={{
+                                min: 0,
+                                max: historyRow.quantity,
+                              }}
+                            />
+                          </TableCell>
                           <TableCell className={classes.cell}>
                             {historyRow.stock}
                           </TableCell>

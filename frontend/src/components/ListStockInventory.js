@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { sendRequest } from "../requests.js";
 import { Redirect, useHistory } from "react-router-dom";
 //material@core
@@ -40,6 +40,14 @@ export default function ListOders({ rows }) {
   const [open, setOpen] = useState(false);
   const [quantity, setQuantity] = useContext(StockInventoryContext);
 
+  useEffect(() => {
+    let aux = [...quantity];
+    rows.forEach((row) => {
+      aux[row.id] = row.storedquantity;
+    });
+    setQuantity(aux);
+  }, []);
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -56,7 +64,7 @@ export default function ListOders({ rows }) {
         let item = {
           sourceDocKey: row.documentId,
           sourceDocLineNumber: row.sourceDocLineNumber,
-          quantity: quantity.toString(),
+          quantity: quantity[row.id],
         };
         return item;
       });

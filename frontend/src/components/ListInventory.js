@@ -89,16 +89,20 @@ const columns = [
   },
 ];
 
-function ListInventory({ rows, isDataReady }) {
+function ListInventory({ rows, isDataReady, page, onPageChange }) {
   const classes = useStyles();
   const rowsPerPage = 8;
 
+  console.log("Page: " + page);
+  console.log("onChange: " + onPageChange);
   return (
     <div className={classes.table}>
       {rows.length === 0 && !isDataReady ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <DataGrid
+          page={page}
+          onPageChange={onPageChange}
           onClick={(ev) => {
             ev.preventDefault();
           }}

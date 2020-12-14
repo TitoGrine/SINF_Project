@@ -20,7 +20,7 @@ function Stockinventory() {
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <h1 className={classes.title}>Stock Inventory</h1>
           <StockProvider>
-            <StockInventoryProvider>
+            <StockInventoryProvider length={data.length}>
               <ListStockInventory rows={data}></ListStockInventory>
             </StockInventoryProvider>
           </StockProvider>
