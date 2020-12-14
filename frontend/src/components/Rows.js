@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { getData } from "../requests.js";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -49,6 +49,10 @@ export default function Row(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const [inputs, setInputs] = useState([]);
 
+  useEffect(() => {
+    setData(row);
+  }, [row]);
+  
   async function getRow(order_ref, documentId) {
     if (data.order[0].description !== "") {
       setOpen(!open);
