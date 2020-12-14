@@ -196,7 +196,7 @@ export default function Row(props) {
                     </TableCell>
                     {type === "supplier" && (
                       <TableCell className={classes.cell}>
-                        <b>Expected Quantity</b>
+                        <b>Received Quantity</b>
                       </TableCell>
                     )}
                     <TableCell className={classes.cell}>

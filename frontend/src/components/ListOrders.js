@@ -119,17 +119,10 @@ export default function ListOders({ type }) {
           console.log(err);
         });
     } else if (type === "supplier") {
-      let prod = rowsSelected.map((obj) => {
-        let item = {
-          sourceDocKey: obj.documentId,
-          sourceDocLineNumber: obj.lineNumber,
-          quantity: obj.expected_quantity.toString(),
-        };
-        return item;
-      });
       let i = 0;
       let sendpage = rowsSelected.map((obj) => {
         let item = {
+          sourceDocLineNumber: obj.lineNumber,
           id: i++,
           documentId: obj.documentId,
           storedquantity: obj.expected_quantity.toString(),
@@ -139,18 +132,7 @@ export default function ListOders({ type }) {
         };
         return item;
       });
-      sendRequest(
-        "POST",
-        "http://localhost:8800/api/supplier/delivery",
-        prod,
-        localStorage.getItem("token")
-      )
-        .then((data) => {
-          history.push("/stock-inventory", { params: sendpage });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      history.push("/stock-inventory", { params: sendpage });
     }
   };
 

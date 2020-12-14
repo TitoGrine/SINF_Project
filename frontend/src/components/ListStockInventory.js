@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { sendRequest } from "../requests.js";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -15,11 +15,12 @@ import TablePagination from "@material-ui/core/TablePagination";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import MuiAlert from "@material-ui/lab/Alert";
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from "@material-ui/core/Snackbar";
 import Row from "../components/StockRows";
 
 import { useAuth } from "../statemanagement/AuthenticationContext.js";
 import { StockContext } from "../statemanagement/StockContext";
+import { StockInventoryContext } from "../statemanagement/StockInventoryContext";
 
 import orderStyle from "../style/orderStyle.js";
 
@@ -30,6 +31,7 @@ function Alert(props) {
 }
 
 export default function ListOders({ rows }) {
+  const history = useHistory();
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
@@ -37,7 +39,7 @@ export default function ListOders({ rows }) {
   const { setAuthToken } = useAuth();
   const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [quantity, setQuantity] = useContext(StockInventoryContext);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -47,48 +49,26 @@ export default function ListOders({ rows }) {
     setOpen(false);
   };
 
-  function include(arr, obj) {
-    return arr.indexOf(obj) != -1;
-  }
-
   const handleButton = () => {
     if (checked.length != rows.length) {
       setOpen(true);
     } else {
-      let locations = [];
-      let objs = [];
-      rows.forEach((row) => {
-        if (!include(locations, row.location)) {
-          let obj = {
-            sourceWarehouse: "D0",
-            targetWarehouse: row.location,
-            items: [
-              {
-                materialsItem: row.productId,
-                quantity: row.storedquantity,
-              },
-            ],
-          };
-          objs.push(obj);
-          locations.push(row.location);
-        } else {
-          let obj = objs.find(
-            (element) => (element.targetWarehouse = row.location)
-          );
-          obj.items.push({
-            materialsItem: row.productId,
-            quantity: row.storedquantity,
-          });
-        }
+      let send = rows.map((row) => {
+        let item = {
+          sourceDocKey: row.documentId,
+          sourceDocLineNumber: row.sourceDocLineNumber,
+          quantity: quantity.toString(),
+        };
+        return item;
       });
       sendRequest(
         "POST",
-        "http://localhost:8800/api/stock/transfer",
-        objs,
+        "http://localhost:8800/api/supplier/delivery",
+        send,
         localStorage.getItem("token")
       )
         .then((data) => {
-          setFlag(true);
+          history.push("/");
         })
         .catch((err) => {
           console.log(err);

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,6 +8,7 @@ import orderStyle from "../style/orderStyle.js";
 import TextField from "@material-ui/core/TextField";
 
 import { StockContext } from "../statemanagement/StockContext";
+import { StockInventoryContext } from "../statemanagement/StockInventoryContext";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -26,9 +27,12 @@ export default function Row(props) {
   const classes = useStyles();
   const [checked, setChecked] = useContext(StockContext);
   const [isSelected, setSelected] = useState(false);
-  const [quantity, setQuantity] = useState(row.storedquantity);
+  const [quantity, setQuantity] = useContext(StockInventoryContext);
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    setQuantity(row.storedquantity);
+  }, []);
   const initialQnt = row.storedquantity;
 
   const handleChecked = (id) => {
