@@ -98,8 +98,8 @@ export default function ListOders({ type }) {
         let item = {
           ref: obj.productId,
           quantity: obj.quantity,
-          location: obj.quantity,
-          order_ref: obj.order_ref,
+          location: obj.location,
+          order_ref: obj.documentId,
           line_number: obj.line_number,
         };
         return item;

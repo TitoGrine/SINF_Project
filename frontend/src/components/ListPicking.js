@@ -74,7 +74,7 @@ function ListPicking({ rows, onQuantityChange, onCheckboxChange }) {
                       style={{ width: 250 }}
                       align="center"
                     >
-                      {row.documentId}
+                      {row.order_ref}
                     </TableCell>
                     <TableCell
                       className={classes.cell}
