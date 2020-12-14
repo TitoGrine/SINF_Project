@@ -177,18 +177,63 @@ function PickingRoute() {
       });
   }
 
-  function transferStock(obj) {
-    
+  function addItemToTransfer(item, transfer) {
+    let newItem = {
+      sourceDocLineNumber: item.line_number,
+      sourceDocKey: item.order_ref,
+      quantity: item.selected_quantity,
+      materialsItem: item.ref,
+    };
 
-    console.log(obj)
+    transfer.items.push(newItem);
+  }
+
+  function addNewTransferEntry(item, transfer) {
+    let newEntry = {
+      sourceWarehouse: item.warehouse_zone,
+      targetWarehouse: "D1",
+      items: [
+        {
+          sourceDocLineNumber: item.line_number,
+          sourceDocKey: item.order_ref,
+          quantity: item.selected_quantity,
+          materialsItem: item.ref,
+        },
+      ],
+    };
+
+    transfer.push(newEntry);
+  }
+
+  function transferStock(obj) {
+    let bodyObj = [];
+
+    obj.forEach((item) => {
+      if (item.picked === false) return;
+
+      for (let i = 0; i < bodyObj.length; i++) {
+        if (bodyObj[i].sourceWarehouse === item.warehouse_zone) {
+          addItemToTransfer(item, bodyObj);
+          return;
+        }
+      }
+
+      addNewTransferEntry(item, bodyObj);
+    });
+
+    console.log(bodyObj);
+    // Passo 1. Transferir stock todo para o D1
     // sendRequest("POST", "http://localhost:8800/api/stock/transfer", obj)
     //   .then((data) => {
-    //     // ??
+    //     // Mostrar modal com botão e tal
     //   })
     //   .catch((err) => {
     //     const error = JSON.parse(err.message);
     //     if (error.status === 401) setAuthToken("");
     //   });
+
+    // Passo 2. Pedido ao Generate Delivery (através de um modal)
+    // igual ao transfer stock, mas com o DocKey e DocLine dentro de cada item
   }
 
   function filterRows() {
@@ -222,7 +267,6 @@ function PickingRoute() {
       return;
     }
 
-    console.log(originalData);
     transferStock(originalData);
     console.log("Finished");
   }
