@@ -37,7 +37,6 @@ export default function ListOders({ rows }) {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [checked] = useContext(StockContext);
   const { setAuthToken } = useAuth();
-  const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
   const [quantity, setQuantity] = useContext(StockInventoryContext);
 
@@ -50,7 +49,7 @@ export default function ListOders({ rows }) {
   };
 
   const handleButton = () => {
-    if (checked.length != rows.length) {
+    if (checked.length !== rows.length) {
       setOpen(true);
     } else {
       let send = rows.map((row) => {
@@ -71,12 +70,11 @@ export default function ListOders({ rows }) {
           history.push("/");
         })
         .catch((err) => {
-          console.log(err);
+          const error = JSON.parse(err.message);
+          if (error.status === 401) setAuthToken("");
         });
     }
   };
-
-  if (flag) return <Redirect to="/" />;
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
