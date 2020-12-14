@@ -47,10 +47,9 @@ export default function Row(props) {
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
+  const [inputs, setInputs] = useState([]);
 
-  console.log(rowsSelected);
-
-  async function getRow(order_ref) {
+  async function getRow(order_ref, documentId) {
     if (data.order[0].description !== "") {
       setOpen(!open);
       return;
@@ -63,8 +62,13 @@ export default function Row(props) {
       .then((d) => {
         let values = [];
         let keysName = Object.keys(d);
+        let inpts = [];
+        let i = 0;
         keysName.forEach((name) => {
           let obj = {
+            id: i++,
+            documentId: documentId,
+            lineNumber: d[name].lineNumber,
             productId: name,
             description: d[name].description,
             location: d[name].location,
@@ -73,9 +77,14 @@ export default function Row(props) {
             stock: d[name].stock,
             checked: false,
           };
+          inpts[obj.id] = [d[name].quantity];
           values.push(obj);
         });
-        data.order = values;
+        setInputs(inpts);
+        setData((prevData) => ({
+          ...prevData,
+          order: values,
+        }));
         setOpen(!open);
       })
       .catch((err) => {
@@ -110,9 +119,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (!row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -130,9 +140,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -151,7 +162,7 @@ export default function Row(props) {
             aria-label="expand row"
             size="small"
             onClick={() => {
-              getRow(row.order_ref);
+              getRow(row.order_ref, row.documentId);
             }}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -170,22 +181,33 @@ export default function Row(props) {
                 <TableHead className={classes.subtablehead}>
                   <TableRow className={classes.subtablerow}>
                     <TableCell className={classes.cell}> </TableCell>
-                    <TableCell className={classes.cell}> <b>ProductId</b> </TableCell>
-                    <TableCell className={classes.cell}><b>Description</b></TableCell>
-                    <TableCell className={classes.cell}><b>Location</b></TableCell>
-                    <TableCell className={classes.cell}><b>Quantity</b></TableCell>
+                    <TableCell className={classes.cell}>
+                      {" "}
+                      <b>ProductId</b>{" "}
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Description</b>
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Location</b>
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      <b>Quantity</b>
+                    </TableCell>
                     {type === "supplier" && (
                       <TableCell className={classes.cell}>
-                       <b>Expected Quantity</b>
+                        <b>Received Quantity</b>
                       </TableCell>
                     )}
-                    <TableCell className={classes.cell}> <b>Stock</b></TableCell>
+                    <TableCell className={classes.cell}>
+                      {" "}
+                      <b>Stock</b>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.order.map((historyRow) => {
                     const isItemSelected = isSelected(historyRow.productId);
-                    let value = 0;
                     return (
                       <TableRow
                         hover
@@ -200,7 +222,7 @@ export default function Row(props) {
                                 event,
                                 historyRow,
                                 data.order_ref,
-                                value
+                                inputs[historyRow.id]
                               );
                             }}
                             color="primary"
@@ -224,9 +246,12 @@ export default function Row(props) {
                             <TextField
                               label="Number"
                               type="number"
+                              value={inputs[historyRow.id]}
                               onChange={(e) => {
-                                value = e.target.value;
-                                handleInput(historyRow, value);
+                                inputs[historyRow.id] = [
+                                  parseInt(e.target.value),
+                                ];
+                                handleInput(historyRow, e.target.value);
                               }}
                               InputLabelProps={{
                                 shrink: true,

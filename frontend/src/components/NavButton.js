@@ -11,7 +11,7 @@ function NavButton({ name, image }) {
 
   return (
     <div className={classes.circle + " icon-circle"}>
-      <img src={"./assets/" + image} alt={image} className={classes.iconImg} />
+      <img src={"../assets/" + image} alt={image} className={classes.iconImg} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getData, sendRequest } from "../requests.js";
-import { useAuth } from "../statemanagement/AuthenticationContext.js";
+import { getData, getToken, sendRequest } from "../requests.js";
+import { useHistory, Redirect } from "react-router-dom";
+//material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,14 +12,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TablePagination from "@material-ui/core/TablePagination";
-import Row from "../components/Rows";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { Redirect } from "react-router-dom";
-
-import orderStyle from "../style/orderStyle.js";
+import Row from "../components/Rows";
 
 import { OrderContext } from "../statemanagement/OrderContext";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
+
+import orderStyle from "../style/orderStyle.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -28,37 +29,10 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [flag, setFlag] = useState(false);
+  const [flagClient, setFlagClient] = useState(false);
+  const history = useHistory();
+
   const { setAuthToken } = useAuth();
-  const handleButton = () => {
-    if (type === "client") {
-      let aux = rowsSelected.map((obj) => {
-        let item = {
-          ref: obj.productId,
-          quantity: obj.quantity,
-          location: obj.quantity,
-          order_ref: obj.order_ref,
-        };
-        return item;
-      });
-      let object = {
-        date: Date.now(),
-        items: aux,
-      };
-      console.log(object)
-      sendRequest(
-        "POST",
-        "http://localhost:8800/api/picking-wave/create",
-        object
-      )
-        .then((data) => {
-          setFlag(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
 
   useEffect(() => {
     getOrders();
@@ -88,11 +62,12 @@ export default function ListOders({ type }) {
             type === "client" ? data[name].client : data[name].supplier;
           let name_value =
             type === "client" ? data[name].clientName : data[name].supplierName;
+          let date = data[name].date;
           let obj = {
             client: value_type,
             name: name_value,
             documentId: data[name].documentId,
-            date: data[name].date,
+            date: date,
             order: [
               {
                 productId: "",
@@ -116,7 +91,52 @@ export default function ListOders({ type }) {
       });
   }
 
-  if (flag) return <Redirect to="/" />;
+  const handleButton = () => {
+    if (type === "client") {
+      let aux = rowsSelected.map((obj) => {
+        let item = {
+          ref: obj.productId,
+          quantity: obj.quantity,
+          location: obj.quantity,
+          order_ref: obj.order_ref,
+        };
+        return item;
+      });
+      let object = {
+        date: Date.now(),
+        items: aux,
+      };
+      sendRequest(
+        "POST",
+        "http://localhost:8800/api/picking-wave/create",
+        object,
+        localStorage.getItem("token")
+      )
+        .then((data) => {
+          setFlagClient(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (type === "supplier") {
+      let i = 0;
+      let sendpage = rowsSelected.map((obj) => {
+        let item = {
+          sourceDocLineNumber: obj.lineNumber,
+          id: i++,
+          documentId: obj.documentId,
+          storedquantity: obj.expected_quantity.toString(),
+          orderedquantity: obj.quantity.toString(),
+          location: obj.location,
+          productId: obj.productId,
+        };
+        return item;
+      });
+      history.push("/stock-inventory", { params: sendpage });
+    }
+  };
+
+  if (flagClient) return <Redirect to="/" />;
 
   let i = 0;
   return (
