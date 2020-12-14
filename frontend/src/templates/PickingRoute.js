@@ -188,16 +188,8 @@ function PickingRoute() {
 
   function getTransferedInfo(obj) {
     let selected = obj.filter((item) => item.picked);
-    let result = selected.map((item) => {
-      return {
-        ref: item.ref,
-        order_ref: item.order_ref,
-        quantity: item.selected_quantity,
-      };
-    });
 
-    console.log(result);
-    return result;
+    return selected;
   }
 
   function nextZone() {
@@ -268,21 +260,22 @@ function PickingRoute() {
           {activeIndex < route.length ? (
             <ListPicking
               rows={rows}
+              selectable
+              withInput
               onQuantityChange={handleQuantityChange}
               onCheckboxChange={handleCheckboxChange}
             />
           ) : (
-            <div>
-              <p>Stock has been transfered to warehouse exit:</p>
-              {getTransferedInfo(originalData).map((item, index) => {
-                <div key={index}>{item}</div>;
-              })}
-            </div>
+            <ListPicking
+              rows={getTransferedInfo(originalData)}
+              onQuantityChange={handleQuantityChange}
+              onCheckboxChange={handleCheckboxChange}
+            />
           )}
         </Grid>
         <Grid item>
           <div className={classes.buttonWrapper}>
-            {activeIndex > 0 && (
+            {activeIndex > 0 && activeIndex < route.length - 1 && (
               <Button
                 className={classes.button}
                 style={{ marginRight: "1rem" }}
@@ -297,7 +290,11 @@ function PickingRoute() {
               onClick={nextZone}
               variant="contained"
             >
-              {activeIndex >= route.length - 1 ? "Finish" : "Next"}
+              {activeIndex >= route.length - 1
+                ? activeIndex === route.length - 1
+                  ? "Finish"
+                  : "Generate Delivery"
+                : "Next"}
             </Button>
           </div>
         </Grid>

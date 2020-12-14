@@ -16,7 +16,13 @@ import { useEffect } from "react";
 
 const useStyles = makeStyles(orderStyle);
 
-function ListPicking({ rows, onQuantityChange, onCheckboxChange }) {
+function ListPicking({
+  rows,
+  onQuantityChange,
+  onCheckboxChange,
+  selectable,
+  withInput,
+}) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const rowsPerPage = 5;
@@ -35,7 +41,7 @@ function ListPicking({ rows, onQuantityChange, onCheckboxChange }) {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow className={classes.header}>
-              <TableCell align="center"> Picked</TableCell>
+              {selectable && <TableCell align="center"> Picked</TableCell>}
               <TableCell align="center"> Product ID</TableCell>
               <TableCell align="center"> Document Id</TableCell>
               <TableCell align="center"> Ordered Quantity</TableCell>
@@ -49,19 +55,21 @@ function ListPicking({ rows, onQuantityChange, onCheckboxChange }) {
                 console.log("Rendering row " + row.id);
                 return (
                   <TableRow hover key={row.id} className={classes.row}>
-                    <TableCell
-                      className={classes.cell}
-                      style={{ padding: 0 }}
-                      align="center"
-                    >
-                      <Checkbox
-                        defaultChecked={row.picked}
-                        onChange={(ev) =>
-                          onCheckboxChange(row.id, ev.target.checked)
-                        }
-                        color="primary"
-                      />
-                    </TableCell>
+                    {selectable && (
+                      <TableCell
+                        className={classes.cell}
+                        style={{ padding: 0 }}
+                        align="center"
+                      >
+                        <Checkbox
+                          defaultChecked={row.picked}
+                          onChange={(ev) =>
+                            onCheckboxChange(row.id, ev.target.checked)
+                          }
+                          color="primary"
+                        />
+                      </TableCell>
+                    )}
                     <TableCell
                       className={classes.cell}
                       style={{ width: 340 }}
@@ -88,14 +96,27 @@ function ListPicking({ rows, onQuantityChange, onCheckboxChange }) {
                       style={{ width: 220, padding: 0 }}
                       align="center"
                     >
-                      <TextField
-                        type="number"
-                        defaultValue={row.selected_quantity}
-                        onChange={(ev) =>
-                          onQuantityChange(row.id, ev.target.value)
-                        }
-                        style={{ width: "80%", margin: "auto" }}
-                      />
+                      {withInput ? (
+                        <TextField
+                          type="number"
+                          InputProps={{
+                            inputProps: { min: 0, max: row.quantity },
+                          }}
+                          defaultValue={row.selected_quantity}
+                          onChange={(ev) =>
+                            onQuantityChange(row.id, ev.target.value)
+                          }
+                          onBlur={(ev) => {
+                            if (ev.target.value > row.quantity) {
+                              ev.target.value = row.quantity;
+                              onQuantityChange(row.id, row.quantity);
+                            }
+                          }}
+                          style={{ width: "80%", margin: "auto" }}
+                        />
+                      ) : (
+                        <span>{row.selected_quantity}</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
