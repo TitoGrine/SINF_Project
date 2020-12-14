@@ -96,7 +96,7 @@ export default function ListOders({ type }) {
       let aux = rowsSelected.map((obj) => {
         let item = {
           ref: obj.productId,
-          quantity: obj.quantity,
+          quantity: obj.expected_quantity,
           location: obj.quantity,
           order_ref: obj.order_ref,
         };

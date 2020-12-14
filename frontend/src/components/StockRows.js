@@ -28,7 +28,6 @@ export default function Row(props) {
   const [checked, setChecked] = useContext(StockContext);
   const [isSelected, setSelected] = useState(false);
   const [quantity, setQuantity] = useContext(StockInventoryContext);
-  const [error, setError] = useState(false);
   const initialQnt = row.storedquantity;
 
   const handleChecked = (id) => {

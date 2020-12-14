@@ -194,11 +194,9 @@ export default function Row(props) {
                     <TableCell className={classes.cell}>
                       <b>Quantity</b>
                     </TableCell>
-                    {type === "supplier" && (
-                      <TableCell className={classes.cell}>
-                        <b>Received Quantity</b>
-                      </TableCell>
-                    )}
+                    <TableCell className={classes.cell}>
+                      <b>Received Quantity</b>
+                    </TableCell>
                     <TableCell className={classes.cell}>
                       {" "}
                       <b>Stock</b>
@@ -241,28 +239,26 @@ export default function Row(props) {
                         <TableCell className={classes.cell}>
                           {historyRow.quantity}
                         </TableCell>
-                        {type === "supplier" && (
-                          <TableCell className={classes.cell}>
-                            <TextField
-                              label="Number"
-                              type="number"
-                              value={inputs[historyRow.id]}
-                              onChange={(e) => {
-                                inputs[historyRow.id] = [
-                                  parseInt(e.target.value),
-                                ];
-                                handleInput(historyRow, e.target.value);
-                              }}
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              inputProps={{
-                                min: 0,
-                                max: historyRow.quantity,
-                              }}
-                            />
-                          </TableCell>
-                        )}
+                        <TableCell className={classes.cell}>
+                          <TextField
+                            label="Number"
+                            type="number"
+                            value={inputs[historyRow.id]}
+                            onChange={(e) => {
+                              inputs[historyRow.id] = [
+                                parseInt(e.target.value),
+                              ];
+                              handleInput(historyRow, e.target.value);
+                            }}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            inputProps={{
+                              min: 0,
+                              max: historyRow.quantity,
+                            }}
+                          />
+                        </TableCell>
                         <TableCell className={classes.cell}>
                           {historyRow.stock}
                         </TableCell>

@@ -64,7 +64,7 @@ export default function ListOders({ rows }) {
         let item = {
           sourceDocKey: row.documentId,
           sourceDocLineNumber: row.sourceDocLineNumber,
-          quantity: quantity[row.id]
+          quantity: quantity[row.id],
         };
         return item;
       });
