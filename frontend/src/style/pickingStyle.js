@@ -22,7 +22,6 @@ const pickingStyle = {
     backgroundColor: darkred,
   },
   buttonWrapper: {
-    width: "100%",
     display: "flex",
     justifyContent: "flex-end",
   },

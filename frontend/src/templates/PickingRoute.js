@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 //material core
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core";
+import { CircularProgress, makeStyles } from "@material-ui/core";
 
 import ListPicking from "../components/ListPicking";
 import PickingCircle from "../components/PickingCircle";
@@ -15,11 +15,14 @@ import { getData, sendRequest } from "../requests";
 const useStyles = makeStyles(pickingStyle);
 
 function PickingRoute() {
+  const history = useHistory();
   const classes = useStyles();
   const [originalData, setOriginalData] = useState([]);
   const [rows, setRows] = useState([]);
   const [route, setRoute] = useState([]);
   const [wrapped, setWrapped] = useState(true);
+  const [isTransferDone, setTransferDone] = useState(false);
+  const [isGeneratingDelivery, setGeneratingDelivery] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const { setAuthToken } = useAuth();
   const { id } = useParams();
@@ -103,6 +106,32 @@ function PickingRoute() {
   }
 
   function transferStock(obj) {
+    let bodyObj = getRequestBody(obj, false);
+
+    console.log(bodyObj);
+    // Passo 1. Transferir stock todo para o D1
+    sendRequest(
+      "POST",
+      "http://localhost:8800/api/stock/transfer",
+      bodyObj,
+      localStorage.getItem("token")
+    )
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].status === 401) {
+            setAuthToken("");
+            return;
+          }
+        }
+        setTransferDone(true);
+      })
+      .catch((err) => {
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
+      });
+  }
+
+  function getRequestBody(obj, fullInfo) {
     let bodyObj = [];
 
     obj.forEach((item) => {
@@ -110,55 +139,76 @@ function PickingRoute() {
 
       for (let i = 0; i < bodyObj.length; i++) {
         if (bodyObj[i].sourceWarehouse === item.warehouse_zone) {
-          addItemToTransfer(item, bodyObj);
+          addItemToTransfer(item, bodyObj[i], fullInfo);
           return;
         }
       }
 
-      addNewTransferEntry(item, bodyObj);
+      addNewTransferEntry(item, bodyObj, fullInfo);
     });
 
-    console.log(bodyObj);
-    // Passo 1. Transferir stock todo para o D1
-    // sendRequest("POST", "http://localhost:8800/api/stock/transfer", obj)
-    //   .then((data) => {
-    //     // Mostrar modal com botão e tal
-    //   })
-    //   .catch((err) => {
-    //     const error = JSON.parse(err.message);
-    //     if (error.status === 401) setAuthToken("");
-    //   });
-
-    // Passo 2. Pedido ao Generate Delivery (através de um modal)
-    // igual ao transfer stock, mas com o DocKey e DocLine dentro de cada item
+    return bodyObj;
   }
 
-  function addItemToTransfer(item, transfer) {
+  function addItemToTransfer(item, transfer, fullInfo) {
     let newItem = {
-      sourceDocLineNumber: item.line_number,
-      sourceDocKey: item.order_ref,
       quantity: item.selected_quantity,
       materialsItem: item.ref,
     };
 
+    if (fullInfo) {
+      newItem.sourceDocLineNumber = item.line_number;
+      newItem.sourceDocKey = item.order_ref;
+    }
+
     transfer.items.push(newItem);
   }
 
-  function addNewTransferEntry(item, transfer) {
+  function addNewTransferEntry(item, transfer, fullInfo) {
     let newEntry = {
       sourceWarehouse: item.warehouse_zone,
       targetWarehouse: "D1",
       items: [
         {
-          sourceDocLineNumber: item.line_number,
-          sourceDocKey: item.order_ref,
           quantity: item.selected_quantity,
           materialsItem: item.ref,
         },
       ],
     };
 
+    if (fullInfo) {
+      newEntry.items[0].sourceDocLineNumber = item.line_number;
+      newEntry.items[0].sourceDocKey = item.order_ref;
+    }
+
     transfer.push(newEntry);
+  }
+
+  function generateDelivery(obj) {
+    let bodyObj = getRequestBody(obj, true);
+
+    console.log(bodyObj);
+    // Passo 2. Pedido ao Generate Delivery (através de um modal)
+    sendRequest(
+      "POST",
+      "http://localhost:8800/api/client/delivery",
+      bodyObj,
+      localStorage.getItem("token")
+    )
+      .then((data) => {
+        alert("Delivery Note(s) created succesfully");
+        history.push("/");
+      })
+      .catch((err) => {
+        const error = JSON.parse(err.message);
+        if (error.status === 401) setAuthToken("");
+        else {
+          alert("An error has ocurred");
+          history.push("/");
+        }
+      });
+
+    setGeneratingDelivery(true);
   }
 
   function filterRows() {
@@ -186,10 +236,38 @@ function PickingRoute() {
     return <PickingCircle active location={location} />;
   }
 
-  function getTransferedInfo(obj) {
-    let selected = obj.filter((item) => item.picked);
+  function getButton() {
+    if (activeIndex === route.length - 1) {
+      return (
+        <Button
+          className={classes.button}
+          onClick={nextZone}
+          variant="contained"
+        >
+          Finish
+        </Button>
+      );
+    } else if (activeIndex >= route.length - 1) {
+      return (
+        <Button
+          className={classes.button}
+          onClick={nextZone}
+          variant="contained"
+        >
+          {isGeneratingDelivery ? (
+            <CircularProgress className={classes.progress} color="inherit" />
+          ) : (
+            "Generate Delivery"
+          )}
+        </Button>
+      );
+    }
 
-    return selected;
+    return (
+      <Button className={classes.button} onClick={nextZone} variant="contained">
+        Next
+      </Button>
+    );
   }
 
   function nextZone() {
@@ -204,6 +282,7 @@ function PickingRoute() {
     }
 
     if (activeIndex === route.length) {
+      generateDelivery(originalData);
       console.log("Deliveries");
       return;
     }
@@ -262,12 +341,14 @@ function PickingRoute() {
               rows={rows}
               selectable
               withInput
+              isDataReady={true}
               onQuantityChange={handleQuantityChange}
               onCheckboxChange={handleCheckboxChange}
             />
           ) : (
             <ListPicking
-              rows={getTransferedInfo(originalData)}
+              rows={originalData.filter((item) => item.picked)}
+              isDataReady={isTransferDone}
               onQuantityChange={handleQuantityChange}
               onCheckboxChange={handleCheckboxChange}
             />
@@ -275,7 +356,17 @@ function PickingRoute() {
         </Grid>
         <Grid item>
           <div className={classes.buttonWrapper}>
-            {activeIndex > 0 && activeIndex < route.length - 1 && (
+            {activeIndex < route.length && (
+              <Button
+                className={classes.button}
+                style={{ marginLeft: "1rem" }}
+                onClick={() => history.push("/client-orders")}
+                variant="contained"
+              >
+                Cancel
+              </Button>
+            )}
+            {activeIndex > 0 && activeIndex < route.length && (
               <Button
                 className={classes.button}
                 style={{ marginRight: "1rem" }}
@@ -285,17 +376,7 @@ function PickingRoute() {
                 Back
               </Button>
             )}
-            <Button
-              className={classes.button}
-              onClick={nextZone}
-              variant="contained"
-            >
-              {activeIndex >= route.length - 1
-                ? activeIndex === route.length - 1
-                  ? "Finish"
-                  : "Generate Delivery"
-                : "Next"}
-            </Button>
+            {getButton()}
           </div>
         </Grid>
       </Grid>
