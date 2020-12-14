@@ -48,8 +48,9 @@ export default function Row(props) {
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
   const [selected, setSelected] = React.useState([]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
+  const [inputs, setInputs] = useState([]);
 
-  async function getRow(order_ref) {
+  async function getRow(order_ref, documentId) {
     setOpen(!open);
     if (data.order[0].description !== "") {
       return;
@@ -62,8 +63,13 @@ export default function Row(props) {
       .then((d) => {
         let values = [];
         let keysName = Object.keys(d);
+        let inpts = [];
+        let i = 0;
         keysName.forEach((name) => {
           let obj = {
+            id: i++,
+            documentId: documentId,
+            lineNumber: d[name].lineNumber,
             productId: name,
             description: d[name].description,
             line_number: d[name].lineNumber,
@@ -71,14 +77,17 @@ export default function Row(props) {
             quantity: d[name].quantity,
             expected_quantity: d[name].quantity,
             stock: d[name].stock,
-            order_ref: data.documentId,
+            order_ref: data.order_ref,
             checked: false,
           };
+          inpts[obj.id] = [d[name].quantity];
           values.push(obj);
         });
-        let tempData = {...data}
-        tempData.order = values;
-        setData(tempData);
+        setInputs(inpts);
+        setData((prevData) => ({
+          ...prevData,
+          order: values,
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -110,9 +119,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (!row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -130,9 +140,10 @@ export default function Row(props) {
       }
       return value;
     });
-    let aux = data;
-    aux.order = new_data;
-    setData(aux);
+    setData((prevData) => ({
+      ...prevData,
+      order: new_data,
+    }));
     if (row_add.checked) {
       let aux = rowsSelected.filter(function (item) {
         return item.productId !== row_add.productId;
@@ -151,7 +162,7 @@ export default function Row(props) {
             aria-label="expand row"
             size="small"
             onClick={() => {
-              getRow(row.order_ref);
+              getRow(row.order_ref, row.documentId);
             }}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -191,7 +202,7 @@ export default function Row(props) {
                       </TableCell>
                       {type === "supplier" && (
                         <TableCell className={classes.cell}>
-                          <b>Expected Quantity</b>
+                          <b>Received Quantity</b>
                         </TableCell>
                       )}
                       <TableCell className={classes.cell}>
@@ -203,7 +214,6 @@ export default function Row(props) {
                   <TableBody>
                     {data.order.map((historyRow) => {
                       const isItemSelected = isSelected(historyRow.productId);
-                      let value = 0;
                       return (
                         <TableRow
                           hover
@@ -217,7 +227,11 @@ export default function Row(props) {
                           >
                             <Checkbox
                               onClick={(event) => {
-                                handleClick(event, historyRow, value);
+                                handleClick(
+                                  event,
+                                  historyRow,
+                                  inputs[historyRow.id]
+                                );
                               }}
                               color="primary"
                               checked={isItemSelected}
@@ -240,9 +254,12 @@ export default function Row(props) {
                               <TextField
                                 label="Number"
                                 type="number"
+                                value={inputs[historyRow.id]}
                                 onChange={(e) => {
-                                  value = e.target.value;
-                                  handleInput(historyRow, value);
+                                  inputs[historyRow.id] = [
+                                    parseInt(e.target.value),
+                                  ];
+                                  handleInput(historyRow, e.target.value);
                                 }}
                                 InputLabelProps={{
                                   shrink: true,
