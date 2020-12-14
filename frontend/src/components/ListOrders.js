@@ -37,6 +37,7 @@ export default function ListOders({ type }) {
 
   useEffect(() => {
     setflagType(true);
+    setPage(0);
     getOrders();
   }, [type]);
 

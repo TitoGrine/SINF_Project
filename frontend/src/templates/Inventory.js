@@ -16,6 +16,7 @@ const useStyles = makeStyles(orderStyle);
 function Inventory() {
   const classes = useStyles();
   const [originalData, setOriginalData] = useState([]);
+  const [page, setPage] = useState(1);
   const [rows, setRows] = useState([]);
   const [dataReady, setDataReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -95,10 +96,16 @@ function Inventory() {
 
   const handleIdChange = (ev) => {
     setSearchQuery(ev.target.value.trim());
+    setPage(1);
   };
 
   const handleZoneChange = (ev) => {
     setZoneQuery(ev.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (params) => {
+    setPage(params.page);
   };
 
   return (
@@ -121,7 +128,12 @@ function Inventory() {
           </Grid>
         </Grid>
         <Grid item className={classes.list}>
-          <ListInventory rows={rows} isDataReady={dataReady} />
+          <ListInventory
+            rows={rows}
+            isDataReady={dataReady}
+            page={page}
+            onPageChange={handlePageChange}
+          />
         </Grid>
       </Grid>
     </div>
