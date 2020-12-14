@@ -85,8 +85,14 @@ export default function ListOders({ type }) {
           };
           return obj;
         });
+        orders.sort((left, right) => {
+          let leftDate = new Date(left.date);
+          let rightDate = new Date(right.date);
+
+          return leftDate - rightDate;
+        });
         setRows(orders);
-        setflagType(false)
+        setflagType(false);
       })
       .catch((err) => {
         const error = JSON.parse(err.message);
@@ -127,6 +133,7 @@ export default function ListOders({ type }) {
     } else if (type === "supplier") {
       let i = 0;
       let sendpage = rowsSelected.map((obj) => {
+        console.log(obj);
         let item = {
           sourceDocLineNumber: obj.lineNumber,
           id: i++,
@@ -145,7 +152,7 @@ export default function ListOders({ type }) {
   let i = 0;
   return (
     <div>
-      {(rows.length === 0 || flagType)? (
+      {rows.length === 0 || flagType ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>
@@ -194,7 +201,9 @@ export default function ListOders({ type }) {
                 className={classes.GnrBtn}
                 variant="contained"
               >
-                Generate Route
+                {type === "client"
+                  ? "Generate Route"
+                  : "Generate Goods Receipt"}
               </Button>
             </Grid>
           </Grid>

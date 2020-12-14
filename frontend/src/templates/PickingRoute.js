@@ -108,7 +108,6 @@ function PickingRoute() {
   function transferStock(obj) {
     let bodyObj = getRequestBody(obj, false);
 
-    console.log(bodyObj);
     // Passo 1. Transferir stock todo para o D1
     sendRequest(
       "POST",
@@ -187,7 +186,6 @@ function PickingRoute() {
   function generateDelivery(obj) {
     let bodyObj = getRequestBody(obj, true);
 
-    console.log(bodyObj);
     // Passo 2. Pedido ao Generate Delivery (através de um modal)
     sendRequest(
       "POST",
@@ -277,13 +275,11 @@ function PickingRoute() {
 
     if (activeIndex === route.length - 1) {
       transferStock(originalData);
-      console.log("Finished");
       return;
     }
 
     if (activeIndex === route.length) {
       generateDelivery(originalData);
-      console.log("Deliveries");
       return;
     }
   }

@@ -79,12 +79,19 @@ export default function Row(props) {
             line_number: d[name].lineNumber,
             location: d[name].location,
             quantity: d[name].quantity,
-            expected_quantity: d[name].quantity,
+            expected_quantity:
+              type === "client"
+                ? Math.min(d[name].quantity, d[name].stock)
+                : d[name].quantity,
             stock: d[name].stock,
             order_ref: data.order_ref,
             checked: false,
           };
-          inpts[obj.id] = [d[name].quantity];
+          inpts[obj.id] = [
+            type === "client"
+              ? Math.min(d[name].quantity, d[name].stock)
+              : d[name].quantity,
+          ];
           values.push(obj);
         });
         setInputs(inpts);
@@ -205,7 +212,11 @@ export default function Row(props) {
                         <b>Quantity</b>
                       </TableCell>
                       <TableCell className={classes.cell}>
-                        <b>Received Quantity</b>
+                        {type === "client" ? (
+                          <b>Quantity To Pick</b>
+                        ) : (
+                          <b>Received Quantity</b>
+                        )}
                       </TableCell>
                       <TableCell className={classes.cell}>
                         {" "}
@@ -227,18 +238,32 @@ export default function Row(props) {
                             className={classes.cell}
                             padding="checkbox"
                           >
-                            <Checkbox
-                              onClick={(event) => {
-                                handleClick(
-                                  event,
-                                  historyRow,
-                                  data.order_ref,
-                                  inputs[historyRow.id]
-                                );
-                              }}
-                              color="primary"
-                              checked={isItemSelected}
-                            />
+                            {historyRow.stock === 0 && type === "client" ? (
+                              <Checkbox
+                                onClick={(event) => {
+                                  handleClick(
+                                    event,
+                                    historyRow,
+                                    inputs[historyRow.id]
+                                  );
+                                }}
+                                color="primary"
+                                checked={isItemSelected}
+                                disabled
+                              />
+                            ) : (
+                              <Checkbox
+                                onClick={(event) => {
+                                  handleClick(
+                                    event,
+                                    historyRow,
+                                    inputs[historyRow.id]
+                                  );
+                                }}
+                                color="primary"
+                                checked={isItemSelected}
+                              />
+                            )}
                           </TableCell>
                           <TableCell className={classes.cell} scope="row">
                             {historyRow.productId}
@@ -250,7 +275,7 @@ export default function Row(props) {
                             {historyRow.location}
                           </TableCell>
                           <TableCell className={classes.cell}>
-                            <b>Received Quantity</b>
+                            {historyRow.quantity}
                           </TableCell>
                           <TableCell className={classes.cell}>
                             <TextField
@@ -258,6 +283,16 @@ export default function Row(props) {
                               type="number"
                               value={inputs[historyRow.id]}
                               onChange={(e) => {
+                                let maxVal =
+                                  type === "client"
+                                    ? Math.min(
+                                        historyRow.quantity,
+                                        historyRow.stock
+                                      )
+                                    : historyRow.quantity;
+                                if (e.target.value > maxVal) {
+                                  e.target.value = maxVal;
+                                }
                                 inputs[historyRow.id] = [
                                   parseInt(e.target.value),
                                 ];
@@ -266,9 +301,17 @@ export default function Row(props) {
                               InputLabelProps={{
                                 shrink: true,
                               }}
-                              inputProps={{
-                                min: 0,
-                                max: historyRow.quantity,
+                              InputProps={{
+                                inputProps: {
+                                  min: 0,
+                                  max:
+                                    type === "client"
+                                      ? Math.min(
+                                          historyRow.quantity,
+                                          historyRow.stock
+                                        )
+                                      : historyRow.quantity,
+                                },
                               }}
                             />
                           </TableCell>

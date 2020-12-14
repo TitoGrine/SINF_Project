@@ -43,6 +43,7 @@ export default function ListOders({ rows }) {
   useEffect(() => {
     let aux = [...quantity];
     rows.forEach((row) => {
+      console.log(row.storedquantity);
       aux[row.id] = row.storedquantity;
     });
     setQuantity(aux);
