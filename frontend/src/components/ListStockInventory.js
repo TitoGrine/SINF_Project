@@ -38,12 +38,12 @@ export default function ListOders({ rows }) {
   const [checked] = useContext(StockContext);
   const { setAuthToken } = useAuth();
   const [open, setOpen] = useState(false);
+  const [isGenerating, setGenerating] = useState(false);
   const [quantity, setQuantity] = useContext(StockInventoryContext);
 
   useEffect(() => {
     let aux = [...quantity];
     rows.forEach((row) => {
-      console.log(row.storedquantity);
       aux[row.id] = row.storedquantity;
     });
     setQuantity(aux);
@@ -61,7 +61,8 @@ export default function ListOders({ rows }) {
     if (checked.length !== rows.length) {
       setOpen(true);
     } else {
-      let send = rows.map((row) => {
+      let filtered = rows.filter((row) => quantity[row.id] !== "0");
+      let send = filtered.map((row) => {
         let item = {
           sourceDocKey: row.documentId,
           sourceDocLineNumber: row.sourceDocLineNumber,
@@ -76,12 +77,19 @@ export default function ListOders({ rows }) {
         localStorage.getItem("token")
       )
         .then((data) => {
+          alert("Goods Receipt generated successfully!");
           history.push("/");
         })
         .catch((err) => {
-          const error = JSON.parse(err.message);
-          if (error.status === 401) setAuthToken("");
+          const status = err.message;
+          if (status === 401) setAuthToken("");
+          else {
+            alert("Failed to generate Goods Receipt");
+            history.push("/supplier-orders");
+          }
         });
+
+      setGenerating(true);
     }
   };
 
@@ -150,7 +158,11 @@ export default function ListOders({ rows }) {
                 className={classes.GnrBtn}
                 variant="contained"
               >
-                Confirm
+                {isGenerating ? (
+                  <CircularProgress color="inherit" />
+                ) : (
+                  "Confirm"
+                )}
               </Button>
             </Grid>
           </Grid>

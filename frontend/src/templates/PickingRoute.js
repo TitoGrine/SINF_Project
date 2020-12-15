@@ -125,8 +125,12 @@ function PickingRoute() {
         setTransferDone(true);
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to transfer stock");
+          history.push("/client-orders");
+        }
       });
   }
 
@@ -198,11 +202,11 @@ function PickingRoute() {
         history.push("/");
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        const status = err.message;
+        if (status === 401) setAuthToken("");
         else {
-          alert("An error has ocurred");
-          history.push("/");
+          alert("Failed to generate Delivery Note");
+          history.push("/client-orders");
         }
       });
 
@@ -253,7 +257,7 @@ function PickingRoute() {
           variant="contained"
         >
           {isGeneratingDelivery ? (
-            <CircularProgress className={classes.progress} color="inherit" />
+            <CircularProgress color="inherit" />
           ) : (
             "Generate Delivery"
           )}

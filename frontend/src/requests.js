@@ -5,10 +5,7 @@ export const getToken = async (method, url, data) => {
     headers: data ? { "Content-Type": "application/json" } : {},
   });
   if (response.status >= 400) {
-    return response.json().then((errorMessage) => {
-      const error = new Error(errorMessage);
-      throw error;
-    });
+    throw new Error(response.status);
   }
   return await response.json();
 };
@@ -22,10 +19,7 @@ export const sendRequest = async (method, url, data, token) => {
       : { Authorization: token },
   });
   if (response.status >= 400) {
-    return response.json().then((errorMessage) => {
-      const error = new Error(errorMessage);
-      throw error;
-    });
+    throw new Error(response.status);
   }
   return await response.json();
 };
@@ -36,11 +30,7 @@ export const getData = async (method, url, token) => {
     headers: { Authorization: token },
   });
   if (response.status >= 400) {
-    return response.json().then((errorMessage) => {
-      errorMessage["status"] = response.status;
-      const error = new Error(JSON.stringify(errorMessage));
-      throw error;
-    });
+    throw new Error(response.status);
   }
   return await response.json();
 };

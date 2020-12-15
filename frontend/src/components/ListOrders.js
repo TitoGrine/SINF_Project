@@ -95,8 +95,12 @@ export default function ListOders({ type }) {
         setflagType(false);
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to fetch orders");
+          history.push("/");
+        }
       });
   }
 

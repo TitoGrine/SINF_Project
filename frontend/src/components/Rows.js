@@ -19,6 +19,8 @@ import { OrderContext } from "../statemanagement/OrderContext";
 
 import orderStyle from "../style/orderStyle.js";
 import { CircularProgress } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -43,6 +45,8 @@ Row.propTypes = {
 export default function Row(props) {
   const { row, type } = props;
   const [open, setOpen] = React.useState(false);
+  const { setAuthToken } = useAuth();
+  const history = useHistory();
   const classes = useStyles();
   const [data, setData] = useState(row);
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
@@ -101,7 +105,12 @@ export default function Row(props) {
         }));
       })
       .catch((err) => {
-        console.log(err);
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to fetch order " + order_ref);
+          history.push("/");
+        }
       });
   }
 
