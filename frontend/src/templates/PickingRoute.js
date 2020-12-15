@@ -108,6 +108,11 @@ function PickingRoute() {
   function transferStock(obj) {
     let bodyObj = getRequestBody(obj, false);
 
+    if (bodyObj.length === 0) {
+      console.log("skipping");
+      setTransferDone(true);
+      return;
+    }
     // Passo 1. Transferir stock todo para o D1
     sendRequest(
       "POST",
@@ -138,7 +143,7 @@ function PickingRoute() {
     let bodyObj = [];
 
     obj.forEach((item) => {
-      if (item.picked === false) return;
+      if (item.picked === false || item.selected_quantity === 0) return;
 
       for (let i = 0; i < bodyObj.length; i++) {
         if (bodyObj[i].sourceWarehouse === item.warehouse_zone) {
@@ -250,6 +255,21 @@ function PickingRoute() {
         </Button>
       );
     } else if (activeIndex >= route.length - 1) {
+      if (
+        originalData.filter(
+          (item) => item.picked && item.selected_quantity !== 0
+        ).length === 0
+      ) {
+        return (
+          <Button
+            className={classes.button}
+            onClick={() => history.push("/client-orders")}
+            variant="contained"
+          >
+            Cancel
+          </Button>
+        );
+      }
       return (
         <Button
           className={classes.button}
@@ -347,7 +367,9 @@ function PickingRoute() {
             />
           ) : (
             <ListPicking
-              rows={originalData.filter((item) => item.picked)}
+              rows={originalData.filter(
+                (item) => item.picked && item.selected_quantity !== 0
+              )}
               isDataReady={isTransferDone}
               onQuantityChange={handleQuantityChange}
               onCheckboxChange={handleCheckboxChange}

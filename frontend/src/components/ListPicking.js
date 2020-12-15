@@ -40,6 +40,8 @@ function ListPicking({
     <React.Fragment>
       {!isDataReady ? (
         <CircularProgress className={classes.progress} color="inherit" />
+      ) : rows.length === 0 ? (
+        <div style={{ textAlign: "center" }}>You did not pick anything...</div>
       ) : (
         <Paper className={classes.root}>
           <TableContainer>
