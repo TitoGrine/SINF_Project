@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { getData } from "../requests.js";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,6 +18,9 @@ import TextField from "@material-ui/core/TextField";
 import { OrderContext } from "../statemanagement/OrderContext";
 
 import orderStyle from "../style/orderStyle.js";
+import { CircularProgress } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../statemanagement/AuthenticationContext.js";
 
 const useStyles = makeStyles(orderStyle);
 
@@ -42,6 +45,8 @@ Row.propTypes = {
 export default function Row(props) {
   const { row, type } = props;
   const [open, setOpen] = React.useState(false);
+  const { setAuthToken } = useAuth();
+  const history = useHistory();
   const classes = useStyles();
   const [data, setData] = useState(row);
   const [rowsSelected, setrowsSelected] = useContext(OrderContext);
@@ -49,9 +54,13 @@ export default function Row(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const [inputs, setInputs] = useState([]);
 
+  useEffect(() => {
+    setData(row);
+  }, [row]);
+
   async function getRow(order_ref, documentId) {
+    setOpen(!open);
     if (data.order[0].description !== "") {
-      setOpen(!open);
       return;
     }
     getData(
@@ -71,13 +80,22 @@ export default function Row(props) {
             lineNumber: d[name].lineNumber,
             productId: name,
             description: d[name].description,
+            line_number: d[name].lineNumber,
             location: d[name].location,
             quantity: d[name].quantity,
-            expected_quantity: d[name].quantity,
+            expected_quantity:
+              type === "client"
+                ? Math.min(d[name].quantity, d[name].stock)
+                : d[name].quantity,
             stock: d[name].stock,
+            order_ref: data.order_ref,
             checked: false,
           };
-          inpts[obj.id] = [d[name].quantity];
+          inpts[obj.id] = [
+            type === "client"
+              ? Math.min(d[name].quantity, d[name].stock)
+              : d[name].quantity,
+          ];
           values.push(obj);
         });
         setInputs(inpts);
@@ -85,14 +103,18 @@ export default function Row(props) {
           ...prevData,
           order: values,
         }));
-        setOpen(!open);
       })
       .catch((err) => {
-        console.log(err);
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to fetch order " + order_ref);
+          history.push("/");
+        }
       });
   }
 
-  const handleClick = (event, row_add, ref, input) => {
+  const handleClick = (event, row_add, input) => {
     const selectedIndex = selected.indexOf(row_add.productId);
     let newSelected = [];
 
@@ -108,11 +130,9 @@ export default function Row(props) {
         selected.slice(selectedIndex + 1)
       );
     }
+
     setSelected(newSelected);
     let new_data = data.order.map((value) => {
-      if (row_add.checked) {
-        row_add.order_ref = ref;
-      }
       if (value.productId === row_add.productId) {
         value.expected_quantity = parseInt(input);
         value.checked = !row_add.checked;
@@ -177,77 +197,111 @@ export default function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box>
-              <Table>
-                <TableHead className={classes.subtablehead}>
-                  <TableRow className={classes.subtablerow}>
-                    <TableCell className={classes.cell}> </TableCell>
-                    <TableCell className={classes.cell}>
-                      {" "}
-                      <b>ProductId</b>{" "}
-                    </TableCell>
-                    <TableCell className={classes.cell}>
-                      <b>Description</b>
-                    </TableCell>
-                    <TableCell className={classes.cell}>
-                      <b>Location</b>
-                    </TableCell>
-                    <TableCell className={classes.cell}>
-                      <b>Quantity</b>
-                    </TableCell>
-                    {type === "supplier" && (
+              {data.order[0].description === "" ? (
+                <CircularProgress
+                  className={classes.progress}
+                  color="inherit"
+                />
+              ) : (
+                <Table>
+                  <TableHead className={classes.subtablehead}>
+                    <TableRow className={classes.subtablerow}>
+                      <TableCell className={classes.cell}> </TableCell>
                       <TableCell className={classes.cell}>
-                        <b>Received Quantity</b>
+                        {" "}
+                        <b>ProductId</b>{" "}
                       </TableCell>
-                    )}
-                    <TableCell className={classes.cell}>
-                      {" "}
-                      <b>Stock</b>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.order.map((historyRow) => {
-                    const isItemSelected = isSelected(historyRow.productId);
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={historyRow.productId}
-                      >
-                        <TableCell className={classes.cell} padding="checkbox">
-                          <Checkbox
-                            onClick={(event) => {
-                              handleClick(
-                                event,
-                                historyRow,
-                                data.order_ref,
-                                inputs[historyRow.id]
-                              );
-                            }}
-                            color="primary"
-                            checked={isItemSelected}
-                          />
-                        </TableCell>
-                        <TableCell className={classes.cell} scope="row">
-                          {historyRow.productId}
-                        </TableCell>
-                        <TableCell className={classes.cell} scope="row">
-                          {historyRow.description}
-                        </TableCell>
-                        <TableCell className={classes.cell}>
-                          {historyRow.location}
-                        </TableCell>
-                        <TableCell className={classes.cell}>
-                          {historyRow.quantity}
-                        </TableCell>
-                        {type === "supplier" && (
+                      <TableCell className={classes.cell}>
+                        <b>Description</b>
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        <b>Location</b>
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        <b>Quantity</b>
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        {type === "client" ? (
+                          <b>Quantity To Pick</b>
+                        ) : (
+                          <b>Received Quantity</b>
+                        )}
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        {" "}
+                        <b>Stock</b>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data.order.map((historyRow) => {
+                      const isItemSelected = isSelected(historyRow.productId);
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={historyRow.productId}
+                        >
+                          <TableCell
+                            className={classes.cell}
+                            padding="checkbox"
+                          >
+                            {historyRow.stock === 0 && type === "client" ? (
+                              <Checkbox
+                                onClick={(event) => {
+                                  handleClick(
+                                    event,
+                                    historyRow,
+                                    inputs[historyRow.id]
+                                  );
+                                }}
+                                color="primary"
+                                checked={isItemSelected}
+                                disabled
+                              />
+                            ) : (
+                              <Checkbox
+                                onClick={(event) => {
+                                  handleClick(
+                                    event,
+                                    historyRow,
+                                    inputs[historyRow.id]
+                                  );
+                                }}
+                                color="primary"
+                                checked={isItemSelected}
+                              />
+                            )}
+                          </TableCell>
+                          <TableCell className={classes.cell} scope="row">
+                            {historyRow.productId}
+                          </TableCell>
+                          <TableCell className={classes.cell} scope="row">
+                            {historyRow.description}
+                          </TableCell>
+                          <TableCell className={classes.cell}>
+                            {historyRow.location}
+                          </TableCell>
+                          <TableCell className={classes.cell}>
+                            {historyRow.quantity}
+                          </TableCell>
                           <TableCell className={classes.cell}>
                             <TextField
                               label="Number"
                               type="number"
                               value={inputs[historyRow.id]}
                               onChange={(e) => {
+                                let maxVal =
+                                  type === "client"
+                                    ? Math.min(
+                                        historyRow.quantity,
+                                        historyRow.stock
+                                      )
+                                    : historyRow.quantity;
+                                if (e.target.value > maxVal) {
+                                  e.target.value = maxVal;
+                                }
                                 inputs[historyRow.id] = [
                                   parseInt(e.target.value),
                                 ];
@@ -256,21 +310,29 @@ export default function Row(props) {
                               InputLabelProps={{
                                 shrink: true,
                               }}
-                              inputProps={{
-                                min: 0,
-                                max: historyRow.quantity,
+                              InputProps={{
+                                inputProps: {
+                                  min: 0,
+                                  max:
+                                    type === "client"
+                                      ? Math.min(
+                                          historyRow.quantity,
+                                          historyRow.stock
+                                        )
+                                      : historyRow.quantity,
+                                },
                               }}
                             />
                           </TableCell>
-                        )}
-                        <TableCell className={classes.cell}>
-                          {historyRow.stock}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                          <TableCell className={classes.cell}>
+                            {historyRow.stock}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
             </Box>
           </Collapse>
         </TableCell>

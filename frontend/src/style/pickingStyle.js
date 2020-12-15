@@ -4,11 +4,10 @@ const pickingStyle = {
   title: {
     color: darkred,
     fontSize: "1.15em",
-    fontWeight: "200",
     paddingLeft: "2em",
   },
   list: {
-    height: "calc(22em - 192px)",
+    marginBottom: "1rem",
   },
   pickingCircles: {
     minHeight: 150,
@@ -18,12 +17,11 @@ const pickingStyle = {
     whiteSpace: "nowrap",
   },
   button: {
-    marginRight: "4em",
+    marginRight: "1rem",
     color: beige,
     backgroundColor: darkred,
   },
   buttonWrapper: {
-    width: "100%",
     display: "flex",
     justifyContent: "flex-end",
   },

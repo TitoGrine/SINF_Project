@@ -3,10 +3,10 @@ import React from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
 
-import orderStyle from "../style/orderStyle.js";
+import inventoryStyle from "../style/inventoryStyle.js";
 import { MenuItem, Select, CircularProgress } from "@material-ui/core";
 
-const useStyles = makeStyles(orderStyle);
+const useStyles = makeStyles(inventoryStyle);
 
 const columns = [
   {
@@ -89,8 +89,9 @@ const columns = [
   },
 ];
 
-function ListInventory({ rows, isDataReady }) {
+function ListInventory({ rows, isDataReady, page, onPageChange }) {
   const classes = useStyles();
+  const rowsPerPage = 8;
 
   return (
     <div className={classes.table}>
@@ -98,17 +99,18 @@ function ListInventory({ rows, isDataReady }) {
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <DataGrid
+          page={page}
+          onPageChange={onPageChange}
           onClick={(ev) => {
             ev.preventDefault();
           }}
           autoHeight
-          className={classes.tables}
           rows={rows}
           columns={columns.map((column) => ({
             ...column,
             disableClickEventBubbling: true,
           }))}
-          pageSize={10}
+          pageSize={rowsPerPage}
           disableSelectionOnClick
         />
       )}

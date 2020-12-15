@@ -8,14 +8,17 @@ import ZoneDropdown from "../components/ZoneDropdown";
 import ListInventory from "../components/ListInventory";
 
 import { getData } from "../requests.js";
-import orderStyle from "../style/orderStyle.js";
+import inventoryStyle from "../style/inventoryStyle.js";
 import { useAuth } from "../statemanagement/AuthenticationContext";
+import { useHistory } from "react-router-dom";
 
-const useStyles = makeStyles(orderStyle);
+const useStyles = makeStyles(inventoryStyle);
 
 function Inventory() {
   const classes = useStyles();
+  const history = useHistory();
   const [originalData, setOriginalData] = useState([]);
+  const [page, setPage] = useState(1);
   const [rows, setRows] = useState([]);
   const [dataReady, setDataReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,17 +91,27 @@ function Inventory() {
         setDataReady(true);
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to fetch inventory");
+          history.push("/");
+        }
       });
   }
 
   const handleIdChange = (ev) => {
     setSearchQuery(ev.target.value.trim());
+    setPage(1);
   };
 
   const handleZoneChange = (ev) => {
     setZoneQuery(ev.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (params) => {
+    setPage(params.page);
   };
 
   return (
@@ -121,7 +134,12 @@ function Inventory() {
           </Grid>
         </Grid>
         <Grid item className={classes.list}>
-          <ListInventory rows={rows} isDataReady={dataReady} />
+          <ListInventory
+            rows={rows}
+            isDataReady={dataReady}
+            page={page}
+            onPageChange={handlePageChange}
+          />
         </Grid>
       </Grid>
     </div>

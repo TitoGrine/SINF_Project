@@ -53,7 +53,6 @@ const orderStyle = {
     borderBottom: "1px solid" + beige,
   },
   GnrBtn: {
-    padding: "1em",
     marginRight: "3.5em",
     color: beige,
     backgroundColor: darkred,

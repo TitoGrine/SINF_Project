@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getData, getToken, sendRequest } from "../requests.js";
-import { useHistory, Redirect } from "react-router-dom";
+import { getData, sendRequest } from "../requests.js";
+import { useHistory } from "react-router-dom";
 //material@core
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -29,12 +29,14 @@ export default function ListOders({ type }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  const [flagClient, setFlagClient] = useState(false);
   const history = useHistory();
+  const [flagType, setflagType] = useState(false);
 
   const { setAuthToken } = useAuth();
 
   useEffect(() => {
+    setflagType(true);
+    setPage(0);
     getOrders();
   }, [type]);
 
@@ -83,22 +85,36 @@ export default function ListOders({ type }) {
           };
           return obj;
         });
+        orders.sort((left, right) => {
+          let leftDate = new Date(left.date);
+          let rightDate = new Date(right.date);
+
+          return leftDate - rightDate;
+        });
         setRows(orders);
+        setflagType(false);
       })
       .catch((err) => {
-        const error = JSON.parse(err.message);
-        if (error.status === 401) setAuthToken("");
+        const status = err.message;
+        if (status === 401) setAuthToken("");
+        else {
+          alert("Failed to fetch orders");
+          history.push("/");
+        }
       });
   }
 
   const handleButton = () => {
+    if (rowsSelected.length === 0) return;
+
     if (type === "client") {
       let aux = rowsSelected.map((obj) => {
         let item = {
           ref: obj.productId,
           quantity: obj.quantity,
-          location: obj.quantity,
-          order_ref: obj.order_ref,
+          location: obj.location,
+          order_ref: obj.documentId,
+          line_number: obj.line_number,
         };
         return item;
       });
@@ -113,7 +129,7 @@ export default function ListOders({ type }) {
         localStorage.getItem("token")
       )
         .then((data) => {
-          setFlagClient(true);
+          window.location.href = "/picking-route/" + data.ref;
         })
         .catch((err) => {
           console.log(err);
@@ -121,6 +137,7 @@ export default function ListOders({ type }) {
     } else if (type === "supplier") {
       let i = 0;
       let sendpage = rowsSelected.map((obj) => {
+        console.log(obj);
         let item = {
           sourceDocLineNumber: obj.lineNumber,
           id: i++,
@@ -136,12 +153,10 @@ export default function ListOders({ type }) {
     }
   };
 
-  if (flagClient) return <Redirect to="/" />;
-
   let i = 0;
   return (
     <div>
-      {rows.length === 0 ? (
+      {rows.length === 0 || flagType ? (
         <CircularProgress className={classes.progress} color="inherit" />
       ) : (
         <div>
@@ -190,7 +205,9 @@ export default function ListOders({ type }) {
                 className={classes.GnrBtn}
                 variant="contained"
               >
-                Generate Route
+                {type === "client"
+                  ? "Generate Route"
+                  : "Generate Goods Receipt"}
               </Button>
             </Grid>
           </Grid>
